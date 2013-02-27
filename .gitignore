@@ -11,3 +11,11 @@
 *.lai
 *.la
 *.a
+
+# Visual Studio IDE temporary files
+*.suo
+*.wwdb
+
+# Output directories
+bin
+obj
