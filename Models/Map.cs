@@ -23,6 +23,20 @@ namespace PathFind.Models
          }
       }
 
+      private Dictionary<GridCoordinate, double> m_blockedCells = new Dictionary<GridCoordinate, double>();
+
+      public Dictionary<GridCoordinate, double> BlockedCells
+      {
+         get
+         {
+            return m_blockedCells;
+         }
+         set
+         {
+            m_blockedCells = value;
+         }
+      }
+
       #region INotifyPropertyChanged Members
 
       public event PropertyChangedEventHandler PropertyChanged;

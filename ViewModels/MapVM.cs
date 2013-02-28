@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.ComponentModel;
+using PathFind.Commands;
 using PathFind.Models;
 
 namespace PathFind.ViewModels
@@ -34,6 +35,14 @@ namespace PathFind.ViewModels
          {
             Map.Dimensions = value;
             FirePropertyChanged("Dimensions");
+         }
+      }
+
+      public void SetPassability(ICollection<GridCoordinate> cells, double passability)
+      {
+         foreach (var cell in cells)
+         {
+            Map.BlockedCells[cell] = passability;
          }
       }
 

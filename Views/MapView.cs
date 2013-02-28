@@ -71,31 +71,51 @@ namespace PathFind.Views
       {
          if (CaptureMouse())
          {
+            HitTestAndAddSelected(e);
             MouseDragging = true;
          }
       }
 
       void MapView_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
       {
-         ReleaseMouseCapture();
-         MouseDragging = false;
+         if (MouseDragging)
+         {
+            var vm = DataContext as MapVM;
+            if (vm != null)
+            {
+               vm.SetPassability(m_selectedCells, 1);
+            }
+
+            ReleaseMouseCapture();
+            MouseDragging = false;
+         }
+      }
+
+      private GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)
+      {
+         Point mouse = mouseEventArgs.GetPosition(this);
+
+         double hitX = mouse.X / (CellSize.Width + GridLineSize);
+         double hitY = mouse.Y / (CellSize.Height + GridLineSize);
+
+         return new GridCoordinate() { Column = (int)hitX, Row = (int)hitY };
+      }
+
+      private void HitTestAndAddSelected(System.Windows.Input.MouseEventArgs mouseEventArgs)
+      {
+         GridCoordinate hitCell = GetHitCell(mouseEventArgs);
+
+         if (m_selectedCells.Add(hitCell))
+         {
+            InvalidateVisual();
+         }
       }
 
       void MapView_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
       {
          if (MouseDragging)
          {
-            Point mouse = e.GetPosition(this);
-
-            double hitX = mouse.X / (CellSize.Width + GridLineSize);
-            double hitY = mouse.Y / (CellSize.Height + GridLineSize);
-
-            GridCoordinate hitCell = new GridCoordinate() { Column = (int)hitX, Row = (int)hitY };
-
-            if (m_selectedCells.Add(hitCell))
-            {
-               InvalidateVisual();
-            }
+            HitTestAndAddSelected(e);
          }
       }
 
@@ -112,15 +132,30 @@ namespace PathFind.Views
 
          DrawGrid(drawingContext);
 
+         DrawBlockedCells(drawingContext);
+
          if (m_selectedCells != null && m_selectedCells.Count > 0)
          {
             DrawSelectedCells(drawingContext);
          }
       }
 
+      private Brush m_gridLineBrush = Brushes.Black;
+      public Brush GridLineBrush
+      {
+         get
+         {
+            return m_gridLineBrush;
+         }
+         set
+         {
+            m_gridLineBrush = value;
+         }
+      }
+
       private void DrawGrid(DrawingContext dc)
       {
-         Pen linePen = new Pen(Brushes.Black, .1);
+         Pen linePen = new Pen(GridLineBrush, 0.1);
 
          // Horizontal grid lines
          for (int i = 0; i <= Dimensions.Height; i++)
@@ -137,13 +172,35 @@ namespace PathFind.Views
          }
       }
 
+      private Rect GetCellRect(GridCoordinate cell)
+      {
+         Point cellPoint = new Point(cell.Column * (CellSize.Width + GridLineSize) + GridLineSize, cell.Row * (CellSize.Height + GridLineSize) + GridLineSize);
+         return new Rect(cellPoint, CellSize);
+      }
+
+      private void DrawBlockedCells(DrawingContext dc)
+      {
+         Color blockedColor = Color.FromRgb(0, 0, 0);
+         Color unblockedColor = Color.FromRgb(255, 255, 255);
+
+         Brush blockedBrush = new SolidColorBrush(blockedColor);
+         Brush unblockedBrush = new SolidColorBrush(unblockedColor);
+
+         var vm = DataContext as MapVM;
+         if (vm != null)
+         {
+            foreach (var cellEntry in vm.Map.BlockedCells)
+            {
+               dc.DrawRectangle(cellEntry.Value != 0 ? blockedBrush : unblockedBrush, null, GetCellRect(cellEntry.Key));
+            }
+         }
+      }
+
       private void DrawSelectedCells(DrawingContext dc)
       {
          foreach (var cell in m_selectedCells)
          {
-            Point cellPoint = new Point(cell.Column * (CellSize.Width + GridLineSize) + GridLineSize, cell.Row * (CellSize.Height + GridLineSize) + GridLineSize);
-            Rect cellRect = new Rect(cellPoint, CellSize);
-            dc.DrawRectangle(Brushes.Blue, null, cellRect);
+            dc.DrawRectangle(Brushes.Tan, null, GetCellRect(cell));
          }
       }
    }
