@@ -33,7 +33,7 @@
                 <MenuItem Header="Stop Finding" />
             </MenuItem>
         </Menu>
-        <ScrollViewer Name="scrollViewer1" Margin="0,24,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer Name="scrollViewer1" Margin="0,24,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="#FFE5DCDC">
             <v:MapView x:Name="mapView1" CellSize="32,32" DataContext="{StaticResource ResourceKey=mapVM}" />
         </ScrollViewer>
     </Grid>
