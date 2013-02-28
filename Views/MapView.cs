@@ -34,12 +34,18 @@ namespace PathFind.Views
          }
       }
 
+      private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();
+      public HashSet<GridCoordinate> SelectedCells
+      {
+         get { return m_selectedCells; }
+         set { m_selectedCells = value; }
+      }
+
+      WeakReference controller;
+
       public MapView()
       {
-         MouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonDown);
-         MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonUp);
-         MouseMove += new System.Windows.Input.MouseEventHandler(MapView_MouseMove);
-         LostMouseCapture += new System.Windows.Input.MouseEventHandler(MapView_LostMouseCapture);
+         controller = new WeakReference(new PassabilityController(this));
 
          Initialized += new EventHandler(MapView_Initialized);
       }
@@ -50,48 +56,7 @@ namespace PathFind.Views
          Height = (CellSize.Height + GridLineSize) * Dimensions.Height;
       }
 
-      private bool m_mouseDragging = false;
-      public bool MouseDragging
-      {
-         get { return m_mouseDragging; }
-         private set
-         {
-            m_mouseDragging = value;
-            if (!m_mouseDragging)
-            {
-               m_selectedCells.Clear();
-               InvalidateVisual();
-            }
-         }
-      }
-
-      private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();
-
-      void MapView_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-      {
-         if (CaptureMouse())
-         {
-            HitTestAndAddSelected(e);
-            MouseDragging = true;
-         }
-      }
-
-      void MapView_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-      {
-         if (MouseDragging)
-         {
-            var vm = DataContext as MapVM;
-            if (vm != null)
-            {
-               vm.SetPassability(m_selectedCells, 1);
-            }
-
-            ReleaseMouseCapture();
-            MouseDragging = false;
-         }
-      }
-
-      private GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)
+      public GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)
       {
          Point mouse = mouseEventArgs.GetPosition(this);
 
@@ -99,29 +64,6 @@ namespace PathFind.Views
          double hitY = mouse.Y / (CellSize.Height + GridLineSize);
 
          return new GridCoordinate() { Column = (int)hitX, Row = (int)hitY };
-      }
-
-      private void HitTestAndAddSelected(System.Windows.Input.MouseEventArgs mouseEventArgs)
-      {
-         GridCoordinate hitCell = GetHitCell(mouseEventArgs);
-
-         if (m_selectedCells.Add(hitCell))
-         {
-            InvalidateVisual();
-         }
-      }
-
-      void MapView_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-      {
-         if (MouseDragging)
-         {
-            HitTestAndAddSelected(e);
-         }
-      }
-
-      void MapView_LostMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
-      {
-         m_mouseDragging = false;
       }
 
       protected override void OnRender(DrawingContext drawingContext)
@@ -134,7 +76,7 @@ namespace PathFind.Views
 
          DrawBlockedCells(drawingContext);
 
-         if (m_selectedCells != null && m_selectedCells.Count > 0)
+         if (SelectedCells != null && SelectedCells.Count > 0)
          {
             DrawSelectedCells(drawingContext);
          }
@@ -196,11 +138,24 @@ namespace PathFind.Views
          }
       }
 
+      private Brush m_selectedCellBrush = Brushes.Tan;
+      public Brush SelectedCellBrush
+      {
+         get
+         {
+            return m_selectedCellBrush;
+         }
+         set
+         {
+            m_selectedCellBrush = value;
+         }
+      }
+
       private void DrawSelectedCells(DrawingContext dc)
       {
-         foreach (var cell in m_selectedCells)
+         foreach (var cell in SelectedCells)
          {
-            dc.DrawRectangle(Brushes.Tan, null, GetCellRect(cell));
+            dc.DrawRectangle(SelectedCellBrush, null, GetCellRect(cell));
          }
       }
    }

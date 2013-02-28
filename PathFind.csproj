@@ -58,6 +58,7 @@
     <Compile Include="Models\GridCoordinate.cs" />
     <Compile Include="ViewModels\MapVM.cs" />
     <Compile Include="Views\MapView.cs" />
+    <Compile Include="Views\PassabilityController.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
