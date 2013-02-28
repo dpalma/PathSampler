@@ -4,21 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.ComponentModel;
+using PathFind.Models;
 
 namespace PathFind.ViewModels
 {
    public class MapVM : INotifyPropertyChanged
    {
-      private Size m_dimensions;
+      private Map m_map;
+      public Map Map
+      {
+         get
+         {
+            return m_map;
+         }
+         set
+         {
+            m_map = value;
+            FirePropertyChanged("Map");
+         }
+      }
+
       public Size Dimensions
       {
          get
          {
-            return m_dimensions;
+            return Map.Dimensions;
          }
          set
          {
-            m_dimensions = value;
+            Map.Dimensions = value;
             FirePropertyChanged("Dimensions");
          }
       }

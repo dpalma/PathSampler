@@ -23,9 +23,6 @@ namespace PathFind.Views
          set { m_cellSize = value; }
       }
 
-      //private static readonly DependencyProperty DimensionsProperty = DependencyProperty.Register(
-      //    "Dimensions", typeof(Size), typeof(MapView));
-
       public Size Dimensions
       {
          get

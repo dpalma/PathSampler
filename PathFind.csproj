@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\GridCoordinate.cs" />
     <Compile Include="ViewModels\MapVM.cs" />
     <Compile Include="Views\MapView.cs" />
     <Page Include="MainWindow.xaml">
