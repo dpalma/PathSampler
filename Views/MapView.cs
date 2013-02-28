@@ -3,30 +3,59 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
+using PathFind.ViewModels;
 
 namespace PathFind.Views
 {
    public class MapView : Canvas
    {
-      private Typeface typeface = new Typeface("Arial");
+      private int m_gridLineSize = 1;
+      public int GridLineSize
+      {
+         get { return m_gridLineSize; }
+         set { m_gridLineSize = value; }
+      }
 
-      const int GridLineSize = 1;
+      private Size m_cellSize = new Size(16, 16);
+      public Size CellSize
+      {
+         get { return m_cellSize; }
+         set { m_cellSize = value; }
+      }
 
-      public Size MapCellSize = new Size(32, 32); // TODO get from view model
+      //private static readonly DependencyProperty DimensionsProperty = DependencyProperty.Register(
+      //    "Dimensions", typeof(Size), typeof(MapView));
+
+      public Size Dimensions
+      {
+         get
+         {
+            var vm = DataContext as MapVM;
+            return vm.Dimensions;
+         }
+      }
 
       public MapView()
       {
          MouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonDown);
          MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonUp);
          MouseMove += new System.Windows.Input.MouseEventHandler(MapView_MouseMove);
+
+         Initialized += new EventHandler(MapView_Initialized);
+      }
+
+      void MapView_Initialized(object sender, EventArgs e)
+      {
+         Width = (CellSize.Width + GridLineSize) * Dimensions.Width;
+         Height = (CellSize.Height + GridLineSize) * Dimensions.Height;
       }
 
       void MapView_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
       {
          Point mouse = e.GetPosition(this);
 
-         double hitX = mouse.X / (MapCellSize.Width + GridLineSize);
-         double hitY = mouse.Y / (MapCellSize.Height + GridLineSize);
+         double hitX = mouse.X / (CellSize.Width + GridLineSize);
+         double hitY = mouse.Y / (CellSize.Height + GridLineSize);
 
          System.Diagnostics.Debug.WriteLine("Mouse down on cell ({0}, {1})", (int)hitX, (int)hitY);
       }
@@ -46,37 +75,24 @@ namespace PathFind.Views
          drawingContext.DrawRectangle(Brushes.White, null, new Rect(new Size(ActualWidth, ActualHeight)));
 
          DrawGrid(drawingContext);
-
-         FormattedText text = new FormattedText("TODO", System.Globalization.CultureInfo.CurrentCulture,
-            System.Windows.FlowDirection.LeftToRight, typeface, 12, Brushes.Black);
-
-         Point p = new Point();
-         p.X = (ActualWidth - text.Width) / 2;
-         p.Y = (ActualHeight - text.Height) / 2;
-
-         drawingContext.DrawText(text, p);
       }
 
       private void DrawGrid(DrawingContext dc)
       {
-         Size dims = new Size(16, 16); // TODO get from model
-
-         Size totalSize = new Size((MapCellSize.Width + GridLineSize) * dims.Width, (MapCellSize.Height + GridLineSize) * dims.Height);
-
          Pen linePen = new Pen(Brushes.Black, .1);
 
          // Horizontal grid lines
-         for (int i = 0; i < dims.Height; i++)
+         for (int i = 0; i <= Dimensions.Height; i++)
          {
-            int y = (int)(i * (MapCellSize.Height + GridLineSize) + MapCellSize.Height);
-            dc.DrawLine(linePen, new Point(0, y), new Point(totalSize.Width, y));
+            int y = (int)(i * (CellSize.Height + GridLineSize));
+            dc.DrawLine(linePen, new Point(0, y), new Point(Width, y));
          }
 
          // Vertical grid lines
-         for (int j = 0; j < dims.Width; j++)
+         for (int j = 0; j <= Dimensions.Width; j++)
          {
-            int x = (int)(j * (MapCellSize.Width + GridLineSize) + MapCellSize.Width);
-            dc.DrawLine(linePen, new Point(x, 0), new Point(x, totalSize.Height));
+            int x = (int)(j * (CellSize.Width + GridLineSize));
+            dc.DrawLine(linePen, new Point(x, 0), new Point(x, Height));
          }
       }
    }

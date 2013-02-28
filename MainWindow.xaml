@@ -28,10 +28,12 @@
                 <MenuItem Header="Stop Finding" />
             </MenuItem>
         </Menu>
-        <v:MapView Margin="0,20,0,0" x:Name="mapView1">
-            <v:MapView.DataContext>
-                <vm:MapVM />
-            </v:MapView.DataContext>
-        </v:MapView>
+        <ScrollViewer Name="scrollViewer1" Margin="0,24,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <v:MapView x:Name="mapView1" CellSize="32,32">
+                <v:MapView.DataContext>
+                    <vm:MapVM Dimensions="16,16" />
+                </v:MapView.DataContext>
+            </v:MapView>
+        </ScrollViewer>
     </Grid>
 </Window>
