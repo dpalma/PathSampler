@@ -20,9 +20,27 @@ namespace PathFind.ViewModels
          }
          set
          {
+            if (value == null)
+            {
+               throw new ArgumentNullException("Map");
+            }
+
+            if (Map != null)
+            {
+               Map.PropertyChanged -= new PropertyChangedEventHandler(Map_PropertyChanged);
+            }
+
             m_map = value;
+
+            Map.PropertyChanged += new PropertyChangedEventHandler(Map_PropertyChanged);
+
             FirePropertyChanged("Map");
          }
+      }
+
+      private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
+      {
+         FirePropertyChanged(e.PropertyName);
       }
 
       private int m_gridLineSize = 1;

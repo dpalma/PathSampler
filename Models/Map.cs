@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 using System.Windows;
 
 namespace PathFind.Models
 {
+   [Serializable]
    public class Map : INotifyPropertyChanged
    {
       private Size m_dimensions;
@@ -77,6 +76,14 @@ namespace PathFind.Models
             m_goal = value;
             FirePropertyChanged("Goal");
          }
+      }
+
+      public void Assign(Map other)
+      {
+         this.Dimensions = other.Dimensions;
+         this.BlockedCells = other.BlockedCells;
+         this.Goal = other.Goal;
+         this.Start = other.Start;
       }
 
       #region INotifyPropertyChanged Members

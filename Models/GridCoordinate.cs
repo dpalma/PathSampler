@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PathFind.Models
 {
+   [Serializable]
    public class GridCoordinate
    {
       public int Row;
