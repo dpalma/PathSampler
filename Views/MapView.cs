@@ -51,7 +51,12 @@ namespace PathFind.Views
 
       public MapView()
       {
-         controller = new WeakReference(new PassabilityController(this));
+         Initialized += new EventHandler(MapView_Initialized);
+      }
+
+      void MapView_Initialized(object sender, EventArgs e)
+      {
+         controller = new WeakReference(new PassabilityController(this, DataContext as MapVM));
       }
 
       public GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)

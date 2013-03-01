@@ -15,9 +15,16 @@ namespace PathFind.Views
          get { return m_mapView; }
       }
 
-      public PassabilityController(MapView mapView)
+      private MapVM m_mapViewModel;
+      public MapVM MapViewModel
+      {
+         get { return m_mapViewModel; }
+      }
+
+      public PassabilityController(MapView mapView, MapVM mapViewModel)
       {
          m_mapView = mapView;
+         m_mapViewModel = mapViewModel;
 
          MapView.MouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonDown);
          MapView.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonUp);
@@ -53,11 +60,7 @@ namespace PathFind.Views
       {
          if (MouseDragging)
          {
-            var vm = MapView.DataContext as MapVM;
-            if (vm != null)
-            {
-               vm.SetPassability(MapView.SelectedCells, 1);
-            }
+            MapViewModel.SetPassability(MapViewModel.SelectedCells, 1);
 
             MapView.ReleaseMouseCapture();
             MouseDragging = false;
@@ -68,7 +71,7 @@ namespace PathFind.Views
       {
          GridCoordinate hitCell = MapView.GetHitCell(mouseEventArgs);
 
-         if (MapView.SelectedCells.Add(hitCell))
+         if (MapViewModel.SelectedCells.Add(hitCell))
          {
             MapView.InvalidateVisual();
          }
