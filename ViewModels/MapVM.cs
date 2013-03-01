@@ -25,6 +25,34 @@ namespace PathFind.ViewModels
          }
       }
 
+      private int m_gridLineSize = 1;
+      public int GridLineSize
+      {
+          get
+          {
+             return m_gridLineSize;
+          }
+          set
+          {
+             m_gridLineSize = value;
+             FirePropertyChanged("GridLineSize");
+          }
+      }
+
+      private Size m_cellSize = new Size(16, 16);
+      public Size CellSize
+      {
+          get
+          {
+             return m_cellSize;
+          }
+          set
+          {
+             m_cellSize = value;
+             FirePropertyChanged("CellSize");
+          }
+      }
+
       public Size Dimensions
       {
          get
@@ -35,6 +63,35 @@ namespace PathFind.ViewModels
          {
             Map.Dimensions = value;
             FirePropertyChanged("Dimensions");
+         }
+      }
+
+      public double ViewWidth
+      {
+         get
+         {
+            return (CellSize.Width + GridLineSize) * Dimensions.Width;
+         }
+      }
+
+      public double ViewHeight
+      {
+         get
+         {
+            return (CellSize.Height + GridLineSize) * Dimensions.Height;
+         }
+      }
+
+      private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();
+      public HashSet<GridCoordinate> SelectedCells
+      {
+         get
+         {
+            return m_selectedCells;
+         }
+         set
+         {
+            m_selectedCells = value;
          }
       }
 

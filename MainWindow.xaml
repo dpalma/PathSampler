@@ -13,7 +13,7 @@
     </Window.CommandBindings>
     <Window.Resources>
         <m:Map x:Key="map" Dimensions="16,16" />
-        <vm:MapVM x:Key="mapVM" Map="{StaticResource ResourceKey=map}" />
+        <vm:MapVM x:Key="mapVM" Map="{StaticResource ResourceKey=map}" CellSize="32,32" />
     </Window.Resources>
     <Grid>
         <Menu Height="23" Name="menu1" VerticalAlignment="Top">
@@ -34,7 +34,7 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Name="scrollViewer1" Margin="0,24,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="Gainsboro">
-            <v:MapView x:Name="mapView1" CellSize="32,32" DataContext="{StaticResource ResourceKey=mapVM}" SelectedCellBrush="#FFC6D1F5" />
+            <v:MapView x:Name="mapView1" DataContext="{StaticResource ResourceKey=mapVM}" SelectedCellBrush="#FFC6D1F5" Width="{Binding Path=ViewWidth}" Height="{Binding Path=ViewHeight}" />
         </ScrollViewer>
     </Grid>
 </Window>

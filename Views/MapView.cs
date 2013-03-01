@@ -11,18 +11,22 @@ namespace PathFind.Views
 {
    public class MapView : Canvas
    {
-      private int m_gridLineSize = 1;
       public int GridLineSize
       {
-         get { return m_gridLineSize; }
-         set { m_gridLineSize = value; }
+         get
+         {
+            var vm = DataContext as MapVM;
+            return vm.GridLineSize;
+         }
       }
 
-      private Size m_cellSize = new Size(16, 16);
       public Size CellSize
       {
-         get { return m_cellSize; }
-         set { m_cellSize = value; }
+         get
+         {
+            var vm = DataContext as MapVM;
+            return vm.CellSize;
+         }
       }
 
       public Size Dimensions
@@ -34,11 +38,13 @@ namespace PathFind.Views
          }
       }
 
-      private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();
       public HashSet<GridCoordinate> SelectedCells
       {
-         get { return m_selectedCells; }
-         set { m_selectedCells = value; }
+         get
+         {
+            var vm = DataContext as MapVM;
+            return vm.SelectedCells;
+         }
       }
 
       WeakReference controller;
@@ -46,14 +52,6 @@ namespace PathFind.Views
       public MapView()
       {
          controller = new WeakReference(new PassabilityController(this));
-
-         Initialized += new EventHandler(MapView_Initialized);
-      }
-
-      void MapView_Initialized(object sender, EventArgs e)
-      {
-         Width = (CellSize.Width + GridLineSize) * Dimensions.Width;
-         Height = (CellSize.Height + GridLineSize) * Dimensions.Height;
       }
 
       public GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)
