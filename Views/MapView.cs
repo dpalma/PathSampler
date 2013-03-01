@@ -69,6 +69,8 @@ namespace PathFind.Views
 
          DrawBlockedCells(drawingContext);
 
+         DrawStartAndGoalCells(drawingContext);
+
          if (SelectedCells != null && SelectedCells.Count > 0)
          {
             DrawSelectedCells(drawingContext);
@@ -129,6 +131,60 @@ namespace PathFind.Views
                dc.DrawRectangle(cellEntry.Value != 0 ? blockedBrush : unblockedBrush, null, GetCellRect(cellEntry.Key));
             }
          }
+      }
+
+      private Brush m_startCellBrush = Brushes.Green;
+      public Brush StartCellBrush
+      {
+         get
+         {
+            return m_startCellBrush;
+         }
+         set
+         {
+            m_startCellBrush = value;
+         }
+      }
+
+      private Brush m_goalCellBrush = Brushes.Red;
+      public Brush GoalCellBrush
+      {
+         get
+         {
+            return m_goalCellBrush;
+         }
+         set
+         {
+            m_goalCellBrush = value;
+         }
+      }
+
+      private void DrawStartAndGoalCells(DrawingContext dc)
+      {
+         var vm = DataContext as MapVM;
+         if (vm != null)
+         {
+            if (vm.Map.Goal != null)
+            {
+               DrawCellEllipse(dc, vm.Map.Goal, GoalCellBrush);
+            }
+
+            if (vm.Map.Start != null)
+            {
+               DrawCellEllipse(dc, vm.Map.Start, StartCellBrush);
+            }
+         }
+      }
+
+      private static Point RectCenter(Rect rect)
+      {
+         return new Point((rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2);
+      }
+
+      private void DrawCellEllipse(DrawingContext dc, GridCoordinate cell, Brush brush, Pen pen = null)
+      {
+         Rect cellRect = GetCellRect(cell);
+         dc.DrawEllipse(brush, pen, RectCenter(cellRect), cellRect.Width / 2, cellRect.Height / 2);
       }
 
       private Brush m_selectedCellBrush = Brushes.Tan;
