@@ -5,7 +5,7 @@
         xmlns:m="clr-namespace:PathFind.Models"
         xmlns:vm="clr-namespace:PathFind.ViewModels"
         xmlns:v="clr-namespace:PathFind.Views"
-        Title="MainWindow" Height="548" Width="707">
+        Title="MainWindow" Height="620" Width="700">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" Executed="OnOpen" />
         <CommandBinding Command="ApplicationCommands.Save" Executed="OnSave" />
@@ -24,9 +24,9 @@
                 <MenuItem Header="Exit" Command="cmd:MainCommands.Exit" />
             </MenuItem>
             <MenuItem Header="Cell">
-                <MenuItem Header="Set Passability" />
-                <MenuItem Header="Set Start" />
-                <MenuItem Header="Set Goal" />
+                <MenuItem Header="Set Passability" IsCheckable="True" />
+                <MenuItem Header="Set Start" IsCheckable="True" />
+                <MenuItem Header="Set Goal" IsCheckable="True" />
             </MenuItem>
             <MenuItem Header="Path">
                 <MenuItem Header="Start Finding" />
