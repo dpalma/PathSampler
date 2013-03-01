@@ -103,7 +103,13 @@ namespace PathFind
 
       private void OnNew(object sender, ExecutedRoutedEventArgs e)
       {
+         Map map = DataContext as Map;
+         if (map == null)
+         {
+            throw new InvalidOperationException("Window has no model");
+         }
 
+         map.Assign(new Map() { Dimensions = new Size(Map.DefaultDimension, Map.DefaultDimension) });
       }
 
       private void OnExit(object sender, ExecutedRoutedEventArgs e)

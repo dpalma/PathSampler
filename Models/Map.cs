@@ -8,6 +8,8 @@ namespace PathFind.Models
    [Serializable]
    public class Map : INotifyPropertyChanged
    {
+      public const int DefaultDimension = 16;
+
       private Size m_dimensions;
       public Size Dimensions
       {
