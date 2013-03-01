@@ -1,14 +1,15 @@
 ﻿using PathFind.Models;
 using PathFind.ViewModels;
+using System.Windows;
 
 namespace PathFind.Views
 {
    class PassabilityController
    {
-      private MapView m_mapView;
-      public MapView MapView
+      private FrameworkElement m_view;
+      public FrameworkElement View
       {
-         get { return m_mapView; }
+         get { return m_view; }
       }
 
       private MapVM m_mapViewModel;
@@ -17,15 +18,15 @@ namespace PathFind.Views
          get { return m_mapViewModel; }
       }
 
-      public PassabilityController(MapView mapView, MapVM mapViewModel)
+      public PassabilityController(FrameworkElement view, MapVM mapViewModel)
       {
-         m_mapView = mapView;
+         m_view = view;
          m_mapViewModel = mapViewModel;
 
-         MapView.MouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonDown);
-         MapView.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonUp);
-         MapView.MouseMove += new System.Windows.Input.MouseEventHandler(MapView_MouseMove);
-         MapView.LostMouseCapture += new System.Windows.Input.MouseEventHandler(MapView_LostMouseCapture);
+         View.MouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonDown);
+         View.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonUp);
+         View.MouseMove += new System.Windows.Input.MouseEventHandler(MapView_MouseMove);
+         View.LostMouseCapture += new System.Windows.Input.MouseEventHandler(MapView_LostMouseCapture);
       }
 
       private bool m_mouseDragging = false;
@@ -37,15 +38,15 @@ namespace PathFind.Views
             m_mouseDragging = value;
             if (!m_mouseDragging)
             {
-               MapView.SelectedCells.Clear();
-               MapView.InvalidateVisual();
+               MapViewModel.SelectedCells.Clear();
+               View.InvalidateVisual();
             }
          }
       }
 
       void MapView_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
       {
-         if (MapView.CaptureMouse())
+         if (View.CaptureMouse())
          {
             HitTestAndAddSelected(e);
             MouseDragging = true;
@@ -58,7 +59,7 @@ namespace PathFind.Views
          {
             MapViewModel.SetPassability(MapViewModel.SelectedCells, 1);
 
-            MapView.ReleaseMouseCapture();
+            View.ReleaseMouseCapture();
             MouseDragging = false;
          }
       }
@@ -71,7 +72,7 @@ namespace PathFind.Views
          {
             if (MapViewModel.SelectedCells.Add(hitCell))
             {
-               MapView.InvalidateVisual();
+               View.InvalidateVisual();
             }
          }
       }
@@ -86,7 +87,7 @@ namespace PathFind.Views
 
       void MapView_LostMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
       {
-         m_mouseDragging = false;
+         MouseDragging = false;
       }
    }
 }
