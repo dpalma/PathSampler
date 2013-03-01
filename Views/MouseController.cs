@@ -81,11 +81,9 @@ namespace PathFind.Views
 
          if (hitCell != null)
          {
-            SelectCell(hitCell);
+            MapViewModel.AddSelectedCell(hitCell);
          }
       }
-
-      protected abstract void SelectCell(GridCoordinate cell);
 
       void MapView_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
       {

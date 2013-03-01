@@ -10,13 +10,5 @@ namespace PathFind.Views
          : base(view, mapViewModel)
       {
       }
-
-      override protected void SelectCell(GridCoordinate cell)
-      {
-         if (MapViewModel.SelectedCells.Add(cell))
-         {
-            View.InvalidateVisual();
-         }
-      }
    }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using PathFind.Models;
 using PathFind.Commands;
+using PathFind.Models;
 
 namespace PathFind.ViewModels
 {
@@ -129,16 +130,27 @@ namespace PathFind.ViewModels
       }
 
       private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();
-      public HashSet<GridCoordinate> SelectedCells
+      internal HashSet<GridCoordinate> SelectedCells
       {
          get
          {
             return m_selectedCells;
          }
-         set
+         private set
          {
             m_selectedCells = value;
             FirePropertyChanged("SelectedCells");
+         }
+      }
+
+      public void AddSelectedCell(GridCoordinate cell)
+      {
+         if (SelectedCells.Add(cell))
+         {
+            if (RedrawRequested != null)
+            {
+               RedrawRequested(this, EventArgs.Empty);
+            }
          }
       }
 
