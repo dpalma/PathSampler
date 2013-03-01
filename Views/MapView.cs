@@ -56,7 +56,14 @@ namespace PathFind.Views
 
       void MapView_Initialized(object sender, EventArgs e)
       {
-         controller = new WeakReference(new PassabilityController(this, DataContext as MapVM));
+         MapVM vm = DataContext as MapVM;
+         vm.RedrawRequested += new EventHandler(ViewModel_RedrawRequested);
+         controller = new WeakReference(new PassabilityController(this, vm));
+      }
+
+      void ViewModel_RedrawRequested(object sender, EventArgs e)
+      {
+         InvalidateVisual();
       }
 
       protected override void OnRender(DrawingContext drawingContext)

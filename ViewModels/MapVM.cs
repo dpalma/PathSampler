@@ -41,7 +41,14 @@ namespace PathFind.ViewModels
       private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
       {
          FirePropertyChanged(e.PropertyName);
+
+         if (RedrawRequested != null)
+         {
+            RedrawRequested(this, EventArgs.Empty);
+         }
       }
+
+      public event EventHandler RedrawRequested;
 
       private int m_gridLineSize = 1;
       public int GridLineSize
