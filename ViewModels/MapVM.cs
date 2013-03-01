@@ -82,6 +82,27 @@ namespace PathFind.ViewModels
          }
       }
 
+      public GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)
+      {
+         FrameworkElement view = mouseEventArgs.Source as FrameworkElement;
+         if (view == null)
+         {
+            return null;
+         }
+
+         Point mouse = mouseEventArgs.GetPosition(view);
+
+         if (mouse.X < 0 || mouse.X > view.Width || mouse.Y < 0 || mouse.Y > view.Height)
+         {
+            return null;
+         }
+
+         double hitX = mouse.X / (CellSize.Width + GridLineSize);
+         double hitY = mouse.Y / (CellSize.Height + GridLineSize);
+
+         return new GridCoordinate() { Column = (int)hitX, Row = (int)hitY };
+      }
+
       private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();
       public HashSet<GridCoordinate> SelectedCells
       {

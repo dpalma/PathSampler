@@ -59,16 +59,6 @@ namespace PathFind.Views
          controller = new WeakReference(new PassabilityController(this, DataContext as MapVM));
       }
 
-      public GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)
-      {
-         Point mouse = mouseEventArgs.GetPosition(this);
-
-         double hitX = mouse.X / (CellSize.Width + GridLineSize);
-         double hitY = mouse.Y / (CellSize.Height + GridLineSize);
-
-         return new GridCoordinate() { Column = (int)hitX, Row = (int)hitY };
-      }
-
       protected override void OnRender(DrawingContext drawingContext)
       {
          base.OnRender(drawingContext);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using PathFind.Models;
+﻿using PathFind.Models;
 using PathFind.ViewModels;
 
 namespace PathFind.Views
@@ -69,11 +65,14 @@ namespace PathFind.Views
 
       private void HitTestAndAddSelected(System.Windows.Input.MouseEventArgs mouseEventArgs)
       {
-         GridCoordinate hitCell = MapView.GetHitCell(mouseEventArgs);
+         GridCoordinate hitCell = MapViewModel.GetHitCell(mouseEventArgs);
 
-         if (MapViewModel.SelectedCells.Add(hitCell))
+         if (hitCell != null)
          {
-            MapView.InvalidateVisual();
+            if (MapViewModel.SelectedCells.Add(hitCell))
+            {
+               MapView.InvalidateVisual();
+            }
          }
       }
 
