@@ -11,11 +11,6 @@ namespace PathFind.Views
       {
       }
 
-      override protected void Finish()
-      {
-         MapViewModel.SetPassability(MapViewModel.SelectedCells, 1);
-      }
-
       override protected void SelectCell(GridCoordinate cell)
       {
          if (MapViewModel.SelectedCells.Add(cell))

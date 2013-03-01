@@ -47,7 +47,7 @@ namespace PathFind.Views
          }
       }
 
-      WeakReference controller;
+      WeakReference controllerRef;
 
       public MapView()
       {
@@ -56,9 +56,15 @@ namespace PathFind.Views
 
       void MapView_Initialized(object sender, EventArgs e)
       {
+         // View model will be null in design mode
          MapVM vm = DataContext as MapVM;
-         vm.RedrawRequested += new EventHandler(ViewModel_RedrawRequested);
-         controller = new WeakReference(new PassabilityController(this, vm));
+         if (vm != null)
+         {
+            vm.RedrawRequested += new EventHandler(ViewModel_RedrawRequested);
+            var controller = new PassabilityController(this, vm);
+            controller.Command = vm.SetPassabilityCommand;
+            controllerRef = new WeakReference(controller);
+         }
       }
 
       void ViewModel_RedrawRequested(object sender, EventArgs e)

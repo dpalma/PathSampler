@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using System.ComponentModel;
-using PathFind.Commands;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 using PathFind.Models;
+using PathFind.Commands;
 
 namespace PathFind.ViewModels
 {
@@ -138,14 +138,78 @@ namespace PathFind.ViewModels
          set
          {
             m_selectedCells = value;
+            FirePropertyChanged("SelectedCells");
          }
       }
 
-      public void SetPassability(ICollection<GridCoordinate> cells, double passability)
+      private double m_passability = 1;
+      public double Passability
       {
-         foreach (var cell in cells)
+         get
          {
-            Map.BlockedCells[cell] = passability;
+            return m_passability;
+         }
+         set
+         {
+            if (value < 0 || value > 1)
+            {
+               throw new ArgumentOutOfRangeException("Passability", "Passability values must be between 0 and 1");
+            }
+            m_passability = value;
+            FirePropertyChanged("Passability");
+         }
+      }
+
+      private void SetPassability()
+      {
+         foreach (var cell in SelectedCells)
+         {
+            Map.BlockedCells[cell] = Passability;
+         }
+      }
+
+      private ICommand m_setPassabilityCommand;
+      public ICommand SetPassabilityCommand
+      {
+         get
+         {
+            if (m_setPassabilityCommand == null)
+            {
+               m_setPassabilityCommand = new DelegateCommand(
+                        t => { SetPassability(); },
+                        t => { return SelectedCells.Count > 0; });
+            }
+            return m_setPassabilityCommand;
+         }
+      }
+
+      private ICommand m_setStartCommand;
+      public ICommand SetStartCommand
+      {
+         get
+         {
+            if (m_setStartCommand == null)
+            {
+               m_setStartCommand = new DelegateCommand(
+                        t => { Map.Start = SelectedCells.First(); },
+                        t => { return SelectedCells.Count == 1; });
+            }
+            return m_setStartCommand;
+         }
+      }
+
+      private ICommand m_setGoalCommand;
+      public ICommand SetGoalCommand
+      {
+         get
+         {
+            if (m_setGoalCommand == null)
+            {
+               m_setGoalCommand = new DelegateCommand(
+                        t => { Map.Goal = SelectedCells.First(); },
+                        t => { return SelectedCells.Count == 1; });
+            }
+            return m_setGoalCommand;
          }
       }
 

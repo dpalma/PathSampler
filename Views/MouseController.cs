@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using PathFind.ViewModels;
+using System.Windows.Input;
 using PathFind.Models;
+using PathFind.ViewModels;
 
 namespace PathFind.Views
 {
@@ -20,6 +19,13 @@ namespace PathFind.Views
       public MapVM MapViewModel
       {
          get { return m_mapViewModel; }
+      }
+
+      private ICommand m_command;
+      public ICommand Command
+      {
+         get { return m_command; }
+         set { m_command = value; }
       }
 
       public MouseController(FrameworkElement view, MapVM mapViewModel)
@@ -61,7 +67,8 @@ namespace PathFind.Views
       {
          if (MouseDragging)
          {
-            Finish();
+            if (Command != null)
+               Command.Execute(null);
 
             View.ReleaseMouseCapture();
             MouseDragging = false;
@@ -77,8 +84,6 @@ namespace PathFind.Views
             SelectCell(hitCell);
          }
       }
-
-      protected abstract void Finish();
 
       protected abstract void SelectCell(GridCoordinate cell);
 
