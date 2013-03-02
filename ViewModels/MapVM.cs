@@ -195,6 +195,27 @@ namespace PathFind.ViewModels
          }
       }
 
+      private ICommand m_clearPassabilityCommand;
+      public ICommand ClearPassabilityCommand
+      {
+         get
+         {
+            if (m_clearPassabilityCommand == null)
+            {
+               m_clearPassabilityCommand = new DelegateCommand(
+                        t =>
+                        {
+                           foreach (var cell in SelectedCells)
+                           {
+                              Map.BlockedCells.Remove(cell);
+                           }
+                        },
+                        t => { return SelectedCells.Count > 0; });
+            }
+            return m_clearPassabilityCommand;
+         }
+      }
+
       private ICommand m_setStartCommand;
       public ICommand SetStartCommand
       {

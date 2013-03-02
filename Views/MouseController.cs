@@ -7,7 +7,7 @@ using PathFind.ViewModels;
 
 namespace PathFind.Views
 {
-   abstract class MouseController
+   class MouseController
    {
       private FrameworkElement m_view;
       public FrameworkElement View
@@ -54,13 +54,53 @@ namespace PathFind.Views
          }
       }
 
+      delegate void CellSelector(GridCoordinate hitCell);
+
       void MapView_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
       {
          if (View.CaptureMouse())
          {
+            GridCoordinate hitCell = MapViewModel.GetHitCell(e);
+            if (hitCell != null)
+            {
+               if (hitCell.Equals(MapViewModel.Map.Goal))
+               {
+                  Command = MapViewModel.SetGoalCommand;
+                  CellSelectionBehavior = CellSelectSingle;
+               }
+               else if (hitCell.Equals(MapViewModel.Map.Start))
+               {
+                  Command = MapViewModel.SetStartCommand;
+                  CellSelectionBehavior = CellSelectSingle;
+               }
+               else if (MapViewModel.Map.BlockedCells.ContainsKey(hitCell))
+               {
+                  Command = MapViewModel.ClearPassabilityCommand;
+                  CellSelectionBehavior = CellSelectMultiple;
+               }
+               else
+               {
+                  Command = MapViewModel.SetPassabilityCommand;
+                  CellSelectionBehavior = CellSelectMultiple;
+               }
+            }
+
             HitTestAndSelect(e);
             MouseDragging = true;
          }
+      }
+
+      private CellSelector CellSelectionBehavior;
+
+      void CellSelectSingle(GridCoordinate cell)
+      {
+         MapViewModel.SelectedCells.Clear();
+         MapViewModel.AddSelectedCell(cell);
+      }
+
+      void CellSelectMultiple(GridCoordinate cell)
+      {
+         MapViewModel.AddSelectedCell(cell);
       }
 
       void MapView_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -81,7 +121,7 @@ namespace PathFind.Views
 
          if (hitCell != null)
          {
-            MapViewModel.AddSelectedCell(hitCell);
+            CellSelectionBehavior(hitCell);
          }
       }
 

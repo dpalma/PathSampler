@@ -61,8 +61,7 @@ namespace PathFind.Views
          if (vm != null)
          {
             vm.RedrawRequested += new EventHandler(ViewModel_RedrawRequested);
-            var controller = new PassabilityController(this, vm);
-            controller.Command = vm.SetPassabilityCommand;
+            var controller = new MouseController(this, vm);
             controllerRef = new WeakReference(controller);
          }
       }
