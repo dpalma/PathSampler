@@ -81,6 +81,8 @@ namespace PathFind.Views
 
          DrawBlockedCells(drawingContext);
 
+         DrawColoredCells(drawingContext);
+
          DrawStartAndGoalCells(drawingContext);
 
          if (SelectedCells != null && SelectedCells.Count > 0)
@@ -142,6 +144,15 @@ namespace PathFind.Views
             {
                dc.DrawRectangle(cellEntry.Value != 0 ? blockedBrush : unblockedBrush, null, GetCellRect(cellEntry.Key));
             }
+         }
+      }
+
+      private void DrawColoredCells(DrawingContext dc)
+      {
+         MapVM vm = DataContext as MapVM;
+         foreach (var entry in vm.ColoredCells)
+         {
+            dc.DrawRectangle(entry.Value, null, GetCellRect(entry.Key));
          }
       }
 

@@ -34,8 +34,8 @@
                 <MenuItem Header="Set Goal" IsCheckable="True" />
             </MenuItem>
             <MenuItem Header="Path">
-                <MenuItem Header="Start Finding" />
-                <MenuItem Header="Stop Finding" />
+                <MenuItem Header="Start Finding" Command="{Binding Source={StaticResource mapVM}, Path=StartPathingCommand}" />
+                <MenuItem Header="Stop Finding" Command="{Binding Source={StaticResource mapVM}, Path=StopPathingCommand}" />
             </MenuItem>
         </Menu>
         <ScrollViewer Name="scrollViewer1" Margin="0,24,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="Gainsboro">

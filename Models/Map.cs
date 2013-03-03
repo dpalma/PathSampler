@@ -80,6 +80,74 @@ namespace PathFind.Models
          }
       }
 
+      private bool IsAtLeftEdge(GridCoordinate cell)
+      {
+         return cell.Column == 0;
+      }
+
+      private bool IsAtRightEdge(GridCoordinate cell)
+      {
+         return cell.Column == (Dimensions.Width - 1);
+      }
+
+      private bool IsAtTopEdge(GridCoordinate cell)
+      {
+         return cell.Row == 0;
+      }
+
+      private bool IsAtBottomEdge(GridCoordinate cell)
+      {
+         return cell.Row == (Dimensions.Height - 1);
+      }
+
+      public GridCoordinate[] GetNeighbors(GridCoordinate cell)
+      {
+         List<GridCoordinate> neighbors = new List<GridCoordinate>();
+
+         bool atLeftEdge = IsAtLeftEdge(cell);
+         bool atRightEdge = IsAtRightEdge(cell);
+
+         if (!IsAtTopEdge(cell))
+         {
+            // top
+            neighbors.Add(new GridCoordinate() { Row = cell.Row - 1, Column = cell.Column });
+
+            // top left
+            if (!atLeftEdge)
+               neighbors.Add(new GridCoordinate() { Row = cell.Row - 1, Column = cell.Column - 1 });
+
+            // top right
+            if (!atRightEdge)
+               neighbors.Add(new GridCoordinate() { Row = cell.Row - 1, Column = cell.Column + 1 });
+         }
+
+         if (!IsAtBottomEdge(cell))
+         {
+            // bottom
+            neighbors.Add(new GridCoordinate() { Row = cell.Row + 1, Column = cell.Column });
+
+            // bottom left
+            if (!atLeftEdge)
+               neighbors.Add(new GridCoordinate() { Row = cell.Row + 1, Column = cell.Column - 1 });
+
+            // bottom right
+            if (!atRightEdge)
+               neighbors.Add(new GridCoordinate() { Row = cell.Row + 1, Column = cell.Column + 1 });
+         }
+
+         // left
+         if (!atLeftEdge)
+            neighbors.Add(new GridCoordinate() { Row = cell.Row, Column = cell.Column - 1 });
+
+         // right
+         if (!atRightEdge)
+            neighbors.Add(new GridCoordinate() { Row = cell.Row, Column = cell.Column + 1 });
+
+         neighbors.RemoveAll(c => BlockedCells.ContainsKey(c));
+
+         return neighbors.ToArray();
+      }
+
       public void Assign(Map other)
       {
          this.Dimensions = other.Dimensions;

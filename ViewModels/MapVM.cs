@@ -7,10 +7,13 @@ using System.Windows;
 using System.Windows.Input;
 using PathFind.Commands;
 using PathFind.Models;
+using System.Windows.Threading;
+using PathFind.PathFinders;
+using System.Windows.Media;
 
 namespace PathFind.ViewModels
 {
-   public class MapVM : INotifyPropertyChanged
+   public class MapVM : INotifyPropertyChanged, ICellColoring
    {
       private Map m_map;
       public Map Map
@@ -42,7 +45,11 @@ namespace PathFind.ViewModels
       private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
       {
          FirePropertyChanged(e.PropertyName);
+         FireRedrawRequested();
+      }
 
+      private void FireRedrawRequested()
+      {
          if (RedrawRequested != null)
          {
             RedrawRequested(this, EventArgs.Empty);
@@ -246,7 +253,97 @@ namespace PathFind.ViewModels
          }
       }
 
+      private DispatcherTimer m_timer;
+      private PathFinder m_pathFinder;
+
+      internal bool IsPathing
+      {
+         get { return m_timer != null; }
+      }
+
+      private void StartPathing()
+      {
+         if (m_timer != null)
+         {
+            throw new InvalidOperationException("Pathing already running");
+         }
+
+         m_timer = new DispatcherTimer();
+         m_timer.Tick += new EventHandler(timer_Tick);
+         m_timer.Interval = new TimeSpan(0, 0, 0, 0, 600);
+         m_timer.Start();
+
+         m_pathFinder = new BreadthFirstSearch(Map, this);
+      }
+
+      void timer_Tick(object sender, EventArgs e)
+      {
+         m_pathFinder.Step();
+
+         if (m_pathFinder.Result != null)
+         {
+            System.Diagnostics.Debug.WriteLine("Pathfinding complete");
+         }
+      }
+
+      private void StopPathing()
+      {
+         if (m_timer != null)
+         {
+            m_timer.Stop();
+            m_timer = null;
+         }
+
+         ColoredCells.Clear();
+      }
+
+      private ICommand m_startPathingCommand;
+      public ICommand StartPathingCommand
+      {
+         get
+         {
+            if (m_startPathingCommand == null)
+            {
+               m_startPathingCommand = new DelegateCommand(
+                        t =>
+                        {
+                           StartPathing();
+                        },
+                        t =>
+                        {
+                           return Map.Goal != null && Map.Start != null;
+                        });
+            }
+            return m_startPathingCommand;
+         }
+      }
+
+      private ICommand m_stopPathingCommand;
+      public ICommand StopPathingCommand
+      {
+         get
+         {
+            if (m_stopPathingCommand == null)
+            {
+               m_stopPathingCommand = new DelegateCommand(
+                        t =>
+                        {
+                           StopPathing();
+                        },
+                        t =>
+                        {
+                           return IsPathing;
+                        });
+            }
+            return m_stopPathingCommand;
+         }
+      }
+
+      #region INotifyPropertyChanged Members
+
       public event PropertyChangedEventHandler PropertyChanged;
+
+      #endregion
 
       private void FirePropertyChanged(string propertyName)
       {
@@ -255,5 +352,28 @@ namespace PathFind.ViewModels
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
          }
       }
+
+      #region ICellColoring Implementation
+
+      private Dictionary<GridCoordinate, Brush> m_coloredCells = new Dictionary<GridCoordinate,Brush>();
+
+      public IDictionary<GridCoordinate, Brush> ColoredCells
+      {
+         get { return m_coloredCells; }
+      }
+
+      public void SetCellColor(GridCoordinate cell, Brush brush)
+      {
+         if (Map.BlockedCells.ContainsKey(cell))
+         {
+            throw new InvalidOperationException("Attempting to color a blocked cell");
+         }
+
+         m_coloredCells[cell] = brush;
+
+         FireRedrawRequested();
+      }
+
+      #endregion
    }
 }
