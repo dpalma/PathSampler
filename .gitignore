@@ -19,3 +19,6 @@
 # Output directories
 bin
 obj
+
+# Third-party library directory
+ThirdParty
