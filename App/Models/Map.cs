@@ -68,6 +68,10 @@ namespace PathFind.Models
          }
          set
          {
+            if (value.Row < 0 || value.Row >= RowCount)
+            {
+               throw new ArgumentException("Start's row is outside the extents of the map");
+            }
             if (BlockedCells.ContainsKey(value))
             {
                throw new ArgumentException(String.Format("Cell {0} is blocked and cannot be the start", value));
@@ -86,6 +90,10 @@ namespace PathFind.Models
          }
          set
          {
+            if (value.Row < 0 || value.Row >= RowCount)
+            {
+               throw new ArgumentException("Goal's row is outside the extents of the map");
+            }
             if (BlockedCells.ContainsKey(value))
             {
                throw new ArgumentException(String.Format("Cell {0} is blocked and cannot be the goal", value));

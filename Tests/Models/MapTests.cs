@@ -50,10 +50,35 @@ namespace PathFindTests.Models
       }
 
       [Test]
-      public void TestSettingAboveRangeGoalThrowsException()
+      [ExpectedException(typeof(ArgumentException))]
+      public void TestSettingAboveRowRangeGoalThrowsException()
       {
          Map map = new Map();
-         //map.Dimensions = new Size(16, 16);
+         map.Goal = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 };
+      }
+
+      [Test]
+      [ExpectedException(typeof(ArgumentException))]
+      public void TestSettingBelowRowRangeGoalThrowsException()
+      {
+         Map map = new Map();
+         map.Goal = new GridCoordinate() { Column = 0, Row = -1 };
+      }
+
+      [Test]
+      [ExpectedException(typeof(ArgumentException))]
+      public void TestSettingAboveRowRangeStartThrowsException()
+      {
+         Map map = new Map();
+         map.Start = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 };
+      }
+
+      [Test]
+      [ExpectedException(typeof(ArgumentException))]
+      public void TestSettingBelowRowRangeStartThrowsException()
+      {
+         Map map = new Map();
+         map.Start = new GridCoordinate() { Column = 0, Row = -1 };
       }
    }
 }
