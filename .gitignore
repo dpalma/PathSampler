@@ -15,6 +15,7 @@
 # Visual Studio IDE temporary files
 *.suo
 *.wwdb
+*.user
 
 # Output directories
 bin
