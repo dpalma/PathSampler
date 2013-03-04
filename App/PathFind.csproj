@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\GridCoordinate.cs" />
+    <Compile Include="Core\IObservableDictionary.cs" />
     <Compile Include="Core\ObservableDictionary.cs" />
     <Compile Include="PathFinders\BreadthFirstSearch.cs" />
     <Compile Include="PathFinders\ICellColoring.cs" />

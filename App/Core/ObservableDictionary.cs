@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PathFind.Core
 {
-   public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged
+   public class ObservableDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue>
    {
       private Dictionary<TKey, TValue> m_dictionary = new Dictionary<TKey, TValue>();
 

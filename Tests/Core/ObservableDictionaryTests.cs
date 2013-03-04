@@ -79,7 +79,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestRemoveByKeyFiresRemoveEvent()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
          dict.Add("key", new object());
          var eventArgsReceived = new List<NotifyCollectionChangedEventArgs>();
          dict.CollectionChanged += (sender, eventArgs) =>
@@ -128,7 +128,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestClearFiresResetEvent()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
          dict.Add("key", new object());
          var eventArgsReceived = new List<NotifyCollectionChangedEventArgs>();
          dict.CollectionChanged += (sender, eventArgs) =>
@@ -143,7 +143,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestIndexerFiresAddEventForNewKeys()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
          var eventArgsReceived = new List<NotifyCollectionChangedEventArgs>();
          dict.CollectionChanged += (sender, eventArgs) =>
          {
@@ -157,7 +157,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestIndexerFiresReplaceEventForExistingKeys()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
          dict["key"] = new object();
          var eventArgsReceived = new List<NotifyCollectionChangedEventArgs>();
          dict.CollectionChanged += (sender, eventArgs) =>
