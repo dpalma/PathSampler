@@ -35,7 +35,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestContainsKeyReturnsTrueForExistingKeys()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IDictionary<string, object> dict = new ObservableDictionary<string, object>();
          dict.Add("key", new object());
          Assert.IsTrue(dict.ContainsKey("key"));
       }
@@ -43,14 +43,14 @@ namespace PathFindTests.Core
       [Test]
       public void TestContainsKeyReturnsFalseForNonExistentKeys()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IDictionary<string, object> dict = new ObservableDictionary<string, object>();
          Assert.IsFalse(dict.ContainsKey("key"));
       }
 
       [Test]
       public void TestKeysCollection()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IDictionary<string, object> dict = new ObservableDictionary<string, object>();
          dict.Add("key1", new object());
          dict.Add("key2", new object());
          Assert.AreEqual(2, dict.Keys.Count);
@@ -61,7 +61,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestRemoveByKeyUpdatesCount()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IDictionary<string, object> dict = new ObservableDictionary<string, object>();
          dict.Add("key1", new object());
          dict.Add("key2", new object());
          Assert.AreEqual(2, dict.Count);
@@ -72,7 +72,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestRemoveByKeyReturnsFalseWhenKeyNotFound()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IDictionary<string, object> dict = new ObservableDictionary<string, object>();
          Assert.IsFalse(dict.Remove("NotFound"));
       }
 
@@ -94,7 +94,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestTryGetValue()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IDictionary<string, object> dict = new ObservableDictionary<string, object>();
          var value = new object();
          dict.Add("key", value);
          object retrievedValue = null;
@@ -105,7 +105,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestValuesProperty()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IDictionary<string, object> dict = new ObservableDictionary<string, object>();
          var value1 = new object();
          var value2 = new object();
          dict.Add("key1", value1);
@@ -118,7 +118,7 @@ namespace PathFindTests.Core
       [Test]
       public void TestClearUpdatesCount()
       {
-         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         IDictionary<string, object> dict = new ObservableDictionary<string, object>();
          dict.Add("key", new object());
          Assert.AreEqual(1, dict.Count);
          dict.Clear();

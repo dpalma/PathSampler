@@ -24,7 +24,7 @@ namespace PathFind.Core
 
       public override string ToString()
       {
-         return String.Format("GridCoordinate({0}, {1})", Row, Column);
+         return String.Format("GridCoordinate(Row {1}, Column {0})", Row, Column);
       }
    }
 }
