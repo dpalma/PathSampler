@@ -91,11 +91,12 @@ namespace PathFind.ViewModels
       {
          get
          {
-            return Map.Dimensions;
+            return new Size(Map.ColumnCount, Map.RowCount);
          }
          set
          {
-            Map.Dimensions = value;
+            Map.RowCount = (int)value.Height;
+            Map.ColumnCount = (int)value.Width;
             FirePropertyChanged("Dimensions");
          }
       }

@@ -13,7 +13,7 @@
         <CommandBinding Command="cmd:MainCommands.Exit" Executed="OnExit" />
     </Window.CommandBindings>
     <Window.Resources>
-        <m:Map x:Key="map" Dimensions="16,16" />
+        <m:Map x:Key="map" RowCount="16" ColumnCount="16" />
         <vm:MapVM x:Key="mapVM" Map="{StaticResource ResourceKey=map}" CellSize="32,32" />
     </Window.Resources>
     <Window.DataContext>

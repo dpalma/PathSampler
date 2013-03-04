@@ -109,7 +109,7 @@ namespace PathFind
             throw new InvalidOperationException("Window has no model");
          }
 
-         map.Assign(new Map() { Dimensions = new Size(Map.DefaultDimension, Map.DefaultDimension) });
+         map.Assign(new Map());
       }
 
       private void OnExit(object sender, ExecutedRoutedEventArgs e)

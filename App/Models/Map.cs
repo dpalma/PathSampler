@@ -2,36 +2,49 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using PathFind.Core;
-using System.Windows;
 
 namespace PathFind.Models
 {
    [Serializable]
    public class Map : INotifyPropertyChanged
    {
-      public const int DefaultDimension = 16;
+      public const int DefaultRowColumnCount = 16;
 
-      private Size m_dimensions;
-      public Size Dimensions
+      public int RowCount
       {
          get
          {
-            return m_dimensions;
+            return m_rowCount;
          }
          set
          {
-            m_dimensions = value;
-
-            if (Goal == null)
+            if (value < 0)
             {
-               Goal = new GridCoordinate() { Row = (int)m_dimensions.Height - 1, Column = (int)m_dimensions.Width - 1 };
+               throw new ArgumentException("RowCount must be non-negative");
             }
-
-            FirePropertyChanged("Dimensions");
+            m_rowCount = value;
+            FirePropertyChanged("RowCount");
          }
       }
+      private int m_rowCount = DefaultRowColumnCount;
 
-      private Dictionary<GridCoordinate, double> m_blockedCells = new Dictionary<GridCoordinate, double>();
+      public int ColumnCount
+      {
+         get
+         {
+            return m_columnCount;
+         }
+         set
+         {
+            if (value < 0)
+            {
+               throw new ArgumentException("ColumnCount must be non-negative");
+            }
+            m_columnCount = value;
+            FirePropertyChanged("ColumnCount");
+         }
+      }
+      private int m_columnCount = DefaultRowColumnCount;
 
       public Dictionary<GridCoordinate, double> BlockedCells
       {
@@ -39,13 +52,14 @@ namespace PathFind.Models
          {
             return m_blockedCells;
          }
-         set
+         private set
          {
             m_blockedCells = value;
+            FirePropertyChanged("BlockedCells");
          }
       }
+      private Dictionary<GridCoordinate, double> m_blockedCells = new Dictionary<GridCoordinate, double>();
 
-      private GridCoordinate m_start = new GridCoordinate() { Row = 0, Column = 0 };
       public GridCoordinate Start
       {
          get
@@ -62,8 +76,8 @@ namespace PathFind.Models
             FirePropertyChanged("Start");
          }
       }
+      private GridCoordinate m_start = new GridCoordinate() { Row = 0, Column = 0 };
 
-      private GridCoordinate m_goal;
       public GridCoordinate Goal
       {
          get
@@ -80,6 +94,7 @@ namespace PathFind.Models
             FirePropertyChanged("Goal");
          }
       }
+      private GridCoordinate m_goal = new GridCoordinate() { Row = DefaultRowColumnCount - 1, Column = DefaultRowColumnCount - 1 };
 
       private bool IsAtLeftEdge(GridCoordinate cell)
       {
@@ -88,7 +103,7 @@ namespace PathFind.Models
 
       private bool IsAtRightEdge(GridCoordinate cell)
       {
-         return cell.Column == (Dimensions.Width - 1);
+         return cell.Column == (ColumnCount - 1);
       }
 
       private bool IsAtTopEdge(GridCoordinate cell)
@@ -98,7 +113,7 @@ namespace PathFind.Models
 
       private bool IsAtBottomEdge(GridCoordinate cell)
       {
-         return cell.Row == (Dimensions.Height - 1);
+         return cell.Row == (RowCount - 1);
       }
 
       public GridCoordinate[] GetNeighbors(GridCoordinate cell)
@@ -151,7 +166,8 @@ namespace PathFind.Models
 
       public void Assign(Map other)
       {
-         this.Dimensions = other.Dimensions;
+         this.RowCount = other.RowCount;
+         this.ColumnCount = other.ColumnCount;
          this.BlockedCells = other.BlockedCells;
          this.Goal = other.Goal;
          this.Start = other.Start;
