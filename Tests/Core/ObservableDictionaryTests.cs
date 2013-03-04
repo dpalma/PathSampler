@@ -168,5 +168,23 @@ namespace PathFindTests.Core
          Assert.AreEqual(1, eventArgsReceived.Count);
          Assert.AreEqual(NotifyCollectionChangedAction.Replace, eventArgsReceived.First().Action);
       }
+
+      [Test]
+      public void TestGetEnumeratorReturnsAllPairs()
+      {
+         IObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         string[] keys = new string[] { "key1", "key2", "key3" };
+         foreach (var key in keys)
+         {
+            dict[key] = new object();
+         }
+         int index = 0;
+         IEnumerator<KeyValuePair<string, object>> enumerator = dict.GetEnumerator();
+         while (enumerator.MoveNext())
+         {
+            Assert.AreEqual(keys[index++], enumerator.Current.Key);
+            Assert.IsNotNull(enumerator.Current.Value);
+         }
+      }
    }
 }

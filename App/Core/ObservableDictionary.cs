@@ -115,7 +115,7 @@ namespace PathFind.Core
 
       public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
       {
-         throw new NotImplementedException();
+         return m_dictionary.GetEnumerator();
       }
 
       System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
