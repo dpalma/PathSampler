@@ -60,6 +60,7 @@
     <Compile Include="PathFinders\ICellColoring.cs" />
     <Compile Include="PathFinders\PathFinder.cs" />
     <Compile Include="ViewModels\MapVM.cs" />
+    <Compile Include="ViewModels\ObservableDictionary.cs" />
     <Compile Include="Views\MapView.cs" />
     <Compile Include="Views\MouseController.cs" />
     <Page Include="MainWindow.xaml">
