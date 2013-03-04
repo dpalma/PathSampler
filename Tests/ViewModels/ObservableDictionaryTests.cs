@@ -33,11 +33,18 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
-      public void TestContainsKey()
+      public void TestContainsKeyReturnsTrueForExistingKeys()
       {
          ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
          dict.Add("key", new object());
          Assert.IsTrue(dict.ContainsKey("key"));
+      }
+
+      [Test]
+      public void TestContainsKeyReturnsFalseForNonExistentKeys()
+      {
+         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         Assert.IsFalse(dict.ContainsKey("key"));
       }
 
       [Test]
@@ -131,6 +138,35 @@ namespace PathFindTests.ViewModels
          dict.Clear();
          Assert.AreEqual(1, eventArgsReceived.Count);
          Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsReceived.First().Action);
+      }
+
+      [Test]
+      public void TestIndexerFiresAddEventForNewKeys()
+      {
+         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         var eventArgsReceived = new List<NotifyCollectionChangedEventArgs>();
+         dict.CollectionChanged += (sender, eventArgs) =>
+         {
+            eventArgsReceived.Add(eventArgs);
+         };
+         dict["key"] = new object();
+         Assert.AreEqual(1, eventArgsReceived.Count);
+         Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsReceived.First().Action);
+      }
+
+      [Test]
+      public void TestIndexerFiresReplaceEventForExistingKeys()
+      {
+         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         dict["key"] = new object();
+         var eventArgsReceived = new List<NotifyCollectionChangedEventArgs>();
+         dict.CollectionChanged += (sender, eventArgs) =>
+         {
+            eventArgsReceived.Add(eventArgs);
+         };
+         dict["key"] = new object();
+         Assert.AreEqual(1, eventArgsReceived.Count);
+         Assert.AreEqual(NotifyCollectionChangedAction.Replace, eventArgsReceived.First().Action);
       }
    }
 }

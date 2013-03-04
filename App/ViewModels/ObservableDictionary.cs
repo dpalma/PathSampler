@@ -18,8 +18,17 @@ namespace PathFind.ViewModels
          }
          set
          {
-            //OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, key, 0));
-            //base[key] = value;
+            NotifyCollectionChangedEventArgs notifyArgs = null;
+            if (m_dictionary.ContainsKey(key))
+            {
+               notifyArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, key, key);
+            }
+            else
+            {
+               notifyArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, key);
+            }
+            m_dictionary[key] = value;
+            FireCollectionChanged(notifyArgs);
          }
       }
 
