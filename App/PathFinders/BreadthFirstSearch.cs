@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PathFind.Models;
 using System.Windows.Media;
+using PathFind.Core;
+using PathFind.Models;
 
 namespace PathFind.PathFinders
 {

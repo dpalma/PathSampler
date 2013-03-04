@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PathFind.Models
+namespace PathFind.Core
 {
    [Serializable]
    public class GridCoordinate

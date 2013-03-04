@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PathFind.Core;
 using PathFind.Models;
 
 namespace PathFind.PathFinders

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using PathFind.Core;
 using System.Windows;
 
 namespace PathFind.Models

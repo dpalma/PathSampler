@@ -5,11 +5,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using PathFind.Commands;
-using PathFind.Models;
-using System.Windows.Threading;
-using PathFind.PathFinders;
 using System.Windows.Media;
+using System.Windows.Threading;
+using PathFind.Commands;
+using PathFind.Core;
+using PathFind.Models;
+using PathFind.PathFinders;
 
 namespace PathFind.ViewModels
 {

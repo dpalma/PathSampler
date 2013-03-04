@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using PathFind.Core;
 using PathFind.Models;
 using PathFind.ViewModels;
 
