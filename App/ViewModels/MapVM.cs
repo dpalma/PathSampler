@@ -93,19 +93,13 @@ namespace PathFind.ViewModels
          {
             return new Size(Map.ColumnCount, Map.RowCount);
          }
-         set
-         {
-            Map.RowCount = (int)value.Height;
-            Map.ColumnCount = (int)value.Width;
-            FirePropertyChanged("Dimensions");
-         }
       }
 
       public double ViewWidth
       {
          get
          {
-            return (CellSize.Width + GridLineSize) * Dimensions.Width;
+            return (CellSize.Width + GridLineSize) * Map.ColumnCount;
          }
       }
 
@@ -113,7 +107,7 @@ namespace PathFind.ViewModels
       {
          get
          {
-            return (CellSize.Height + GridLineSize) * Dimensions.Height;
+            return (CellSize.Height + GridLineSize) * Map.RowCount;
          }
       }
 

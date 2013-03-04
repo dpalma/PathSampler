@@ -7,6 +7,7 @@ using System.Windows;
 using PathFind.Core;
 using PathFind.Models;
 using PathFind.ViewModels;
+using System.ComponentModel;
 
 namespace PathFind.Views
 {
@@ -27,15 +28,6 @@ namespace PathFind.Views
          {
             var vm = DataContext as MapVM;
             return vm.CellSize;
-         }
-      }
-
-      public Size Dimensions
-      {
-         get
-         {
-            var vm = DataContext as MapVM;
-            return vm.Dimensions;
          }
       }
 
@@ -105,19 +97,34 @@ namespace PathFind.Views
          }
       }
 
+      public static DependencyProperty RowCountProperty = DependencyProperty.Register("RowCount", typeof(int), typeof(MapView));
+      public static DependencyProperty ColumnCountProperty = DependencyProperty.Register("ColumnCount", typeof(int), typeof(MapView));
+
+      public int RowCount
+      {
+         get { return (int)GetValue(RowCountProperty); }
+         set { SetValue(RowCountProperty, value); }
+      }
+
+      public int ColumnCount
+      {
+         get { return (int)GetValue(ColumnCountProperty); }
+         set { SetValue(ColumnCountProperty, value); }
+      }
+
       private void DrawGrid(DrawingContext dc)
       {
          Pen linePen = new Pen(GridLineBrush, 0.1);
 
          // Horizontal grid lines
-         for (int i = 0; i <= Dimensions.Height; i++)
+         for (int i = 0; i <= RowCount; i++)
          {
             int y = (int)(i * (CellSize.Height + GridLineSize));
             dc.DrawLine(linePen, new Point(0, y), new Point(Width, y));
          }
 
          // Vertical grid lines
-         for (int j = 0; j <= Dimensions.Width; j++)
+         for (int j = 0; j <= ColumnCount; j++)
          {
             int x = (int)(j * (CellSize.Width + GridLineSize));
             dc.DrawLine(linePen, new Point(x, 0), new Point(x, Height));
