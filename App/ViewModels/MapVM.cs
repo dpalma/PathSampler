@@ -71,8 +71,22 @@ namespace PathFind.ViewModels
             ConnectMapEventHandlers();
          }
 
+         UpdateCommands();
+
          FirePropertyChanged(e.PropertyName);
          FireRedrawRequested();
+      }
+
+      private void UpdateCommands()
+      {
+         if (m_stopPathingCommand != null)
+         {
+            m_stopPathingCommand.RaiseCanExecuteChanged();
+         }
+         if (m_startPathingCommand != null)
+         {
+            m_startPathingCommand.RaiseCanExecuteChanged();
+         }
       }
 
       private void FireRedrawRequested()
@@ -209,7 +223,7 @@ namespace PathFind.ViewModels
          }
       }
 
-      private ICommand m_setPassabilityCommand;
+      private DelegateCommand m_setPassabilityCommand;
       public ICommand SetPassabilityCommand
       {
          get
@@ -224,7 +238,7 @@ namespace PathFind.ViewModels
          }
       }
 
-      private ICommand m_clearPassabilityCommand;
+      private DelegateCommand m_clearPassabilityCommand;
       public ICommand ClearPassabilityCommand
       {
          get
@@ -245,7 +259,7 @@ namespace PathFind.ViewModels
          }
       }
 
-      private ICommand m_setStartCommand;
+      private DelegateCommand m_setStartCommand;
       public ICommand SetStartCommand
       {
          get
@@ -260,7 +274,7 @@ namespace PathFind.ViewModels
          }
       }
 
-      private ICommand m_setGoalCommand;
+      private DelegateCommand m_setGoalCommand;
       public ICommand SetGoalCommand
       {
          get
@@ -296,6 +310,8 @@ namespace PathFind.ViewModels
          m_timer.Start();
 
          m_pathFinder = new BreadthFirstSearch(Map, this);
+
+         UpdateCommands();
       }
 
       void timer_Tick(object sender, EventArgs e)
@@ -322,9 +338,11 @@ namespace PathFind.ViewModels
          }
 
          ColoredCells.Clear();
+
+         FireRedrawRequested();
       }
 
-      private ICommand m_startPathingCommand;
+      private DelegateCommand m_startPathingCommand;
       public ICommand StartPathingCommand
       {
          get
@@ -345,7 +363,7 @@ namespace PathFind.ViewModels
          }
       }
 
-      private ICommand m_stopPathingCommand;
+      private DelegateCommand m_stopPathingCommand;
       public ICommand StopPathingCommand
       {
          get
