@@ -30,21 +30,47 @@ namespace PathFind.ViewModels
                throw new ArgumentNullException("Map");
             }
 
-            if (Map != null)
-            {
-               Map.PropertyChanged -= new PropertyChangedEventHandler(Map_PropertyChanged);
-            }
+            DisconnectMapEventHandlers();
 
             m_map = value;
 
-            Map.PropertyChanged += new PropertyChangedEventHandler(Map_PropertyChanged);
+            ConnectMapEventHandlers();
 
             FirePropertyChanged("Map");
          }
       }
 
+      private void ConnectMapEventHandlers()
+      {
+         if (Map != null)
+         {
+            Map.PropertyChanged += new PropertyChangedEventHandler(Map_PropertyChanged);
+            Map.BlockedCells.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(BlockedCells_CollectionChanged);
+         }
+      }
+
+      private void DisconnectMapEventHandlers()
+      {
+         if (Map != null)
+         {
+            Map.PropertyChanged -= new PropertyChangedEventHandler(Map_PropertyChanged);
+            Map.BlockedCells.CollectionChanged -= new System.Collections.Specialized.NotifyCollectionChangedEventHandler(BlockedCells_CollectionChanged);
+         }
+      }
+
+      void BlockedCells_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+      {
+         FireRedrawRequested();
+      }
+
       private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
       {
+         if (e.PropertyName == "BlockedCells")
+         {
+            DisconnectMapEventHandlers();
+            ConnectMapEventHandlers();
+         }
+
          FirePropertyChanged(e.PropertyName);
          FireRedrawRequested();
       }

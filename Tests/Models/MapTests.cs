@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using NUnit.Framework;
 using PathFind.Core;
@@ -79,6 +82,31 @@ namespace PathFindTests.Models
       {
          Map map = new Map();
          map.Start = new GridCoordinate() { Column = 0, Row = -1 };
+      }
+
+      [Test]
+      public void TestSerialization()
+      {
+         Map map = new Map()
+         {
+            RowCount = 24,
+            ColumnCount = 24,
+            Start = new GridCoordinate() { Row = 5, Column = 18 },
+            Goal = new GridCoordinate() { Row = 17, Column = 2 },
+         };
+         using (var stream = new MemoryStream())
+         {
+            IFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, map);
+            stream.Flush();
+            stream.Seek(0, SeekOrigin.Begin);
+
+            Map loadedMap = (Map)formatter.Deserialize(stream);
+            Assert.AreEqual(map.RowCount, loadedMap.RowCount);
+            Assert.AreEqual(map.ColumnCount, loadedMap.ColumnCount);
+            Assert.AreEqual(map.Start, loadedMap.Start);
+            Assert.AreEqual(map.Goal, loadedMap.Goal);
+         }
       }
    }
 }
