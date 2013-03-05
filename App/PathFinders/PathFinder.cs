@@ -42,5 +42,39 @@ namespace PathFind.PathFinders
       }
 
       abstract public void Step();
+
+      protected Queue<GridCoordinate> OpenList { get { return m_openList; } }
+      private Queue<GridCoordinate> m_openList = new Queue<GridCoordinate>();
+
+      protected HashSet<GridCoordinate> ClosedList { get { return m_closedList; } }
+      private HashSet<GridCoordinate> m_closedList = new HashSet<GridCoordinate>();
+
+      protected bool IsUnseen(GridCoordinate cell)
+      {
+         return !OpenList.Contains(cell) && !ClosedList.Contains(cell);
+      }
+
+      protected IDictionary<GridCoordinate, GridCoordinate> Predecessors { get { return m_predecessors; } }
+      private Dictionary<GridCoordinate, GridCoordinate> m_predecessors = new Dictionary<GridCoordinate, GridCoordinate>();
+
+      protected bool BuildPath()
+      {
+         List<GridCoordinate> path = new List<GridCoordinate>();
+         GridCoordinate cell = Map.Goal;
+         path.Add(cell);
+         while (!cell.Equals(Map.Start))
+         {
+            GridCoordinate predecessor = null;
+            if (!Predecessors.TryGetValue(cell, out predecessor))
+            {
+               return false;
+            }
+            path.Add(predecessor);
+            cell = predecessor;
+         }
+         path.Reverse();
+         Path = path.ToArray();
+         return true;
+      }
    }
 }

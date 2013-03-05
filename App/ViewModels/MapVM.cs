@@ -292,7 +292,7 @@ namespace PathFind.ViewModels
 
          m_timer = new DispatcherTimer();
          m_timer.Tick += new EventHandler(timer_Tick);
-         m_timer.Interval = new TimeSpan(0, 0, 0, 0, 600);
+         m_timer.Interval = new TimeSpan(0, 0, 0, 0, 200);
          m_timer.Start();
 
          m_pathFinder = new BreadthFirstSearch(Map, this);
@@ -305,6 +305,11 @@ namespace PathFind.ViewModels
          if (m_pathFinder.Result != null)
          {
             System.Diagnostics.Debug.WriteLine("Pathfinding complete");
+            StopPathing();
+            foreach (var cell in m_pathFinder.Path)
+            {
+               this.ColoredCells[cell] = Brushes.MediumSeaGreen;
+            }
          }
       }
 
