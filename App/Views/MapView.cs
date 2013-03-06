@@ -11,23 +11,49 @@ using System.ComponentModel;
 
 namespace PathFind.Views
 {
-   public class MapView : Canvas
+   public class MapView : Canvas, IMapView
    {
       public int GridLineSize
       {
          get
          {
-            var vm = DataContext as MapVM;
-            return vm.GridLineSize;
+            return m_gridLineSize;
+         }
+         set
+         {
+            m_gridLineSize = value;
          }
       }
+      private int m_gridLineSize = 1;
 
       public Size CellSize
       {
          get
          {
+            return m_cellSize;
+         }
+         set
+         {
+            m_cellSize = value;
+         }
+      }
+      private Size m_cellSize = new Size(16, 16);
+
+      public double ViewWidth
+      {
+         get
+         {
             var vm = DataContext as MapVM;
-            return vm.CellSize;
+            return (CellSize.Width + GridLineSize) * vm.Map.ColumnCount;
+         }
+      }
+
+      public double ViewHeight
+      {
+         get
+         {
+            var vm = DataContext as MapVM;
+            return (CellSize.Height + GridLineSize) * vm.Map.RowCount;
          }
       }
 
@@ -49,12 +75,16 @@ namespace PathFind.Views
 
       void MapView_Initialized(object sender, EventArgs e)
       {
+         // TODO turn this back into a binding
+         Width = ViewWidth;
+         Height = ViewHeight;
+
          // View model will be null in design mode
          MapVM vm = DataContext as MapVM;
          if (vm != null)
          {
             vm.RedrawRequested += new EventHandler(ViewModel_RedrawRequested);
-            var controller = new MouseController(this, vm);
+            var controller = new MouseController(this, this, vm);
             controllerRef = new WeakReference(controller);
          }
       }

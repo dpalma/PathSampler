@@ -99,77 +99,12 @@ namespace PathFind.ViewModels
 
       public event EventHandler RedrawRequested;
 
-      private int m_gridLineSize = 1;
-      public int GridLineSize
-      {
-          get
-          {
-             return m_gridLineSize;
-          }
-          set
-          {
-             m_gridLineSize = value;
-             FirePropertyChanged("GridLineSize");
-          }
-      }
-
-      private Size m_cellSize = new Size(16, 16);
-      public Size CellSize
-      {
-          get
-          {
-             return m_cellSize;
-          }
-          set
-          {
-             m_cellSize = value;
-             FirePropertyChanged("CellSize");
-          }
-      }
-
       public Size Dimensions
       {
          get
          {
             return new Size(Map.ColumnCount, Map.RowCount);
          }
-      }
-
-      public double ViewWidth
-      {
-         get
-         {
-            return (CellSize.Width + GridLineSize) * Map.ColumnCount;
-         }
-      }
-
-      public double ViewHeight
-      {
-         get
-         {
-            return (CellSize.Height + GridLineSize) * Map.RowCount;
-         }
-      }
-
-      public GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)
-      {
-         FrameworkElement view = mouseEventArgs.Source as FrameworkElement;
-         if (view == null)
-         {
-            return null;
-         }
-
-         Point mouse = mouseEventArgs.GetPosition(view);
-
-         if (mouse.X < 0 || mouse.X > view.Width || mouse.Y < 0 || mouse.Y > view.Height)
-         {
-            return null;
-         }
-
-         double hitX = mouse.X / (CellSize.Width + GridLineSize);
-         double hitY = mouse.Y / (CellSize.Height + GridLineSize);
-
-         return new GridCoordinate() { Column = (int)hitX, Row = (int)hitY };
       }
 
       private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();

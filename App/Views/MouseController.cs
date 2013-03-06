@@ -16,6 +16,12 @@ namespace PathFind.Views
          get { return m_view; }
       }
 
+      private IMapView m_mapView;
+      public IMapView MapView
+      {
+         get { return m_mapView; }
+      }
+
       private MapVM m_mapViewModel;
       public MapVM MapViewModel
       {
@@ -29,9 +35,10 @@ namespace PathFind.Views
          set { m_command = value; }
       }
 
-      public MouseController(FrameworkElement view, MapVM mapViewModel)
+      public MouseController(FrameworkElement view, IMapView mapView, MapVM mapViewModel)
       {
          m_view = view;
+         m_mapView = mapView;
          m_mapViewModel = mapViewModel;
 
          View.MouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonDown);
@@ -61,7 +68,7 @@ namespace PathFind.Views
       {
          if (View.CaptureMouse())
          {
-            GridCoordinate hitCell = MapViewModel.GetHitCell(e);
+            GridCoordinate hitCell = GetHitCell(e);
             if (hitCell != null)
             {
                if (hitCell.Equals(MapViewModel.Map.Goal))
@@ -104,6 +111,27 @@ namespace PathFind.Views
          MapViewModel.AddSelectedCell(cell);
       }
 
+      public GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)
+      {
+         FrameworkElement view = mouseEventArgs.Source as FrameworkElement;
+         if (view == null)
+         {
+            return null;
+         }
+
+         Point mouse = mouseEventArgs.GetPosition(view);
+
+         if (mouse.X < 0 || mouse.X > view.Width || mouse.Y < 0 || mouse.Y > view.Height)
+         {
+            return null;
+         }
+
+         double hitX = mouse.X / (MapView.CellSize.Width + MapView.GridLineSize);
+         double hitY = mouse.Y / (MapView.CellSize.Height + MapView.GridLineSize);
+
+         return new GridCoordinate() { Column = (int)hitX, Row = (int)hitY };
+      }
+
       void MapView_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
       {
          if (MouseDragging)
@@ -118,7 +146,7 @@ namespace PathFind.Views
 
       private void HitTestAndSelect(System.Windows.Input.MouseEventArgs mouseEventArgs)
       {
-         GridCoordinate hitCell = MapViewModel.GetHitCell(mouseEventArgs);
+         GridCoordinate hitCell = GetHitCell(mouseEventArgs);
 
          if (hitCell != null)
          {
