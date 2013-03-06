@@ -61,7 +61,9 @@
     <Compile Include="PathFinders\BreadthFirstSearch.cs" />
     <Compile Include="PathFinders\ICellColoring.cs" />
     <Compile Include="PathFinders\PathFinder.cs" />
+    <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\MapVM.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\MapView.cs" />
     <Compile Include="Views\MouseController.cs" />
     <Page Include="MainWindow.xaml">

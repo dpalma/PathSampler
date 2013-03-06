@@ -7,39 +7,31 @@
         xmlns:v="clr-namespace:PathFind.Views"
         Title="MainWindow" Height="620" Width="700">
     <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.Open" Executed="OnOpen" />
-        <CommandBinding Command="ApplicationCommands.Save" Executed="OnSave" />
-        <CommandBinding Command="ApplicationCommands.New" Executed="OnNew" />
         <CommandBinding Command="cmd:MainCommands.Exit" Executed="OnExit" />
     </Window.CommandBindings>
     <Window.Resources>
         <m:Map x:Key="map" RowCount="16" ColumnCount="16" />
-        <vm:MapVM x:Key="mapVM" Map="{StaticResource ResourceKey=map}" CellSize="32,32" />
+        <vm:MainWindowVM x:Key="mainWindowVM" Map="{StaticResource ResourceKey=map}" />
     </Window.Resources>
     <Window.DataContext>
-        <StaticResource ResourceKey="map"/>
+      <StaticResource ResourceKey="mainWindowVM"/>
     </Window.DataContext>
     <Grid>
         <Menu Height="23" Name="menu1" VerticalAlignment="Top">
             <MenuItem Header="Map">
-                <MenuItem Header="New" Command="ApplicationCommands.New" />
-                <MenuItem Header="Open" Command="ApplicationCommands.Open" />
-                <MenuItem Header="Save" Command="ApplicationCommands.Save" />
+                <MenuItem Header="New" Command="{Binding Path=NewCommand}" />
+                <MenuItem Header="Open" Command="{Binding Path=OpenCommand}" />
+                <MenuItem Header="Save" Command="{Binding Path=SaveCommand}" />
                 <Separator />
                 <MenuItem Header="Exit" Command="cmd:MainCommands.Exit" />
             </MenuItem>
-            <MenuItem Header="Cell">
-                <MenuItem Header="Set Passability" IsCheckable="True" />
-                <MenuItem Header="Set Start" IsCheckable="True" />
-                <MenuItem Header="Set Goal" IsCheckable="True" />
-            </MenuItem>
             <MenuItem Header="Path">
-                <MenuItem Header="Start Finding" Command="{Binding Source={StaticResource mapVM}, Path=StartPathingCommand}" />
-                <MenuItem Header="Stop Finding" Command="{Binding Source={StaticResource mapVM}, Path=StopPathingCommand}" />
+                <MenuItem Header="Start Finding" Command="{Binding Path=MapVM.StartPathingCommand}" />
+                <MenuItem Header="Stop Finding" Command="{Binding Path=MapVM.StopPathingCommand}" />
             </MenuItem>
         </Menu>
         <ScrollViewer Name="scrollViewer1" Margin="0,24,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="Gainsboro">
-            <v:MapView x:Name="mapView1" DataContext="{Binding Source={StaticResource mapVM}}" SelectedCellBrush="#FFEBEBEB" Width="{Binding Path=ViewWidth}" Height="{Binding Path=ViewHeight}" RowCount="{Binding Path=Map.RowCount}" ColumnCount="{Binding Path=Map.ColumnCount}">
+            <v:MapView x:Name="mapView1" DataContext="{Binding Path=MapVM}" SelectedCellBrush="#FFEBEBEB" Width="{Binding Path=ViewWidth}" Height="{Binding Path=ViewHeight}" RowCount="{Binding Path=Map.RowCount}" ColumnCount="{Binding Path=Map.ColumnCount}">
                 <v:MapView.StartCellBrush>
                     <RadialGradientBrush>
                         <GradientStop Color="#FF17B117" Offset="0" />

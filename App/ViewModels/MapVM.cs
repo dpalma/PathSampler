@@ -14,7 +14,7 @@ using PathFind.PathFinders;
 
 namespace PathFind.ViewModels
 {
-   public class MapVM : INotifyPropertyChanged, ICellColoring
+   public class MapVM : ViewModel, ICellColoring
    {
       private Map m_map;
       public Map Map
@@ -381,20 +381,6 @@ namespace PathFind.ViewModels
                         });
             }
             return m_stopPathingCommand;
-         }
-      }
-
-      #region INotifyPropertyChanged Members
-
-      public event PropertyChangedEventHandler PropertyChanged;
-
-      #endregion
-
-      private void FirePropertyChanged(string propertyName)
-      {
-         if (PropertyChanged != null)
-         {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
          }
       }
 
