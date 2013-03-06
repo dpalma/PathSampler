@@ -121,13 +121,19 @@ namespace PathFind.Views
          }
       }
 
-      public static DependencyProperty RowCountProperty = DependencyProperty.Register("RowCount", typeof(int), typeof(MapView), new PropertyMetadata(Map.DefaultRowColumnCount));
-      public static DependencyProperty ColumnCountProperty = DependencyProperty.Register("ColumnCount", typeof(int), typeof(MapView), new PropertyMetadata(Map.DefaultRowColumnCount));
+      public static readonly DependencyProperty RowCountProperty = DependencyProperty.Register("RowCount", typeof(int), typeof(MapView), new PropertyMetadata(Map.DefaultRowColumnCount));
+      public static readonly DependencyProperty ColumnCountProperty = DependencyProperty.Register("ColumnCount", typeof(int), typeof(MapView), new PropertyMetadata(Map.DefaultRowColumnCount));
 
       public int RowCount
       {
-         get { return (int)GetValue(RowCountProperty); }
-         set { SetValue(RowCountProperty, value); }
+         get
+         {
+            return (int)GetValue(RowCountProperty);
+         }
+         set
+         {
+            SetValue(RowCountProperty, value);
+         }
       }
 
       public int ColumnCount
@@ -138,20 +144,23 @@ namespace PathFind.Views
 
       private void DrawGrid(DrawingContext dc)
       {
-         Pen linePen = new Pen(GridLineBrush, 0.1);
+         Size horizontalGridLineSize = new Size(Width, GridLineSize);
+         Size verticalGridLineSize = new Size(GridLineSize, Height);
 
          // Horizontal grid lines
          for (int i = 0; i <= RowCount; i++)
          {
             int y = (int)(i * (CellSize.Height + GridLineSize));
-            dc.DrawLine(linePen, new Point(0, y), new Point(Width, y));
+            Rect gridLineRect = new Rect(new Point(0, y), horizontalGridLineSize);
+            dc.DrawRectangle(GridLineBrush, null, gridLineRect);
          }
 
          // Vertical grid lines
          for (int j = 0; j <= ColumnCount; j++)
          {
             int x = (int)(j * (CellSize.Width + GridLineSize));
-            dc.DrawLine(linePen, new Point(x, 0), new Point(x, Height));
+            Rect gridLineRect = new Rect(new Point(x, 0), verticalGridLineSize);
+            dc.DrawRectangle(GridLineBrush, null, gridLineRect);
          }
       }
 
