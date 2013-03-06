@@ -31,7 +31,7 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Name="scrollViewer1" Margin="0,24,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="Gainsboro">
-            <v:MapView x:Name="mapView1" DataContext="{Binding Path=MapVM}" SelectedCellBrush="#FFEBEBEB" RowCount="{Binding Path=Map.RowCount}" ColumnCount="{Binding Path=Map.ColumnCount}">
+            <v:MapView x:Name="mapView1" DataContext="{Binding Path=MapVM}" SelectedCellBrush="#FFEBEBEB" RowCount="{Binding Path=Map.RowCount}" ColumnCount="{Binding Path=Map.ColumnCount}" Width="{Binding RelativeSource={RelativeSource Self}, Path=ViewWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=ViewHeight}">
                 <v:MapView.StartCellBrush>
                     <RadialGradientBrush>
                         <GradientStop Color="#FF17B117" Offset="0" />

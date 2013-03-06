@@ -43,8 +43,7 @@ namespace PathFind.Views
       {
          get
          {
-            var vm = DataContext as MapVM;
-            return (CellSize.Width + GridLineSize) * vm.Map.ColumnCount;
+            return (CellSize.Width + GridLineSize) * ColumnCount;
          }
       }
 
@@ -52,8 +51,7 @@ namespace PathFind.Views
       {
          get
          {
-            var vm = DataContext as MapVM;
-            return (CellSize.Height + GridLineSize) * vm.Map.RowCount;
+            return (CellSize.Height + GridLineSize) * RowCount;
          }
       }
 
@@ -75,10 +73,6 @@ namespace PathFind.Views
 
       void MapView_Initialized(object sender, EventArgs e)
       {
-         // TODO turn this back into a binding
-         Width = ViewWidth;
-         Height = ViewHeight;
-
          // View model will be null in design mode
          MapVM vm = DataContext as MapVM;
          if (vm != null)
@@ -127,8 +121,8 @@ namespace PathFind.Views
          }
       }
 
-      public static DependencyProperty RowCountProperty = DependencyProperty.Register("RowCount", typeof(int), typeof(MapView));
-      public static DependencyProperty ColumnCountProperty = DependencyProperty.Register("ColumnCount", typeof(int), typeof(MapView));
+      public static DependencyProperty RowCountProperty = DependencyProperty.Register("RowCount", typeof(int), typeof(MapView), new PropertyMetadata(Map.DefaultRowColumnCount));
+      public static DependencyProperty ColumnCountProperty = DependencyProperty.Register("ColumnCount", typeof(int), typeof(MapView), new PropertyMetadata(Map.DefaultRowColumnCount));
 
       public int RowCount
       {
