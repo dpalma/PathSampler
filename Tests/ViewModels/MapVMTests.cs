@@ -53,6 +53,15 @@ namespace PathFindTests.ViewModels
          Assert.IsTrue(canExecuteChanged);
       }
 
+      [Test]
+      public void TestSelectSameCellTwiceOnlyAddsOnce()
+      {
+         GridCoordinate cell = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
+         vm.AddSelectedCell(cell);
+         vm.AddSelectedCell(cell);
+         Assert.AreEqual(1, vm.SelectedCells.Count);
+      }
+
       //[Test]
       //public void TestStartPathingTwiceDoesntThrowException()
       //{

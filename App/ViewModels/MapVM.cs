@@ -108,7 +108,7 @@ namespace PathFind.ViewModels
       }
 
       private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();
-      internal HashSet<GridCoordinate> SelectedCells
+      public ISet<GridCoordinate> SelectedCells
       {
          get
          {
@@ -116,7 +116,7 @@ namespace PathFind.ViewModels
          }
          private set
          {
-            m_selectedCells = value;
+            m_selectedCells = value as HashSet<GridCoordinate>;
             FirePropertyChanged("SelectedCells");
          }
       }

@@ -55,7 +55,7 @@ namespace PathFind.Views
          }
       }
 
-      public HashSet<GridCoordinate> SelectedCells
+      public ICollection<GridCoordinate> SelectedCells
       {
          get
          {
