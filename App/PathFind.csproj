@@ -56,7 +56,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Collections\IObservableDictionary.cs" />
+    <Compile Include="Collections\IObservableSet.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />
+    <Compile Include="Collections\ObservableSet.cs" />
     <Compile Include="Core\GridCoordinate.cs" />
     <Compile Include="PathFinders\BreadthFirstSearch.cs" />
     <Compile Include="PathFinders\ICellColoring.cs" />
