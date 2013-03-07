@@ -45,8 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\ObservableDictionaryTests.cs" />
     <Compile Include="Core\GridCoordinateTests.cs" />
-    <Compile Include="Core\ObservableDictionaryTests.cs" />
     <Compile Include="Models\MapTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\MapVMTests.cs" />

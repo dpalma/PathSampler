@@ -4,9 +4,9 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Core;
+using PathFind.Collections;
 
-namespace PathFindTests.Core
+namespace PathFindTests.Collections
 {
    class ObservableDictionaryTests
    {

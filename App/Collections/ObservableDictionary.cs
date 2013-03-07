@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 
-namespace PathFind.Core
+namespace PathFind.Collections
 {
    [Serializable]
    public class ObservableDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue>

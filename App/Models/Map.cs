@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using PathFind.Core;
+using PathFind.Collections;
 
 namespace PathFind.Models
 {
