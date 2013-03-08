@@ -85,8 +85,6 @@ namespace PathFind.ViewModels
 
          StopPathing();
 
-         UpdateCommands();
-
          FirePropertyChanged(e.PropertyName);
          FireRedrawRequested();
       }
@@ -247,6 +245,14 @@ namespace PathFind.ViewModels
          UpdateCommands();
       }
 
+      public bool CanStartPathing
+      {
+         get
+         {
+            return !IsPathing && Map.Goal != null && Map.Start != null;
+         }
+      }
+
       void timer_Tick(object sender, EventArgs e)
       {
          m_pathFinder.Step();
@@ -272,6 +278,8 @@ namespace PathFind.ViewModels
 
          ColoredCells.Clear();
 
+         UpdateCommands();
+
          FireRedrawRequested();
       }
 
@@ -283,14 +291,8 @@ namespace PathFind.ViewModels
             if (m_startPathingCommand == null)
             {
                m_startPathingCommand = new DelegateCommand(
-                        t =>
-                        {
-                           StartPathing();
-                        },
-                        t =>
-                        {
-                           return Map.Goal != null && Map.Start != null;
-                        });
+                        t => { StartPathing(); },
+                        t => { return CanStartPathing; });
             }
             return m_startPathingCommand;
          }
@@ -304,14 +306,8 @@ namespace PathFind.ViewModels
             if (m_stopPathingCommand == null)
             {
                m_stopPathingCommand = new DelegateCommand(
-                        t =>
-                        {
-                           StopPathing();
-                        },
-                        t =>
-                        {
-                           return IsPathing;
-                        });
+                        t => { StopPathing(); },
+                        t => { return IsPathing; });
             }
             return m_stopPathingCommand;
          }
