@@ -50,7 +50,7 @@ namespace PathFindTests.Models
       }
 
       [Test]
-      public void TestGetNeighborsWithNoDiagonalsReturnsOnlyForResults()
+      public void TestGetNeighborsWithNoDiagonalsReturnsOnlyFourResults()
       {
          GridCoordinate center = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
          GridCoordinate[] neighbors = map.GetNeighbors(center, false);
