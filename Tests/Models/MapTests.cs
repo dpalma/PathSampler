@@ -13,10 +13,17 @@ namespace PathFindTests.Models
 {
    class MapTests
    {
+      private Map map;
+
+      [SetUp]
+      public void SetUp()
+      {
+         map = new Map();
+      }
+
       [Test]
       public void TestDefaultSize()
       {
-         Map map = new Map();
          Assert.AreEqual(Map.DefaultRowColumnCount, map.RowCount);
          Assert.AreEqual(Map.DefaultRowColumnCount, map.ColumnCount);
       }
@@ -24,23 +31,36 @@ namespace PathFindTests.Models
       [Test]
       public void TestDefaultGoal()
       {
-         Map map = new Map();
          Assert.IsNotNull(map.Goal);
       }
 
       [Test]
       public void TestTopLeftCellHasOnlyThreeNeighbors()
       {
-         Map map = new Map();
          GridCoordinate[] neighbors = map.GetNeighbors(new GridCoordinate());
          Assert.AreEqual(3, neighbors.Length);
+      }
+
+      [Test]
+      public void TestGetNeighborsReturnsAllEightResults()
+      {
+         GridCoordinate center = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
+         GridCoordinate[] neighbors = map.GetNeighbors(center);
+         Assert.AreEqual(8, neighbors.Length);
+      }
+
+      [Test]
+      public void TestGetNeighborsWithNoDiagonalsReturnsOnlyForResults()
+      {
+         GridCoordinate center = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
+         GridCoordinate[] neighbors = map.GetNeighbors(center, false);
+         Assert.AreEqual(4, neighbors.Length);
       }
 
       [Test]
       [ExpectedException(typeof(ArgumentException))]
       public void TestSettingNegativeRowCountThrowsException()
       {
-         Map map = new Map();
          map.RowCount = -1;
       }
 
@@ -48,7 +68,6 @@ namespace PathFindTests.Models
       [ExpectedException(typeof(ArgumentException))]
       public void TestSettingNegativeColumnCountThrowsException()
       {
-         Map map = new Map();
          map.ColumnCount = -1;
       }
 
@@ -56,7 +75,6 @@ namespace PathFindTests.Models
       [ExpectedException(typeof(ArgumentException))]
       public void TestSettingAboveRowRangeGoalThrowsException()
       {
-         Map map = new Map();
          map.Goal = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 };
       }
 
@@ -64,7 +82,6 @@ namespace PathFindTests.Models
       [ExpectedException(typeof(ArgumentException))]
       public void TestSettingBelowRowRangeGoalThrowsException()
       {
-         Map map = new Map();
          map.Goal = new GridCoordinate() { Column = 0, Row = -1 };
       }
 
@@ -72,7 +89,6 @@ namespace PathFindTests.Models
       [ExpectedException(typeof(ArgumentException))]
       public void TestSettingAboveRowRangeStartThrowsException()
       {
-         Map map = new Map();
          map.Start = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 };
       }
 
@@ -80,20 +96,16 @@ namespace PathFindTests.Models
       [ExpectedException(typeof(ArgumentException))]
       public void TestSettingBelowRowRangeStartThrowsException()
       {
-         Map map = new Map();
          map.Start = new GridCoordinate() { Column = 0, Row = -1 };
       }
 
       [Test]
       public void TestSerialization()
       {
-         Map map = new Map()
-         {
-            RowCount = 24,
-            ColumnCount = 24,
-            Start = new GridCoordinate() { Row = 5, Column = 18 },
-            Goal = new GridCoordinate() { Row = 17, Column = 2 },
-         };
+         map.RowCount = 24;
+         map.ColumnCount = 24;
+         map.Start = new GridCoordinate() { Row = 5, Column = 18 };
+         map.Goal = new GridCoordinate() { Row = 17, Column = 2 };
          using (var stream = new MemoryStream())
          {
             IFormatter formatter = new BinaryFormatter();

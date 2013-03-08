@@ -129,7 +129,7 @@ namespace PathFind.Models
          return cell.Row == (RowCount - 1);
       }
 
-      public GridCoordinate[] GetNeighbors(GridCoordinate cell)
+      public GridCoordinate[] GetNeighbors(GridCoordinate cell, bool allowDiagonals = true)
       {
          List<GridCoordinate> neighbors = new List<GridCoordinate>();
 
@@ -141,13 +141,16 @@ namespace PathFind.Models
             // top
             neighbors.Add(new GridCoordinate() { Row = cell.Row - 1, Column = cell.Column });
 
-            // top left
-            if (!atLeftEdge)
-               neighbors.Add(new GridCoordinate() { Row = cell.Row - 1, Column = cell.Column - 1 });
+            if (allowDiagonals)
+            {
+               // top left
+               if (!atLeftEdge)
+                  neighbors.Add(new GridCoordinate() { Row = cell.Row - 1, Column = cell.Column - 1 });
 
-            // top right
-            if (!atRightEdge)
-               neighbors.Add(new GridCoordinate() { Row = cell.Row - 1, Column = cell.Column + 1 });
+               // top right
+               if (!atRightEdge)
+                  neighbors.Add(new GridCoordinate() { Row = cell.Row - 1, Column = cell.Column + 1 });
+            }
          }
 
          if (!IsAtBottomEdge(cell))
@@ -155,13 +158,16 @@ namespace PathFind.Models
             // bottom
             neighbors.Add(new GridCoordinate() { Row = cell.Row + 1, Column = cell.Column });
 
-            // bottom left
-            if (!atLeftEdge)
-               neighbors.Add(new GridCoordinate() { Row = cell.Row + 1, Column = cell.Column - 1 });
+            if (allowDiagonals)
+            {
+               // bottom left
+               if (!atLeftEdge)
+                  neighbors.Add(new GridCoordinate() { Row = cell.Row + 1, Column = cell.Column - 1 });
 
-            // bottom right
-            if (!atRightEdge)
-               neighbors.Add(new GridCoordinate() { Row = cell.Row + 1, Column = cell.Column + 1 });
+               // bottom right
+               if (!atRightEdge)
+                  neighbors.Add(new GridCoordinate() { Row = cell.Row + 1, Column = cell.Column + 1 });
+            }
          }
 
          // left
