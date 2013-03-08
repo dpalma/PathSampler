@@ -35,7 +35,7 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Name="scrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="Gainsboro" Grid.Row="1">
-            <v:MapView x:Name="mapView1" DataContext="{Binding Path=MapVM}" SelectedCellBrush="#FFEBEBEB" RowCount="{Binding Path=Map.RowCount}" ColumnCount="{Binding Path=Map.ColumnCount}" Width="{Binding RelativeSource={RelativeSource Self}, Path=ViewWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=ViewHeight}" SnapsToDevicePixels="True" GridLineBrush="Gainsboro">
+            <v:MapView x:Name="mapView1" DataContext="{Binding Path=MapVM}" SelectedCellBrush="#FFEBEBEB" RowCount="{Binding Path=Map.RowCount}" ColumnCount="{Binding Path=Map.ColumnCount}" Width="{Binding RelativeSource={RelativeSource Self}, Path=ViewWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=ViewHeight}" SnapsToDevicePixels="True" GridLineBrush="Gainsboro" SelectedCells="{Binding Path=SelectedCells}">
                 <v:MapView.StartCellBrush>
                     <RadialGradientBrush>
                         <GradientStop Color="#FF17B117" Offset="0" />

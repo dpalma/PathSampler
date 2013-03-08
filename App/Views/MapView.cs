@@ -55,12 +55,17 @@ namespace PathFind.Views
          }
       }
 
+      public static readonly DependencyProperty SelectedCellsProperty = DependencyProperty.Register("SelectedCells", typeof(ICollection<GridCoordinate>), typeof(MapView));
+
       public ICollection<GridCoordinate> SelectedCells
       {
          get
          {
-            var vm = DataContext as MapVM;
-            return vm.SelectedCells;
+            return (ICollection<GridCoordinate>)GetValue(SelectedCellsProperty);
+         }
+         set
+         {
+            SetValue(SelectedCellsProperty, value);
          }
       }
 

@@ -17,5 +17,6 @@ namespace PathFind
       {
          Application.Current.Shutdown();
       }
+
    }
 }
