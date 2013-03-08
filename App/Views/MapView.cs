@@ -175,13 +175,36 @@ namespace PathFind.Views
          return new Rect(cellPoint, CellSize);
       }
 
+      public Color BlockedCellColor
+      {
+         get
+         {
+            return m_blockedCellColor;
+         }
+         set
+         {
+            m_blockedCellColor = value;
+         }
+      }
+      private Color m_blockedCellColor = Colors.Black;
+
+      public Color UnblockedCellColor
+      {
+         get
+         {
+            return m_unblockedCellColor;
+         }
+         set
+         {
+            m_unblockedCellColor = value;
+         }
+      }
+      private Color m_unblockedCellColor = Colors.White;
+
       private void DrawBlockedCells(DrawingContext dc)
       {
-         Color blockedColor = Color.FromRgb(0, 0, 0);
-         Color unblockedColor = Color.FromRgb(255, 255, 255);
-
-         Brush blockedBrush = new SolidColorBrush(blockedColor);
-         Brush unblockedBrush = new SolidColorBrush(unblockedColor);
+         Brush blockedBrush = new SolidColorBrush(BlockedCellColor);
+         Brush unblockedBrush = new SolidColorBrush(UnblockedCellColor);
 
          var vm = DataContext as MapVM;
          if (vm != null)
