@@ -103,12 +103,12 @@ namespace PathFind.Views
       void CellSelectSingle(GridCoordinate cell)
       {
          MapViewModel.SelectedCells.Clear();
-         MapViewModel.AddSelectedCell(cell);
+         MapViewModel.SelectedCells.Add(cell);
       }
 
       void CellSelectMultiple(GridCoordinate cell)
       {
-         MapViewModel.AddSelectedCell(cell);
+         MapViewModel.SelectedCells.Add(cell);
       }
 
       public GridCoordinate GetHitCell(System.Windows.Input.MouseEventArgs mouseEventArgs)

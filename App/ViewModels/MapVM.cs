@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using PathFind.Collections;
 using PathFind.Commands;
 using PathFind.Core;
 using PathFind.Models;
@@ -16,7 +18,16 @@ namespace PathFind.ViewModels
 {
    public class MapVM : ViewModel, ICellColoring
    {
-      private Map m_map;
+      public MapVM()
+      {
+         SelectedCells.CollectionChanged += new NotifyCollectionChangedEventHandler(SelectedCells_CollectionChanged);
+      }
+
+      private void SelectedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+      {
+         FireRedrawRequested();
+      }
+
       public Map Map
       {
          get
@@ -39,13 +50,14 @@ namespace PathFind.ViewModels
             FirePropertyChanged("Map");
          }
       }
+      private Map m_map;
 
       private void ConnectMapEventHandlers()
       {
          if (Map != null)
          {
             Map.PropertyChanged += new PropertyChangedEventHandler(Map_PropertyChanged);
-            Map.BlockedCells.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(BlockedCells_CollectionChanged);
+            Map.BlockedCells.CollectionChanged += new NotifyCollectionChangedEventHandler(BlockedCells_CollectionChanged);
          }
       }
 
@@ -54,11 +66,11 @@ namespace PathFind.ViewModels
          if (Map != null)
          {
             Map.PropertyChanged -= new PropertyChangedEventHandler(Map_PropertyChanged);
-            Map.BlockedCells.CollectionChanged -= new System.Collections.Specialized.NotifyCollectionChangedEventHandler(BlockedCells_CollectionChanged);
+            Map.BlockedCells.CollectionChanged -= new NotifyCollectionChangedEventHandler(BlockedCells_CollectionChanged);
          }
       }
 
-      void BlockedCells_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+      void BlockedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
          FireRedrawRequested();
       }
@@ -107,28 +119,12 @@ namespace PathFind.ViewModels
          }
       }
 
-      private HashSet<GridCoordinate> m_selectedCells = new HashSet<GridCoordinate>();
-      public ISet<GridCoordinate> SelectedCells
+      private readonly ObservableSet<GridCoordinate> m_selectedCells = new ObservableSet<GridCoordinate>();
+      public IObservableSet<GridCoordinate> SelectedCells
       {
          get
          {
             return m_selectedCells;
-         }
-         private set
-         {
-            m_selectedCells = value as HashSet<GridCoordinate>;
-            FirePropertyChanged("SelectedCells");
-         }
-      }
-
-      public void AddSelectedCell(GridCoordinate cell)
-      {
-         if (SelectedCells.Add(cell))
-         {
-            if (RedrawRequested != null)
-            {
-               RedrawRequested(this, EventArgs.Empty);
-            }
          }
       }
 

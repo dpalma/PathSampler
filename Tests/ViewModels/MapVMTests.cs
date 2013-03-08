@@ -57,8 +57,8 @@ namespace PathFindTests.ViewModels
       public void TestSelectSameCellTwiceOnlyAddsOnce()
       {
          GridCoordinate cell = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
-         vm.AddSelectedCell(cell);
-         vm.AddSelectedCell(cell);
+         vm.SelectedCells.Add(cell);
+         vm.SelectedCells.Add(cell);
          Assert.AreEqual(1, vm.SelectedCells.Count);
       }
 
