@@ -128,6 +128,48 @@ namespace PathFind.ViewModels
          }
       }
 
+      private Brush m_selectedCellBrush = Brushes.Tan;
+      public Brush SelectedCellBrush
+      {
+         get
+         {
+            return m_selectedCellBrush;
+         }
+         set
+         {
+            m_selectedCellBrush = value;
+            FirePropertyChanged("SelectedCellBrush");
+         }
+      }
+
+      private Brush m_startCellBrush = Brushes.Green;
+      public Brush StartCellBrush
+      {
+         get
+         {
+            return m_startCellBrush;
+         }
+         set
+         {
+            m_startCellBrush = value;
+            FirePropertyChanged("StartCellBrush");
+         }
+      }
+
+      private Brush m_goalCellBrush = Brushes.Red;
+      public Brush GoalCellBrush
+      {
+         get
+         {
+            return m_goalCellBrush;
+         }
+         set
+         {
+            m_goalCellBrush = value;
+            FirePropertyChanged("GoalCellBrush");
+         }
+      }
+
       private double m_passability = 1;
       public double Passability
       {

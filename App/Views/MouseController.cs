@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using PathFind.Core;
 using PathFind.Models;
 using PathFind.ViewModels;
@@ -56,13 +57,19 @@ namespace PathFind.Views
             m_mouseDragging = value;
             if (!m_mouseDragging)
             {
+               if (m_oldSelectedCellBrush != null)
+               {
+                  MapViewModel.SelectedCellBrush = m_oldSelectedCellBrush;
+                  m_oldSelectedCellBrush = null;
+               }
                MapViewModel.SelectedCells.Clear();
-               View.InvalidateVisual();
             }
          }
       }
 
       delegate void CellSelector(GridCoordinate hitCell);
+
+      private Brush m_oldSelectedCellBrush;
 
       void MapView_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
       {
@@ -71,14 +78,17 @@ namespace PathFind.Views
             GridCoordinate hitCell = GetHitCell(e);
             if (hitCell != null)
             {
+               m_oldSelectedCellBrush = MapViewModel.SelectedCellBrush;
                if (hitCell.Equals(MapViewModel.Map.Goal))
                {
                   Command = MapViewModel.SetGoalCommand;
+                  MapViewModel.SelectedCellBrush = MapViewModel.GoalCellBrush;
                   CellSelectionBehavior = CellSelectSingle;
                }
                else if (hitCell.Equals(MapViewModel.Map.Start))
                {
                   Command = MapViewModel.SetStartCommand;
+                  MapViewModel.SelectedCellBrush = MapViewModel.StartCellBrush;
                   CellSelectionBehavior = CellSelectSingle;
                }
                else if (MapViewModel.Map.BlockedCells.ContainsKey(hitCell))

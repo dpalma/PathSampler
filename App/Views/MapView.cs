@@ -225,29 +225,30 @@ namespace PathFind.Views
          }
       }
 
-      private Brush m_startCellBrush = Brushes.Green;
+      private static readonly DependencyProperty GoalCellBrushProperty = DependencyProperty.Register("GoalCellBrush", typeof(Brush), typeof(MapView));
+      private static readonly DependencyProperty StartCellBrushProperty = DependencyProperty.Register("StartCellBrush", typeof(Brush), typeof(MapView));
+
       public Brush StartCellBrush
       {
          get
          {
-            return m_startCellBrush;
+            return (Brush)GetValue(StartCellBrushProperty);
          }
          set
          {
-            m_startCellBrush = value;
+            SetValue(StartCellBrushProperty, value);
          }
       }
 
-      private Brush m_goalCellBrush = Brushes.Red;
       public Brush GoalCellBrush
       {
          get
          {
-            return m_goalCellBrush;
+            return (Brush)GetValue(GoalCellBrushProperty);
          }
          set
          {
-            m_goalCellBrush = value;
+            SetValue(GoalCellBrushProperty, value);
          }
       }
 
@@ -279,16 +280,17 @@ namespace PathFind.Views
          dc.DrawEllipse(brush, pen, RectCenter(cellRect), cellRect.Width / 2, cellRect.Height / 2);
       }
 
-      private Brush m_selectedCellBrush = Brushes.Tan;
+      private static readonly DependencyProperty SelectedCellBrushProperty = DependencyProperty.Register("SelectedCellBrush", typeof(Brush), typeof(MapView));
+
       public Brush SelectedCellBrush
       {
          get
          {
-            return m_selectedCellBrush;
+            return (Brush)GetValue(SelectedCellBrushProperty);
          }
          set
          {
-            m_selectedCellBrush = value;
+            SetValue(SelectedCellBrushProperty, value);
          }
       }
 
