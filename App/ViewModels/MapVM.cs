@@ -301,11 +301,17 @@ namespace PathFind.ViewModels
 
          if (m_pathFinder.Result != null)
          {
-            System.Diagnostics.Debug.WriteLine("Pathfinding complete");
             StopPathing();
-            foreach (var cell in m_pathFinder.Path)
+            if (m_pathFinder.Result == PathFindResult.PathFound)
             {
-               this.ColoredCells[cell] = Brushes.MediumSeaGreen;
+               foreach (var cell in m_pathFinder.Path)
+               {
+                  this.ColoredCells[cell] = Brushes.MediumSeaGreen;
+               }
+            }
+            else
+            {
+               System.Diagnostics.Debug.WriteLine("No path");
             }
          }
       }
