@@ -44,16 +44,14 @@ namespace PathFindTests.Models
       [Test]
       public void TestGetNeighborsReturnsAllEightResults()
       {
-         GridCoordinate center = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
-         GridCoordinate[] neighbors = map.GetNeighbors(center);
+         GridCoordinate[] neighbors = map.GetNeighbors(map.GetCenter());
          Assert.AreEqual(8, neighbors.Length);
       }
 
       [Test]
       public void TestGetNeighborsWithNoDiagonalsReturnsOnlyFourResults()
       {
-         GridCoordinate center = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
-         GridCoordinate[] neighbors = map.GetNeighbors(center, false);
+         GridCoordinate[] neighbors = map.GetNeighbors(map.GetCenter(), false);
          Assert.AreEqual(4, neighbors.Length);
       }
 

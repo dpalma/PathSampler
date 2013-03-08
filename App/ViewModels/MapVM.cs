@@ -83,6 +83,8 @@ namespace PathFind.ViewModels
             ConnectMapEventHandlers();
          }
 
+         StopPathing();
+
          UpdateCommands();
 
          FirePropertyChanged(e.PropertyName);
@@ -223,7 +225,7 @@ namespace PathFind.ViewModels
       private DispatcherTimer m_timer;
       private PathFinder m_pathFinder;
 
-      internal bool IsPathing
+      public bool IsPathing
       {
          get { return m_timer != null; }
       }

@@ -62,6 +62,16 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(1, vm.SelectedCells.Count);
       }
 
+      [Test]
+      public void TestChangingGoalStopsPathing()
+      {
+         vm.StartPathingCommand.Execute(null);
+         Assert.IsTrue(vm.IsPathing);
+         GridCoordinate cell = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
+         map.Goal = cell;
+         Assert.IsFalse(vm.IsPathing);
+      }
+
       //[Test]
       //public void TestStartPathingTwiceDoesntThrowException()
       //{
