@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Collections\HeapUtils.cs" />
     <Compile Include="Collections\IObservableDictionary.cs" />
     <Compile Include="Collections\IObservableSet.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />

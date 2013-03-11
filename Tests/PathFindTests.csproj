@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\HeapUtilsTests.cs" />
     <Compile Include="Collections\ObservableDictionaryTests.cs" />
     <Compile Include="Collections\ObservableSetTests.cs" />
     <Compile Include="Core\GridCoordinateTests.cs" />
