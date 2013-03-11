@@ -60,6 +60,7 @@
     <Compile Include="Collections\IObservableSet.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />
     <Compile Include="Collections\ObservableSet.cs" />
+    <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Core\GridCoordinate.cs" />
     <Compile Include="Models\MapExtensions.cs" />
     <Compile Include="PathFinders\BreadthFirstSearch.cs" />

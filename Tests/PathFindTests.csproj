@@ -48,6 +48,7 @@
     <Compile Include="Collections\HeapUtilsTests.cs" />
     <Compile Include="Collections\ObservableDictionaryTests.cs" />
     <Compile Include="Collections\ObservableSetTests.cs" />
+    <Compile Include="Collections\PriorityQueueTests.cs" />
     <Compile Include="Core\GridCoordinateTests.cs" />
     <Compile Include="Models\MapExtensionsTests.cs" />
     <Compile Include="Models\MapTests.cs" />
