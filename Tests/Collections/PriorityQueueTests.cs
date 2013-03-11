@@ -57,6 +57,21 @@ namespace PathFindTests.Collections
       }
 
       [Test]
+      public void TestContainsReturnsTrueForItemsPresent()
+      {
+         PriorityQueue<int> queue = new PriorityQueue<int>();
+         queue.Enqueue(50);
+         Assert.IsTrue(queue.Contains(50));
+      }
+
+      [Test]
+      public void TestContainsReturnsFalseForNonExistentItems()
+      {
+         PriorityQueue<int> queue = new PriorityQueue<int>();
+         Assert.IsFalse(queue.Contains(8));
+      }
+
+      [Test]
       public void TestGetEnumeratorReturnsAllItems()
       {
          PriorityQueue<int> queue = new PriorityQueue<int>();

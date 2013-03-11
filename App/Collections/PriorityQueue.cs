@@ -33,6 +33,11 @@ namespace PathFind.Collections
          return m_list[0];
       }
 
+      public bool Contains(T value)
+      {
+         return m_list.Contains(value);
+      }
+
       #region ICollection Members
 
       public void CopyTo(Array array, int index)
