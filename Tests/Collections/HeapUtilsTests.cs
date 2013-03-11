@@ -49,5 +49,28 @@ namespace PathFindTests.Collections
          test.MakeHeap();
          Assert.IsTrue(test.IsHeap());
       }
+
+      [Test]
+      public void TestHeapAdd()
+      {
+         List<int> heap = new List<int> { 16, 14, 10, 8, 7, 9, 3, 2, 4, 1 };
+         Assert.IsTrue(heap.IsHeap());
+         heap.HeapAdd(15);
+         Assert.AreEqual(new List<int> { 16, 15, 10, 8, 14, 9, 3, 2, 4, 1, 7 }, heap);
+      }
+
+      [Test]
+      public void TestHeapRemove()
+      {
+         List<int> heap = new List<int> { 16, 14, 10, 8, 7, 9, 3, 2, 4, 1 };
+         while (heap.Count > 0)
+         {
+            int value = heap.HeapRemove();
+            if (heap.Count == 0)
+               break;
+            Assert.IsTrue(value > heap.Max());
+            Assert.IsTrue(heap.IsHeap());
+         }
+      }
    }
 }

@@ -9,7 +9,7 @@ namespace PathFind.Collections
    {
       private static int HeapParent(int index)
       {
-         return (int)Math.Floor((double)(index - 1) / 2);
+         return ((index - 1) / 2);
       }
 
       private static int HeapLeft(int index)
@@ -85,6 +85,27 @@ namespace PathFind.Collections
          {
             list.Heapify(i);
          }
+      }
+
+      public static void HeapAdd<T>(this IList<T> heap, T value) where T : IComparable<T>
+      {
+         heap.Add(value);
+         int index = heap.Count - 1;
+         while ((index > 0) && (heap[HeapParent(index)].CompareTo(value) < 0))
+         {
+            heap[index] = heap[HeapParent(index)];
+            index = HeapParent(index);
+         }
+         heap[index] = value;
+      }
+
+      public static T HeapRemove<T>(this IList<T> heap) where T : IComparable<T>
+      {
+         T max = heap[0];
+         heap[0] = heap[heap.Count - 1];
+         heap.RemoveAt(heap.Count - 1);
+         heap.Heapify(0);
+         return max;
       }
    }
 }
