@@ -16,6 +16,9 @@ namespace PathFind.PathFinders
          AddToOpenList(Map.Start);
       }
 
+      protected Queue<GridCoordinate> OpenList { get { return m_openList; } }
+      private Queue<GridCoordinate> m_openList = new Queue<GridCoordinate>();
+
       private void AddToOpenList(GridCoordinate cell)
       {
          OpenList.Enqueue(cell);
@@ -26,6 +29,11 @@ namespace PathFind.PathFinders
       {
          ClosedList.Add(cell);
          CellColoring.SetCellColor(cell, Brushes.Gray);
+      }
+
+      protected bool IsUnseen(GridCoordinate cell)
+      {
+         return !OpenList.Contains(cell) && !ClosedList.Contains(cell);
       }
 
       override public void Step()
