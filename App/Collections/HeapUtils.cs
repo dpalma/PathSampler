@@ -78,5 +78,13 @@ namespace PathFind.Collections
             list.Heapify(largest);
          }
       }
+
+      public static void MakeHeap<T>(this IList<T> list) where T : IComparable<T>
+      {
+         for (int i = list.Count / 2; i >= 0; --i)
+         {
+            list.Heapify(i);
+         }
+      }
    }
 }

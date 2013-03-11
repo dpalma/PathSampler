@@ -36,5 +36,18 @@ namespace PathFindTests.Collections
          test.Heapify(1);
          Assert.AreEqual(new List<int>() { 15, 8, 4, 7, 5, 3, 1, 2, 6 }, test);
       }
+
+      [Test]
+      public void TestMakeHeap()
+      {
+         List<int> test = new List<int>();
+         for (int i = 1; i < 100; ++i)
+         {
+            test.Add(i);
+         }
+         Assert.IsFalse(test.IsHeap());
+         test.MakeHeap();
+         Assert.IsTrue(test.IsHeap());
+      }
    }
 }
