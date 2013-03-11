@@ -72,7 +72,7 @@ namespace PathFindTests.Collections
       }
 
       [Test]
-      public void TestGetEnumeratorReturnsAllItems()
+      public void TestGenericGetEnumeratorReturnsAllItems()
       {
          PriorityQueue<int> queue = new PriorityQueue<int>();
          for (int i = 10; i <= 100; i += 10)
@@ -80,13 +80,39 @@ namespace PathFindTests.Collections
             queue.Enqueue(i);
          }
          int itemsEnumerated = 0;
-         IEnumerator enumerator = queue.GetEnumerator();
-         while (enumerator.MoveNext())
+         foreach (var item in queue)
          {
-            Assert.IsTrue(((int)enumerator.Current % 10) == 0);
+            Assert.IsTrue(((int)item % 10) == 0);
             itemsEnumerated++;
          }
          Assert.AreEqual(queue.Count, itemsEnumerated);
       }
+
+      [Test]
+      public void TestPriorityQueueWorksWithWhere()
+      {
+         PriorityQueue<Node> queue = new PriorityQueue<Node>();
+         queue.Enqueue(new Node() { Priority = 100, Data = "TestNode1" });
+         queue.Enqueue(new Node() { Priority = 200, Data = "TestNode2" });
+         var result = queue.Where(n => n.Priority == 100);
+         Assert.AreEqual(1, result.Count());
+         Node node = result.First();
+         Assert.AreEqual("TestNode1", node.Data);
+      }
+   }
+
+   internal class Node : IComparable<Node>
+   {
+      public int Priority;
+      public String Data;
+
+      #region IComparable<Node> Members
+
+      public int CompareTo(Node other)
+      {
+         return Priority - other.Priority;
+      }
+
+      #endregion
    }
 }

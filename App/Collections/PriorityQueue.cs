@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PathFind.Collections
 {
-   public class PriorityQueue<T> : ICollection where T : IComparable<T>
+   public class PriorityQueue<T> : IEnumerable<T>, ICollection where T : IComparable<T>
    {
       private List<T> m_list = new List<T>();
 
@@ -64,7 +64,16 @@ namespace PathFind.Collections
 
       #region IEnumerable Members
 
-      public IEnumerator GetEnumerator()
+      IEnumerator IEnumerable.GetEnumerator()
+      {
+         throw new NotImplementedException();
+      }
+
+      #endregion
+
+      #region IEnumerable<T> Members
+
+      IEnumerator<T> IEnumerable<T>.GetEnumerator()
       {
          return m_list.GetEnumerator();
       }
