@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Data;
 using NUnit.Framework;
 using PathFind.Core;
 using PathFind.Models;
@@ -78,5 +80,30 @@ namespace PathFindTests.ViewModels
       //   vm.StartPathingCommand.Execute(null);
       //   vm.StartPathingCommand.Execute(null);
       //}
+
+      [Test]
+      public void TestSelectedCellsBinding()
+      {
+         Target target = new Target();
+         BindingOperations.SetBinding(target, Target.SelectedCellsProperty,
+            new Binding()
+               {
+                  Source = vm,
+                  Path = new PropertyPath("SelectedCells", null),
+               });
+         Assert.AreEqual(0, target.SelectedCells.Count);
+         vm.SelectedCells.Add(map.GetCenter());
+         Assert.AreEqual(1, target.SelectedCells.Count);
+      }
+   }
+
+   sealed class Target : DependencyObject
+   {
+      public static readonly DependencyProperty SelectedCellsProperty = DependencyProperty.Register("SelectedCells", typeof(ICollection<GridCoordinate>), typeof(Target));
+      public ICollection<GridCoordinate> SelectedCells
+      {
+         get { return (ICollection<GridCoordinate>)GetValue(SelectedCellsProperty); }
+         set { SetValue(SelectedCellsProperty, value); }
+      }
    }
 }
