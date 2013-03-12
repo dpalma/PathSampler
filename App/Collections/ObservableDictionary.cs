@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Data;
 
 namespace PathFind.Collections
 {
@@ -124,14 +126,44 @@ namespace PathFind.Collections
          throw new NotImplementedException();
       }
 
+      #region INotifyCollectionChanged Implementation
+
       public event NotifyCollectionChangedEventHandler CollectionChanged;
 
       private void FireCollectionChanged(NotifyCollectionChangedEventArgs args)
       {
+         if (args.Action == NotifyCollectionChangedAction.Add
+            || args.Action == NotifyCollectionChangedAction.Remove
+            || args.Action == NotifyCollectionChangedAction.Reset)
+         {
+            FirePropertyChanged("Count");
+            FirePropertyChanged(Binding.IndexerName);
+         }
+         else if (args.Action == NotifyCollectionChangedAction.Replace)
+         {
+            FirePropertyChanged(Binding.IndexerName);
+         }
+
          if (CollectionChanged != null)
          {
             CollectionChanged(this, args);
          }
       }
+
+      #endregion
+
+      #region INotifyPropertyChanged Implementation
+
+      public event PropertyChangedEventHandler PropertyChanged;
+
+      private void FirePropertyChanged(string propertyName)
+      {
+         if (PropertyChanged != null)
+         {
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+         }
+      }
+
+      #endregion
    }
 }

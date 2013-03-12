@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -185,6 +186,46 @@ namespace PathFindTests.Collections
             Assert.AreEqual(keys[index++], enumerator.Current.Key);
             Assert.IsNotNull(enumerator.Current.Value);
          }
+      }
+
+      [Test]
+      public void TestAddItemFiresCountPropertyChangedEvent()
+      {
+         var dict = new ObservableDictionary<string, object>();
+         var propertyNamesChanged = new List<string>();
+         dict.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+         {
+            propertyNamesChanged.Add(e.PropertyName);
+         };
+         dict["test"] = new object();
+         Assert.IsTrue(propertyNamesChanged.Contains("Count"));
+      }
+
+      [Test]
+      public void TestRemoveItemFiresCountPropertyChangedEvent()
+      {
+         var dict = new ObservableDictionary<string, object>();
+         dict["test"] = new object();
+         var propertyNamesChanged = new List<string>();
+         dict.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+         {
+            propertyNamesChanged.Add(e.PropertyName);
+         };
+         dict.Remove("test");
+         Assert.IsTrue(propertyNamesChanged.Contains("Count"));
+      }
+
+      [Test]
+      public void TestSetItemFiresIndexerPropertyChangedEvent()
+      {
+         var dict = new ObservableDictionary<string, object>();
+         var propertyNamesChanged = new List<string>();
+         dict.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+         {
+            propertyNamesChanged.Add(e.PropertyName);
+         };
+         dict["test"] = new object();
+         Assert.IsTrue(propertyNamesChanged.Contains("Item[]"));
       }
    }
 }
