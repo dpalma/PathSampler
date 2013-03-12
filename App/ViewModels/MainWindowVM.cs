@@ -1,19 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Input;
 using PathFind.Commands;
 using PathFind.Models;
+using PathFind.PathFinders;
 
 namespace PathFind.ViewModels
 {
    public class MainWindowVM : ViewModel
    {
+      public MainWindowVM()
+      {
+         var q = from t in Assembly.GetExecutingAssembly().GetTypes()
+                 where t.IsClass && t.BaseType.Equals(typeof(PathFinder))
+                 select t;
+         q.ToList().ForEach(t => PathingAlgorithms.Add(t));
+
+         SelectedPathingAlgorithm = PathingAlgorithms.First();
+      }
+
       public Map Map
       {
          get
@@ -164,5 +177,27 @@ namespace PathFind.ViewModels
          }
       }
       private DelegateCommand m_saveCommand;
+
+      public ObservableCollection<Type> PathingAlgorithms
+      {
+         get
+         {
+            return m_pathingAlgorithms;
+         }
+      }
+      ObservableCollection<Type> m_pathingAlgorithms = new ObservableCollection<Type>();
+
+      public Type SelectedPathingAlgorithm
+      {
+         get
+         {
+            return m_selectedPathingAlgorithm;
+         }
+         set
+         {
+            m_selectedPathingAlgorithm = value;
+         }
+      }
+      private Type m_selectedPathingAlgorithm;
    }
 }

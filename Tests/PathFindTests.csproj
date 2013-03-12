@@ -55,6 +55,7 @@
     <Compile Include="Models\MapTests.cs" />
     <Compile Include="PathFinders\AStarTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\MainWindowVMTests.cs" />
     <Compile Include="ViewModels\MapVMTests.cs" />
   </ItemGroup>
   <ItemGroup>
