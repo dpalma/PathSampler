@@ -20,6 +20,12 @@ namespace PathFind.ViewModels
    {
       public MapVM()
       {
+         ColoredCells.CollectionChanged += new NotifyCollectionChangedEventHandler(ColoredCells_CollectionChanged);
+      }
+
+      void ColoredCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+      {
+         FireRedrawRequested();
       }
 
       public Map Map
@@ -79,11 +85,13 @@ namespace PathFind.ViewModels
 
          StopPathing();
 
+         UpdatePathingCommands();
+
          FirePropertyChanged(e.PropertyName);
          FireRedrawRequested();
       }
 
-      private void UpdateCommands()
+      private void UpdatePathingCommands()
       {
          if (m_stopPathingCommand != null)
          {
@@ -277,8 +285,6 @@ namespace PathFind.ViewModels
          m_timer.Start();
 
          m_pathFinder = new BreadthFirstSearch(Map, this);
-
-         UpdateCommands();
       }
 
       public bool CanStartPathing
@@ -319,10 +325,6 @@ namespace PathFind.ViewModels
          }
 
          ColoredCells.Clear();
-
-         UpdateCommands();
-
-         FireRedrawRequested();
       }
 
       private DelegateCommand m_startPathingCommand;
@@ -333,7 +335,11 @@ namespace PathFind.ViewModels
             if (m_startPathingCommand == null)
             {
                m_startPathingCommand = new DelegateCommand(
-                        t => { StartPathing(); },
+                        t =>
+                        {
+                           StartPathing();
+                           UpdatePathingCommands();
+                        },
                         t => { return CanStartPathing; });
             }
             return m_startPathingCommand;
@@ -348,7 +354,11 @@ namespace PathFind.ViewModels
             if (m_stopPathingCommand == null)
             {
                m_stopPathingCommand = new DelegateCommand(
-                        t => { StopPathing(); },
+                        t =>
+                        {
+                           StopPathing();
+                           UpdatePathingCommands();
+                        },
                         t => { return IsPathing; });
             }
             return m_stopPathingCommand;
@@ -357,9 +367,9 @@ namespace PathFind.ViewModels
 
       #region ICellColoring Implementation
 
-      private Dictionary<GridCoordinate, Brush> m_coloredCells = new Dictionary<GridCoordinate,Brush>();
+      private ObservableDictionary<GridCoordinate, Brush> m_coloredCells = new ObservableDictionary<GridCoordinate, Brush>();
 
-      public IDictionary<GridCoordinate, Brush> ColoredCells
+      public IObservableDictionary<GridCoordinate, Brush> ColoredCells
       {
          get { return m_coloredCells; }
       }
@@ -371,9 +381,7 @@ namespace PathFind.ViewModels
             throw new InvalidOperationException("Attempting to color a blocked cell");
          }
 
-         m_coloredCells[cell] = brush;
-
-         FireRedrawRequested();
+         ColoredCells[cell] = brush;
       }
 
       #endregion
