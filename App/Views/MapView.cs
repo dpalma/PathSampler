@@ -59,14 +59,8 @@ namespace PathFind.Views
 
       public ICollection<GridCoordinate> SelectedCells
       {
-         get
-         {
-            return (ICollection<GridCoordinate>)GetValue(SelectedCellsProperty);
-         }
-         set
-         {
-            SetValue(SelectedCellsProperty, value);
-         }
+         get { return (ICollection<GridCoordinate>)GetValue(SelectedCellsProperty); }
+         set { SetValue(SelectedCellsProperty, value); }
       }
 
       WeakReference controllerRef;
@@ -131,14 +125,8 @@ namespace PathFind.Views
 
       public int RowCount
       {
-         get
-         {
-            return (int)GetValue(RowCountProperty);
-         }
-         set
-         {
-            SetValue(RowCountProperty, value);
-         }
+         get { return (int)GetValue(RowCountProperty); }
+         set { SetValue(RowCountProperty, value); }
       }
 
       public int ColumnCount
@@ -230,42 +218,41 @@ namespace PathFind.Views
 
       public Brush StartCellBrush
       {
-         get
-         {
-            return (Brush)GetValue(StartCellBrushProperty);
-         }
-         set
-         {
-            SetValue(StartCellBrushProperty, value);
-         }
+         get { return (Brush)GetValue(StartCellBrushProperty); }
+         set { SetValue(StartCellBrushProperty, value); }
       }
 
       public Brush GoalCellBrush
       {
-         get
-         {
-            return (Brush)GetValue(GoalCellBrushProperty);
-         }
-         set
-         {
-            SetValue(GoalCellBrushProperty, value);
-         }
+         get { return (Brush)GetValue(GoalCellBrushProperty); }
+         set { SetValue(GoalCellBrushProperty, value); }
+      }
+
+      private static readonly DependencyProperty GoalCellProperty = DependencyProperty.Register("GoalCell", typeof(GridCoordinate), typeof(MapView));
+      private static readonly DependencyProperty StartCellProperty = DependencyProperty.Register("StartCell", typeof(GridCoordinate), typeof(MapView));
+
+      public GridCoordinate StartCell
+      {
+         get { return (GridCoordinate)GetValue(StartCellProperty); }
+         set { SetValue(StartCellProperty, value); }
+      }
+
+      public GridCoordinate GoalCell
+      {
+         get { return (GridCoordinate)GetValue(GoalCellProperty); }
+         set { SetValue(GoalCellProperty, value); }
       }
 
       private void DrawStartAndGoalCells(DrawingContext dc)
       {
-         var vm = DataContext as MapVM;
-         if (vm != null)
+         if (GoalCell != null)
          {
-            if (vm.Map.Goal != null)
-            {
-               DrawCellEllipse(dc, vm.Map.Goal, GoalCellBrush);
-            }
+            DrawCellEllipse(dc, GoalCell, GoalCellBrush);
+         }
 
-            if (vm.Map.Start != null)
-            {
-               DrawCellEllipse(dc, vm.Map.Start, StartCellBrush);
-            }
+         if (StartCell != null)
+         {
+            DrawCellEllipse(dc, StartCell, StartCellBrush);
          }
       }
 
