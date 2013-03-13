@@ -20,12 +20,6 @@ namespace PathFind.ViewModels
    {
       public MapVM()
       {
-         SelectedCells.CollectionChanged += new NotifyCollectionChangedEventHandler(SelectedCells_CollectionChanged);
-      }
-
-      private void SelectedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-      {
-         FireRedrawRequested();
       }
 
       public Map Map

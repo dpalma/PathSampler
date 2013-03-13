@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows;
 using PathFind.Core;
 using PathFind.Models;
 using PathFind.ViewModels;
-using System.ComponentModel;
 
 namespace PathFind.Views
 {
@@ -55,7 +56,21 @@ namespace PathFind.Views
          }
       }
 
-      public static readonly DependencyProperty SelectedCellsProperty = DependencyProperty.Register("SelectedCells", typeof(ICollection<GridCoordinate>), typeof(MapView));
+      public static readonly DependencyProperty SelectedCellsProperty = DependencyProperty.Register("SelectedCells", typeof(ICollection<GridCoordinate>), typeof(MapView), new PropertyMetadata(new PropertyChangedCallback(SelectedCells_PropertyChanged)));
+
+      private static void SelectedCells_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+      {
+         MapView mapView = d as MapView;
+         if (mapView != null)
+         {
+            ((INotifyCollectionChanged)d.GetValue(e.Property)).CollectionChanged += new NotifyCollectionChangedEventHandler(mapView.SelectedCells_CollectionChanged);
+         }
+      }
+
+      private void SelectedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+      {
+         InvalidateVisual();
+      }
 
       public ICollection<GridCoordinate> SelectedCells
       {
