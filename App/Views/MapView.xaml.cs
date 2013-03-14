@@ -28,18 +28,19 @@ namespace PathFind.Views
          InitializeComponent();
       }
 
+      public static readonly DependencyProperty GridLineSizeProperty = DependencyProperty.Register("GridLineSize", typeof(int), typeof(MapView), new PropertyMetadata(1));
+
       public int GridLineSize
       {
          get
          {
-            return m_gridLineSize;
+            return (int)GetValue(GridLineSizeProperty);
          }
          set
          {
-            m_gridLineSize = value;
+            SetValue(GridLineSizeProperty, value);
          }
       }
-      private int m_gridLineSize = 1;
 
       public Size CellSize
       {

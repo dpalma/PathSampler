@@ -113,6 +113,20 @@ namespace PathFind.ViewModels
 
       public event EventHandler RedrawRequested;
 
+      public int GridLineSize
+      {
+         get
+         {
+            return m_gridLineSize;
+         }
+         set
+         {
+            m_gridLineSize = value;
+            FirePropertyChanged("GridLineSize");
+         }
+      }
+      private int m_gridLineSize = 1;
+
       public Size Dimensions
       {
          get
