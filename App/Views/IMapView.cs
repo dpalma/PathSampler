@@ -8,6 +8,5 @@ namespace PathFind.Views
 {
    public interface IMapView
    {
-      Size CellSize { get; set; }
    }
 }

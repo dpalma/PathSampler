@@ -42,18 +42,19 @@ namespace PathFind.Views
          }
       }
 
+      public static readonly DependencyProperty CellSizeProperty = DependencyProperty.Register("CellSize", typeof(Size), typeof(MapView), new PropertyMetadata(new Size(16, 16)));
+
       public Size CellSize
       {
          get
          {
-            return m_cellSize;
+            return (Size)GetValue(CellSizeProperty);
          }
          set
          {
-            m_cellSize = value;
+            SetValue(CellSizeProperty, value);
          }
       }
-      private Size m_cellSize = new Size(16, 16);
 
       public double ViewWidth
       {

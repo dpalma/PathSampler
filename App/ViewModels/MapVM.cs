@@ -127,6 +127,20 @@ namespace PathFind.ViewModels
       }
       private int m_gridLineSize = 1;
 
+      public Size CellSize
+      {
+         get
+         {
+            return m_cellSize;
+         }
+         set
+         {
+            m_cellSize = value;
+            FirePropertyChanged("CellSize");
+         }
+      }
+      private Size m_cellSize = new Size(16, 16);
+
       public Size Dimensions
       {
          get
