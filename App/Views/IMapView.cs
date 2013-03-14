@@ -9,7 +9,5 @@ namespace PathFind.Views
    public interface IMapView
    {
       Size CellSize { get; set; }
-
-      int GridLineSize { get; set; }
    }
 }

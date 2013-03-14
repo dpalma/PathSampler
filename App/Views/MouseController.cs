@@ -136,8 +136,8 @@ namespace PathFind.Views
             return null;
          }
 
-         double hitX = mouse.X / (MapView.CellSize.Width + MapView.GridLineSize);
-         double hitY = mouse.Y / (MapView.CellSize.Height + MapView.GridLineSize);
+         double hitX = mouse.X / (MapView.CellSize.Width + MapViewModel.GridLineSize);
+         double hitY = mouse.Y / (MapView.CellSize.Height + MapViewModel.GridLineSize);
 
          return new GridCoordinate() { Column = (int)hitX, Row = (int)hitY };
       }
