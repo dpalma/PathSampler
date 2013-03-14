@@ -21,7 +21,7 @@ namespace PathFind.Views
    /// <summary>
    /// Interaction logic for MapView.xaml
    /// </summary>
-   public partial class MapView : FrameworkElement, IMapView
+   public partial class MapView : ItemsControl, IMapView
    {
       public MapView()
       {
