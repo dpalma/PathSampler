@@ -12,7 +12,7 @@ using PathFind.ViewModels;
 
 namespace PathFind.Views
 {
-   public class MapView : Canvas, IMapView
+   public class MapCanvas : Canvas, IMapView
    {
       public int GridLineSize
       {
@@ -56,11 +56,11 @@ namespace PathFind.Views
          }
       }
 
-      public static readonly DependencyProperty SelectedCellsProperty = DependencyProperty.Register("SelectedCells", typeof(ICollection<GridCoordinate>), typeof(MapView), new PropertyMetadata(new PropertyChangedCallback(SelectedCells_PropertyChanged)));
+      public static readonly DependencyProperty SelectedCellsProperty = DependencyProperty.Register("SelectedCells", typeof(ICollection<GridCoordinate>), typeof(MapCanvas), new PropertyMetadata(new PropertyChangedCallback(SelectedCells_PropertyChanged)));
 
       private static void SelectedCells_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
       {
-         MapView mapView = d as MapView;
+         MapCanvas mapView = d as MapCanvas;
          if (mapView != null)
          {
             ((INotifyCollectionChanged)d.GetValue(e.Property)).CollectionChanged += new NotifyCollectionChangedEventHandler(mapView.SelectedCells_CollectionChanged);
@@ -80,7 +80,7 @@ namespace PathFind.Views
 
       WeakReference controllerRef;
 
-      public MapView()
+      public MapCanvas()
       {
          Initialized += new EventHandler(MapView_Initialized);
       }
@@ -135,8 +135,8 @@ namespace PathFind.Views
          }
       }
 
-      public static readonly DependencyProperty RowCountProperty = DependencyProperty.Register("RowCount", typeof(int), typeof(MapView), new PropertyMetadata(Map.DefaultRowColumnCount));
-      public static readonly DependencyProperty ColumnCountProperty = DependencyProperty.Register("ColumnCount", typeof(int), typeof(MapView), new PropertyMetadata(Map.DefaultRowColumnCount));
+      public static readonly DependencyProperty RowCountProperty = DependencyProperty.Register("RowCount", typeof(int), typeof(MapCanvas), new PropertyMetadata(Map.DefaultRowColumnCount));
+      public static readonly DependencyProperty ColumnCountProperty = DependencyProperty.Register("ColumnCount", typeof(int), typeof(MapCanvas), new PropertyMetadata(Map.DefaultRowColumnCount));
 
       public int RowCount
       {
@@ -228,8 +228,8 @@ namespace PathFind.Views
          }
       }
 
-      private static readonly DependencyProperty GoalCellBrushProperty = DependencyProperty.Register("GoalCellBrush", typeof(Brush), typeof(MapView));
-      private static readonly DependencyProperty StartCellBrushProperty = DependencyProperty.Register("StartCellBrush", typeof(Brush), typeof(MapView));
+      private static readonly DependencyProperty GoalCellBrushProperty = DependencyProperty.Register("GoalCellBrush", typeof(Brush), typeof(MapCanvas));
+      private static readonly DependencyProperty StartCellBrushProperty = DependencyProperty.Register("StartCellBrush", typeof(Brush), typeof(MapCanvas));
 
       public Brush StartCellBrush
       {
@@ -243,8 +243,8 @@ namespace PathFind.Views
          set { SetValue(GoalCellBrushProperty, value); }
       }
 
-      private static readonly DependencyProperty GoalCellProperty = DependencyProperty.Register("GoalCell", typeof(GridCoordinate), typeof(MapView));
-      private static readonly DependencyProperty StartCellProperty = DependencyProperty.Register("StartCell", typeof(GridCoordinate), typeof(MapView));
+      private static readonly DependencyProperty GoalCellProperty = DependencyProperty.Register("GoalCell", typeof(GridCoordinate), typeof(MapCanvas));
+      private static readonly DependencyProperty StartCellProperty = DependencyProperty.Register("StartCell", typeof(GridCoordinate), typeof(MapCanvas));
 
       public GridCoordinate StartCell
       {
@@ -282,7 +282,7 @@ namespace PathFind.Views
          dc.DrawEllipse(brush, pen, RectCenter(cellRect), cellRect.Width / 2, cellRect.Height / 2);
       }
 
-      private static readonly DependencyProperty SelectedCellBrushProperty = DependencyProperty.Register("SelectedCellBrush", typeof(Brush), typeof(MapView));
+      private static readonly DependencyProperty SelectedCellBrushProperty = DependencyProperty.Register("SelectedCellBrush", typeof(Brush), typeof(MapCanvas));
 
       public Brush SelectedCellBrush
       {

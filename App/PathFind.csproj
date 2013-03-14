@@ -72,7 +72,7 @@
     <Compile Include="ViewModels\MapVM.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\IMapView.cs" />
-    <Compile Include="Views\MapView.cs" />
+    <Compile Include="Views\MapCanvas.cs" />
     <Compile Include="Views\MouseController.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
