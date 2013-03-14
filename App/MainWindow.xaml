@@ -44,8 +44,8 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Name="scrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="Gainsboro" Grid.Row="2">
-            <v:MapCanvas x:Name="mapView1" DataContext="{Binding Path=MapVM}" SelectedCellBrush="{Binding Path=SelectedCellBrush}" RowCount="{Binding Path=Map.RowCount}" ColumnCount="{Binding Path=Map.ColumnCount}" Width="{Binding RelativeSource={RelativeSource Self}, Path=ViewWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=ViewHeight}" SnapsToDevicePixels="True" GridLineBrush="Gainsboro" SelectedCells="{Binding Path=SelectedCells}" StartCellBrush="{Binding Path=StartCellBrush}" GoalCellBrush="{Binding Path=GoalCellBrush}" GoalCell="{Binding Path=Map.Goal}" StartCell="{Binding Path=Map.Start}">
-            </v:MapCanvas>
+            <v:MapView x:Name="mapView1" SelectedCellBrush="{Binding Path=SelectedCellBrush}" RowCount="{Binding Path=Map.RowCount}" ColumnCount="{Binding Path=Map.ColumnCount}" Width="{Binding RelativeSource={RelativeSource Self}, Path=ViewWidth}" Height="{Binding RelativeSource={RelativeSource Self}, Path=ViewHeight}" SnapsToDevicePixels="True" GridLineBrush="Gainsboro" SelectedCells="{Binding Path=SelectedCells}" StartCellBrush="{Binding Path=StartCellBrush}" GoalCellBrush="{Binding Path=GoalCellBrush}" GoalCell="{Binding Path=Map.Goal}" StartCell="{Binding Path=Map.Start}" DataContext="{Binding Path=MapVM}">
+            </v:MapView>
         </ScrollViewer>
         <ToolBarTray Height="26" Name="toolBarTray1" VerticalAlignment="Top" Grid.Row="1">
             <ToolBar Height="26" HorizontalAlignment="Left" Name="pathToolBar" VerticalAlignment="Center" Width="350">
