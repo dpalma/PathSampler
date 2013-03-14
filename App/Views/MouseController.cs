@@ -17,12 +17,6 @@ namespace PathFind.Views
          get { return m_view; }
       }
 
-      private IMapView m_mapView;
-      public IMapView MapView
-      {
-         get { return m_mapView; }
-      }
-
       private MapVM m_mapViewModel;
       public MapVM MapViewModel
       {
@@ -36,10 +30,9 @@ namespace PathFind.Views
          set { m_command = value; }
       }
 
-      public MouseController(FrameworkElement view, IMapView mapView, MapVM mapViewModel)
+      public MouseController(FrameworkElement view, MapVM mapViewModel)
       {
          m_view = view;
-         m_mapView = mapView;
          m_mapViewModel = mapViewModel;
 
          View.MouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(MapView_MouseLeftButtonDown);

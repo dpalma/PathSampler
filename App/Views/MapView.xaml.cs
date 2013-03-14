@@ -21,7 +21,7 @@ namespace PathFind.Views
    /// <summary>
    /// Interaction logic for MapView.xaml
    /// </summary>
-   public partial class MapView : ItemsControl, IMapView
+   public partial class MapView : ItemsControl
    {
       public MapView()
       {
@@ -103,7 +103,7 @@ namespace PathFind.Views
          if (vm != null)
          {
             vm.RedrawRequested += new EventHandler(ViewModel_RedrawRequested);
-            var controller = new MouseController(this, this, vm);
+            var controller = new MouseController(this, vm);
             controllerRef = new WeakReference(controller);
          }
       }
