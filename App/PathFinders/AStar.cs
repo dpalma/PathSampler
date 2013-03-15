@@ -34,12 +34,16 @@ namespace PathFind.PathFinders
       }
       private double m_costToGoal = Double.PositiveInfinity;
 
+      public double Cost
+      {
+         get { return CostFromStart + CostToGoal; }
+      }
+
       #region IComparable<AStarNode> Members
 
       public int CompareTo(AStarNode other)
       {
-         // TODO: compare by priority
-         return Cell.Equals(other) ? 0 : -1;
+         return (int)(other.Cost - this.Cost);
       }
 
       #endregion
@@ -51,7 +55,7 @@ namespace PathFind.PathFinders
       public AStar(Map map, ICellColoring cellColoring)
          : base(map, cellColoring)
       {
-         OpenList.Enqueue(new AStarNode(Map.Start) { CostToGoal = Map.Start.ManhattanDistance(Map.Goal) });
+         OpenList.Enqueue(new AStarNode(Map.Start) { CostToGoal = PathCostEstimate(Map.Start, Map.Goal) });
       }
 
       private PriorityQueue<AStarNode> OpenList { get { return m_openList; } }
@@ -59,8 +63,13 @@ namespace PathFind.PathFinders
 
       private void AddToOpenList(GridCoordinate cell)
       {
-         OpenList.Enqueue(new AStarNode(cell));
-         CellColoring.SetCellColor(cell, Brushes.Orange);
+         AddToOpenList(new AStarNode(cell));
+      }
+
+      private void AddToOpenList(AStarNode node)
+      {
+         OpenList.Enqueue(node);
+         CellColoring.SetCellColor(node.Cell, Brushes.Orange);
       }
 
       private void AddToClosedList(GridCoordinate cell)
@@ -79,6 +88,22 @@ namespace PathFind.PathFinders
          return !IsOnOpenList(cell) && !ClosedList.Contains(cell);
       }
 
+      private double PathCostActual(GridCoordinate from, GridCoordinate to)
+      {
+         if (Math.Abs(from.Row - to.Row) > 1 || Math.Abs(from.Column - to.Column) > 1)
+            throw new InvalidOperationException("Cells are more than one space away");
+
+         if (from.Row != to.Row && from.Column != to.Column)
+            return 1.4;
+         else
+            return 1.0;
+      }
+
+      private double PathCostEstimate(GridCoordinate from, GridCoordinate to)
+      {
+         return from.ManhattanDistance(to);
+      }
+
       public override void Step()
       {
          if (OpenList.Count == 0)
@@ -89,7 +114,6 @@ namespace PathFind.PathFinders
          else
          {
             AStarNode node = OpenList.Dequeue();
-            AddToClosedList(node.Cell);
 
             if (node.Cell.Equals(Map.Goal))
             {
@@ -105,14 +129,34 @@ namespace PathFind.PathFinders
 
                foreach (var neighbor in neighbors)
                {
-                  //double newCost = node.CostFromStart + node.Cell.ManhattanDistance(neighbor);
+                  double newCost = node.CostFromStart + PathCostActual(node.Cell, neighbor);
 
-                  if (IsUnseen(neighbor))
+                  AStarNode neighborNode = OpenList.Where(n => n.Cell.Equals(neighbor)).FirstOrDefault();
+
+                  if (ClosedList.Contains(neighbor)
+                     || (neighborNode != null && neighborNode.CostFromStart <= newCost))
                   {
-                     AddToOpenList(neighbor);
+                     continue;
+                  }
+                  else
+                  {
+                     if (neighborNode == null)
+                     {
+                        neighborNode = new AStarNode(neighbor);
+                     }
+                     else
+                     {
+                        OpenList.Remove(neighborNode);
+                     }
+
+                     neighborNode.CostFromStart = newCost;
+                     neighborNode.CostToGoal = PathCostEstimate(neighbor, Map.Goal);
+                     AddToOpenList(neighborNode);
                      Predecessors[neighbor] = node.Cell;
                   }
                }
+
+               AddToClosedList(node.Cell);
             }
          }
       }
