@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -21,6 +22,13 @@ namespace PathFind.ViewModels
       public MapVM()
       {
          ColoredCells.CollectionChanged += new NotifyCollectionChangedEventHandler(ColoredCells_CollectionChanged);
+
+         var q = from t in Assembly.GetExecutingAssembly().GetTypes()
+                 where t.IsClass && t.BaseType.Equals(typeof(PathFinder))
+                 select t;
+         q.ToList().ForEach(t => PathingAlgorithms.Add(t));
+
+         SelectedPathingAlgorithm = PathingAlgorithms.First();
       }
 
       void ColoredCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -277,6 +285,28 @@ namespace PathFind.ViewModels
             return m_setGoalCommand;
          }
       }
+
+      public ObservableCollection<Type> PathingAlgorithms
+      {
+         get
+         {
+            return m_pathingAlgorithms;
+         }
+      }
+      ObservableCollection<Type> m_pathingAlgorithms = new ObservableCollection<Type>();
+
+      public Type SelectedPathingAlgorithm
+      {
+         get
+         {
+            return m_selectedPathingAlgorithm;
+         }
+         set
+         {
+            m_selectedPathingAlgorithm = value;
+         }
+      }
+      private Type m_selectedPathingAlgorithm;
 
       private DispatcherTimer m_timer;
       private PathFinder m_pathFinder;

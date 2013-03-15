@@ -51,7 +51,18 @@ namespace PathFindTests.ViewModels
       //{
       //   vm.StartPathingCommand.Execute(null);
       //   vm.StartPathingCommand.Execute(null);
-      //}
+
+      [Test]
+      public void TestPathingAlgorithmImplementationsAreCollected()
+      {
+         Assert.IsTrue(vm.PathingAlgorithms.Count > 0);
+      }
+
+      [Test]
+      public void TestThereIsADefaultPathingAlgorithmSelected()
+      {
+         Assert.IsNotNull(vm.SelectedPathingAlgorithm);
+      }
 
       [Test]
       public void TestSelectedCellsBinding()

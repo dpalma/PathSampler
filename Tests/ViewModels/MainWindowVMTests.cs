@@ -12,20 +12,6 @@ namespace PathFindTests.ViewModels
    class MainWindowVMTests
    {
       [Test]
-      public void TestPathingAlgorithmImplementationsAreCollected()
-      {
-         MainWindowVM vm = new MainWindowVM();
-         Assert.IsTrue(vm.PathingAlgorithms.Count > 0);
-      }
-
-      [Test]
-      public void TestThereIsADefaultPathingAlgorithmSelected()
-      {
-         MainWindowVM vm = new MainWindowVM();
-         Assert.IsNotNull(vm.SelectedPathingAlgorithm);
-      }
-
-      [Test]
       public void TestStopPathingCanExecuteChangedFiresWhenGoalChanges()
       {
          MainWindowVM vm = new MainWindowVM();
