@@ -99,13 +99,18 @@ namespace PathFind.Collections
          heap[index] = value;
       }
 
+      public static T HeapRemoveAt<T>(this IList<T> heap, int index) where T : IComparable<T>
+      {
+         T max = heap[index];
+         heap[index] = heap[heap.Count - 1];
+         heap.RemoveAt(heap.Count - 1);
+         heap.Heapify(index);
+         return max;
+      }
+
       public static T HeapRemove<T>(this IList<T> heap) where T : IComparable<T>
       {
-         T max = heap[0];
-         heap[0] = heap[heap.Count - 1];
-         heap.RemoveAt(heap.Count - 1);
-         heap.Heapify(0);
-         return max;
+         return heap.HeapRemoveAt(0);
       }
    }
 }

@@ -89,6 +89,25 @@ namespace PathFindTests.Collections
       }
 
       [Test]
+      public void TestRemoveFromMiddleMaintainsHeapCondition()
+      {
+         PriorityQueue<int> queue = new PriorityQueue<int>();
+         for (int i = 1; i <= 20; ++i)
+         {
+            queue.Enqueue(i);
+         }
+         queue.Remove(20);
+         while (queue.Count > 0)
+         {
+            int next = queue.Dequeue();
+            if (queue.Count > 0)
+            {
+               Assert.IsTrue(next >= queue.Max());
+            }
+         }
+      }
+
+      [Test]
       public void TestPriorityQueueWorksWithWhere()
       {
          PriorityQueue<Node> queue = new PriorityQueue<Node>();

@@ -38,6 +38,17 @@ namespace PathFind.Collections
          return m_list.Contains(value);
       }
 
+      public bool Remove(T value)
+      {
+         int index = m_list.IndexOf(value);
+         if (index >= 0)
+         {
+            m_list.HeapRemoveAt(index);
+            return true;
+         }
+         return false;
+      }
+
       #region ICollection Members
 
       public void CopyTo(Array array, int index)
