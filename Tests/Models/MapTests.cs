@@ -11,6 +11,27 @@ using PathFind.Models;
 
 namespace PathFindTests.Models
 {
+   internal static class MapUtilsForTesting
+   {
+      internal static void Randomize(this Map map)
+      {
+         Random rand = new Random();
+
+         for (int i = 0; i < map.RowCount; ++i)
+         {
+            for (int j = 0; j < map.ColumnCount; ++j)
+            {
+               GridCoordinate cell = new GridCoordinate() { Row = i, Column = j };
+               if (map.Goal.Equals(cell) || map.Start.Equals(cell))
+                  continue;
+
+               if ((rand.Next() & 1) != 0)
+                  map.BlockedCells[cell] = 1;
+            }
+         }
+      }
+   }
+
    class MapTests
    {
       private Map map;
@@ -117,6 +138,17 @@ namespace PathFindTests.Models
             Assert.AreEqual(map.Start, loadedMap.Start);
             Assert.AreEqual(map.Goal, loadedMap.Goal);
          }
+      }
+
+      [Test]
+      public void TestAssign()
+      {
+         map.Randomize();
+         Assert.IsTrue(map.BlockedCells.Count > 0);
+         Map newMap = new Map();
+         newMap.Assign(map);
+         Assert.AreEqual(map.BlockedCells.Count, newMap.BlockedCells.Count);
+         Assert.AreEqual(map.BlockedCells, newMap.BlockedCells);
       }
    }
 }
