@@ -46,5 +46,20 @@ namespace PathFindTests.ViewModels
          map.Goal = cell;
          Assert.IsFalse(vm.MapVM.IsPathing);
       }
+
+      [Test]
+      [Ignore]
+      public void TestPathingCommandsUpdateWhenPathFindingCompletes()
+      {
+         MainWindowVM vm = new MainWindowVM();
+         vm.Map = new Map() { RowCount = 4, ColumnCount = 4, Goal = new GridCoordinate() { Row = 3, Column = 3 } };
+         vm.StartPathingCommand.Execute(null);
+         Assert.IsFalse(vm.StartPathingCommand.CanExecute(null));
+         // Not even sure if this will ever work. Maybe path-finding should
+         // be encapsulated in a Task.
+         while (vm.MapVM.CurrentPathFinder.Result == null)
+            vm.MapVM.CurrentPathFinder.Step();
+         Assert.IsTrue(vm.StartPathingCommand.CanExecute(null));
+      }
    }
 }
