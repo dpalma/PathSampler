@@ -53,17 +53,8 @@ namespace PathFind.Models
          {
             return m_blockedCells;
          }
-         private set
-         {
-            if (!(value is ObservableDictionary<GridCoordinate, double>))
-            {
-               throw new ArgumentException("Invalid dictionary object given to BlockedCells");
-            }
-            m_blockedCells = value as ObservableDictionary<GridCoordinate, double>;
-            FirePropertyChanged("BlockedCells");
-         }
       }
-      private ObservableDictionary<GridCoordinate, double> m_blockedCells = new ObservableDictionary<GridCoordinate, double>();
+      private readonly ObservableDictionary<GridCoordinate, double> m_blockedCells = new ObservableDictionary<GridCoordinate, double>();
 
       public GridCoordinate Start
       {
@@ -187,7 +178,11 @@ namespace PathFind.Models
       {
          this.RowCount = other.RowCount;
          this.ColumnCount = other.ColumnCount;
-         this.BlockedCells = other.BlockedCells;
+         this.BlockedCells.Clear();
+         foreach (var item in other.BlockedCells)
+         {
+            this.BlockedCells.Add(item);
+         }
          this.Goal = other.Goal;
          this.Start = other.Start;
       }
