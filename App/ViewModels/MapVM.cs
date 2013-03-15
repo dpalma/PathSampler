@@ -318,7 +318,7 @@ namespace PathFind.ViewModels
          get { return m_timer != null; }
       }
 
-      internal void StartPathing()
+      public void StartPathing()
       {
          if (m_timer != null)
          {
@@ -330,7 +330,9 @@ namespace PathFind.ViewModels
          m_timer.Interval = new TimeSpan(0, 0, 0, 0, 200);
          m_timer.Start();
 
-         CurrentPathFinder = new BreadthFirstSearch(Map, this);
+         var constructor = SelectedPathingAlgorithm.GetConstructor(new Type[] { typeof(Map), typeof(ICellColoring) });
+
+         CurrentPathFinder = (PathFinder)constructor.Invoke(new object[] { Map, this });
       }
 
       public bool CanStartPathing
