@@ -40,12 +40,25 @@ namespace PathFind.ViewModels
                throw new ArgumentNullException("Map");
             }
 
+            if (Map != null)
+            {
+               Map.PropertyChanged -= new PropertyChangedEventHandler(Map_PropertyChanged);
+            }
+
             m_map = value;
             FirePropertyChanged("Map");
+
+            Map.PropertyChanged += new PropertyChangedEventHandler(Map_PropertyChanged);
 
             MapVM = new MapVM() { Map = m_map };
          }
       }
+
+      void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
+      {
+         UpdatePathingCommands();
+      }
+
       private Map m_map;
 
       public MapVM MapVM
@@ -199,5 +212,55 @@ namespace PathFind.ViewModels
          }
       }
       private Type m_selectedPathingAlgorithm;
+
+      private void UpdatePathingCommands()
+      {
+         if (m_stopPathingCommand != null)
+         {
+            m_stopPathingCommand.RaiseCanExecuteChanged();
+         }
+         if (m_startPathingCommand != null)
+         {
+            m_startPathingCommand.RaiseCanExecuteChanged();
+         }
+      }
+
+      private DelegateCommand m_startPathingCommand;
+      public ICommand StartPathingCommand
+      {
+         get
+         {
+            if (m_startPathingCommand == null)
+            {
+               m_startPathingCommand = new DelegateCommand(
+                        t =>
+                        {
+                           MapVM.StartPathing();
+                           UpdatePathingCommands();
+                        },
+                        t => { return MapVM.CanStartPathing; });
+            }
+            return m_startPathingCommand;
+         }
+      }
+
+      private DelegateCommand m_stopPathingCommand;
+      public ICommand StopPathingCommand
+      {
+         get
+         {
+            if (m_stopPathingCommand == null)
+            {
+               m_stopPathingCommand = new DelegateCommand(
+                        t =>
+                        {
+                           MapVM.StopPathing();
+                           UpdatePathingCommands();
+                        },
+                        t => { return MapVM.IsPathing; });
+            }
+            return m_stopPathingCommand;
+         }
+      }
    }
 }

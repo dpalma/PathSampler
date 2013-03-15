@@ -39,8 +39,8 @@
                 <MenuItem Header="Exit" Command="cmd:MainCommands.Exit" />
             </MenuItem>
             <MenuItem Header="Path">
-                <MenuItem Header="Start Finding" Command="{Binding Path=MapVM.StartPathingCommand}" />
-                <MenuItem Header="Stop Finding" Command="{Binding Path=MapVM.StopPathingCommand}" />
+                <MenuItem Header="Start Finding" Command="{Binding Path=StartPathingCommand}" />
+                <MenuItem Header="Stop Finding" Command="{Binding Path=StopPathingCommand}" />
             </MenuItem>
         </Menu>
         <ScrollViewer Name="scrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="Gainsboro" Grid.Row="2">
@@ -56,8 +56,8 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Content="Start Pathing" Name="button1" Width="75" Command="{Binding Path=MapVM.StartPathingCommand}" />
-                <Button Content="Stop Pathing" Name="button2" Width="75" Command="{Binding Path=MapVM.StopPathingCommand}" />
+                <Button Content="Start Pathing" Name="button1" Width="75" Command="{Binding Path=StartPathingCommand}" />
+                <Button Content="Stop Pathing" Name="button2" Width="75" Command="{Binding Path=StopPathingCommand}" />
             </ToolBar>
         </ToolBarTray>
     </Grid>

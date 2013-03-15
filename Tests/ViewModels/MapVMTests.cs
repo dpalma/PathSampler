@@ -38,40 +38,12 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
-      public void TestStopPathingCanExecuteChangedFiresWhenGoalChanges()
-      {
-         bool canExecuteChanged = false;
-         vm.StopPathingCommand.CanExecuteChanged += (object sender, EventArgs e) => { canExecuteChanged = true; };
-         map.Goal = map.Start;
-         Assert.IsTrue(canExecuteChanged);
-      }
-
-      [Test]
-      public void TestStopPathingCanExecuteChangedFiresOnStartingPathing()
-      {
-         bool canExecuteChanged = false;
-         vm.StopPathingCommand.CanExecuteChanged += (object sender, EventArgs e) => { canExecuteChanged = true; };
-         vm.StartPathingCommand.Execute(null);
-         Assert.IsTrue(canExecuteChanged);
-      }
-
-      [Test]
       public void TestSelectSameCellTwiceOnlyAddsOnce()
       {
          GridCoordinate cell = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
          vm.SelectedCells.Add(cell);
          vm.SelectedCells.Add(cell);
          Assert.AreEqual(1, vm.SelectedCells.Count);
-      }
-
-      [Test]
-      public void TestChangingGoalStopsPathing()
-      {
-         vm.StartPathingCommand.Execute(null);
-         Assert.IsTrue(vm.IsPathing);
-         GridCoordinate cell = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
-         map.Goal = cell;
-         Assert.IsFalse(vm.IsPathing);
       }
 
       //[Test]

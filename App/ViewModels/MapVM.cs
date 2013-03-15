@@ -85,22 +85,8 @@ namespace PathFind.ViewModels
 
          StopPathing();
 
-         UpdatePathingCommands();
-
          FirePropertyChanged(e.PropertyName);
          FireRedrawRequested();
-      }
-
-      private void UpdatePathingCommands()
-      {
-         if (m_stopPathingCommand != null)
-         {
-            m_stopPathingCommand.RaiseCanExecuteChanged();
-         }
-         if (m_startPathingCommand != null)
-         {
-            m_startPathingCommand.RaiseCanExecuteChanged();
-         }
       }
 
       private void FireRedrawRequested()
@@ -300,7 +286,7 @@ namespace PathFind.ViewModels
          get { return m_timer != null; }
       }
 
-      private void StartPathing()
+      internal void StartPathing()
       {
          if (m_timer != null)
          {
@@ -344,7 +330,7 @@ namespace PathFind.ViewModels
          }
       }
 
-      private void StopPathing()
+      internal void StopPathing()
       {
          if (m_timer != null)
          {
@@ -353,44 +339,6 @@ namespace PathFind.ViewModels
          }
 
          ColoredCells.Clear();
-      }
-
-      private DelegateCommand m_startPathingCommand;
-      public ICommand StartPathingCommand
-      {
-         get
-         {
-            if (m_startPathingCommand == null)
-            {
-               m_startPathingCommand = new DelegateCommand(
-                        t =>
-                        {
-                           StartPathing();
-                           UpdatePathingCommands();
-                        },
-                        t => { return CanStartPathing; });
-            }
-            return m_startPathingCommand;
-         }
-      }
-
-      private DelegateCommand m_stopPathingCommand;
-      public ICommand StopPathingCommand
-      {
-         get
-         {
-            if (m_stopPathingCommand == null)
-            {
-               m_stopPathingCommand = new DelegateCommand(
-                        t =>
-                        {
-                           StopPathing();
-                           UpdatePathingCommands();
-                        },
-                        t => { return IsPathing; });
-            }
-            return m_stopPathingCommand;
-         }
       }
 
       #region ICellColoring Implementation
