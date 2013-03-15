@@ -20,6 +20,7 @@
             <GradientStop Color="DarkGreen" Offset="1" />
         </RadialGradientBrush>
         <vm:MainWindowVM x:Key="mainWindowVM" Map="{StaticResource ResourceKey=map}" />
+        <v:DisplayNameConverter x:Key="displayNameConverter" />
     </Window.Resources>
     <Window.DataContext>
       <StaticResource ResourceKey="mainWindowVM"/>
@@ -49,10 +50,10 @@
         </ScrollViewer>
         <ToolBarTray Height="26" Name="toolBarTray1" VerticalAlignment="Top" Grid.Row="1">
             <ToolBar Height="26" HorizontalAlignment="Left" Name="pathToolBar" VerticalAlignment="Center" Width="350">
-                <ComboBox HorizontalAlignment="Left" Name="comboBox1" VerticalAlignment="Top" Width="120" ItemsSource="{Binding Path=MapVM.PathingAlgorithms}" SelectedItem="{Binding Path=MapVM.SelectedPathingAlgorithm}">
+                <ComboBox HorizontalAlignment="Left" Name="comboBox1" VerticalAlignment="Top" Width="150" ItemsSource="{Binding Path=MapVM.PathingAlgorithms}" SelectedItem="{Binding Path=MapVM.SelectedPathingAlgorithm}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                            <TextBlock Text="{Binding Converter={StaticResource displayNameConverter}}"></TextBlock>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
@@ -8,6 +9,7 @@ using PathFind.Models;
 
 namespace PathFind.PathFinders
 {
+   [DisplayName("Breadth-First Search")]
    public class BreadthFirstSearch : PathFinder
    {
       public BreadthFirstSearch(Map map, ICellColoring cellColoring)

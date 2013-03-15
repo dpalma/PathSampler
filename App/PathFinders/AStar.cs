@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
@@ -44,6 +45,7 @@ namespace PathFind.PathFinders
       #endregion
    }
 
+   [DisplayName("A*")]
    public class AStar : PathFinder
    {
       public AStar(Map map, ICellColoring cellColoring)
