@@ -28,7 +28,9 @@ namespace PathFind.ViewModels
                  select t;
          q.ToList().ForEach(t => PathingAlgorithms.Add(t));
 
-         SelectedPathingAlgorithm = PathingAlgorithms.First();
+         SelectedPathingAlgorithm = (from t in PathingAlgorithms
+                                     where t.Equals(typeof(BreadthFirstSearch))
+                                     select t).Single();
       }
 
       void ColoredCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -309,7 +311,7 @@ namespace PathFind.ViewModels
       private Type m_selectedPathingAlgorithm;
 
       private DispatcherTimer m_timer;
-      private PathFinder m_pathFinder;
+      public PathFinder CurrentPathFinder { get; private set; }
 
       public bool IsPathing
       {
@@ -328,7 +330,7 @@ namespace PathFind.ViewModels
          m_timer.Interval = new TimeSpan(0, 0, 0, 0, 200);
          m_timer.Start();
 
-         m_pathFinder = new BreadthFirstSearch(Map, this);
+         CurrentPathFinder = new BreadthFirstSearch(Map, this);
       }
 
       public bool CanStartPathing
@@ -341,14 +343,14 @@ namespace PathFind.ViewModels
 
       void timer_Tick(object sender, EventArgs e)
       {
-         m_pathFinder.Step();
+         CurrentPathFinder.Step();
 
-         if (m_pathFinder.Result != null)
+         if (CurrentPathFinder.Result != null)
          {
             StopPathing();
-            if (m_pathFinder.Result == PathFindResult.PathFound)
+            if (CurrentPathFinder.Result == PathFindResult.PathFound)
             {
-               foreach (var cell in m_pathFinder.Path)
+               foreach (var cell in CurrentPathFinder.Path)
                {
                   this.ColoredCells[cell] = Brushes.MediumSeaGreen;
                }

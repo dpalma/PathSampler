@@ -65,6 +65,22 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
+      public void TestDefaultPathingAlgorithmIsBFS()
+      {
+         Assert.AreEqual("BreadthFirstSearch", vm.SelectedPathingAlgorithm.Name);
+      }
+
+      //[Test]
+      //public void TestPathingUsesSelectedAlgorithm()
+      //{
+      //   Type defaultPathingAlgorithm = vm.SelectedPathingAlgorithm;
+      //   vm.SelectedPathingAlgorithm = vm.PathingAlgorithms.Skip(1).First();
+      //   Assert.AreNotEqual(defaultPathingAlgorithm, vm.SelectedPathingAlgorithm);
+      //   vm.StartPathing();
+      //   Assert.AreEqual(vm.SelectedPathingAlgorithm, vm.PathFinder.GetType());
+      //}
+
+      [Test]
       public void TestSelectedCellsBinding()
       {
          Target target = new Target();
