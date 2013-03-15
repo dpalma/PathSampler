@@ -20,8 +20,7 @@ namespace PathFindTests.ViewModels
       public void SetUp()
       {
          map = new Map();
-         vm = new MapVM();
-         vm.Map = map;
+         vm = new MapVM(map);
       }
 
       [Test]

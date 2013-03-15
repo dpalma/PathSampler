@@ -19,8 +19,10 @@ namespace PathFind.ViewModels
 {
    public class MapVM : ViewModel, ICellColoring
    {
-      public MapVM()
+      public MapVM(Map map)
       {
+         Map = map;
+
          ColoredCells.CollectionChanged += new NotifyCollectionChangedEventHandler(ColoredCells_CollectionChanged);
 
          var q = from t in Assembly.GetExecutingAssembly().GetTypes()
@@ -44,7 +46,7 @@ namespace PathFind.ViewModels
          {
             return m_map;
          }
-         set
+         private set
          {
             if (value == null)
             {
@@ -56,8 +58,6 @@ namespace PathFind.ViewModels
             m_map = value;
 
             ConnectMapEventHandlers();
-
-            FirePropertyChanged("Map");
          }
       }
       private Map m_map;
