@@ -34,6 +34,20 @@ namespace PathFindTests.Collections
       }
 
       [Test]
+      public void TestAddPairFiresAddEvent()
+      {
+         ObservableDictionary<string, object> dict = new ObservableDictionary<string, object>();
+         var eventArgsReceived = new List<NotifyCollectionChangedEventArgs>();
+         dict.CollectionChanged += (sender, eventArgs) =>
+         {
+            eventArgsReceived.Add(eventArgs);
+         };
+         dict.Add(new KeyValuePair<string, object>("Key", new object()));
+         Assert.AreEqual(1, eventArgsReceived.Count);
+         Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsReceived.First().Action);
+      }
+
+      [Test]
       public void TestContainsKeyReturnsTrueForExistingKeys()
       {
          IDictionary<string, object> dict = new ObservableDictionary<string, object>();
@@ -168,6 +182,20 @@ namespace PathFindTests.Collections
          dict["key"] = new object();
          Assert.AreEqual(1, eventArgsReceived.Count);
          Assert.AreEqual(NotifyCollectionChangedAction.Replace, eventArgsReceived.First().Action);
+      }
+
+      [Test]
+      public void TestExplicitGetEnumeratorReturnsAllPairs()
+      {
+         var dict = new ObservableDictionary<string, int>();
+         for (int i = 0; i < 10; ++i)
+            dict[String.Format("Key{0}", i)] = i;
+         System.Collections.IEnumerator enumerator = ((System.Collections.IEnumerable)dict).GetEnumerator();
+         while (enumerator.MoveNext())
+         {
+            KeyValuePair<string, int> pair = (KeyValuePair<string, int>)enumerator.Current;
+            Assert.AreEqual(String.Format("Key{0}", pair.Value), pair.Key);
+         }
       }
 
       [Test]

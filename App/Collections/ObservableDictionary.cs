@@ -79,7 +79,7 @@ namespace PathFind.Collections
 
       public void Add(KeyValuePair<TKey, TValue> item)
       {
-         throw new NotImplementedException();
+         Add(item.Key, item.Value);
       }
 
       public void Clear()
@@ -123,7 +123,7 @@ namespace PathFind.Collections
 
       System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
       {
-         throw new NotImplementedException();
+         return ((System.Collections.IEnumerable)m_dictionary).GetEnumerator();
       }
 
       #region INotifyCollectionChanged Implementation
