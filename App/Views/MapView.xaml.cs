@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,10 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Collections.Specialized;
 using PathFind.Core;
-using PathFind.ViewModels;
 using PathFind.Models;
+using PathFind.ViewModels;
 
 namespace PathFind.Views
 {
@@ -235,9 +236,12 @@ namespace PathFind.Views
          MapVM vm = DataContext as MapVM;
          if (vm != null)
          {
-            foreach (var entry in vm.ColoredCells)
+            if (Monitor.TryEnter(vm.ColoredCells))
             {
-               dc.DrawRectangle(entry.Value, null, GetCellRect(entry.Key));
+               foreach (var entry in vm.ColoredCells)
+               {
+                  dc.DrawRectangle(entry.Value, null, GetCellRect(entry.Key));
+               }
             }
          }
       }

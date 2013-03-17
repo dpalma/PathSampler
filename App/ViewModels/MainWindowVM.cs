@@ -228,7 +228,7 @@ namespace PathFind.ViewModels
                            MapVM.StopPathing();
                            UpdatePathingCommands();
                         },
-                        t => { return MapVM.IsPathing; });
+                        t => { return MapVM.CanStopPathing; });
             }
             return m_stopPathingCommand;
          }

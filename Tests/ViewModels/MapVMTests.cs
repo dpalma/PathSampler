@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using NUnit.Framework;
@@ -79,6 +80,15 @@ namespace PathFindTests.ViewModels
          vm.SelectedPathingAlgorithm = otherPathingAlgorithm;
          vm.StartPathing();
          Assert.AreEqual(otherPathingAlgorithm, vm.CurrentPathFinder.GetType());
+      }
+
+      [Test]
+      [Ignore]
+      public void TestPathingTaskCompletes()
+      {
+         vm.StartPathing();
+         Assert.IsNotNull(vm.ActivePathingTask);
+         // TODO
       }
 
       [Test]

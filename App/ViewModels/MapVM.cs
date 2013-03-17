@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -99,7 +99,7 @@ namespace PathFind.ViewModels
          FireRedrawRequested();
       }
 
-      private void FireRedrawRequested()
+      private void FireRedrawRequestedWhenOnProperThread()
       {
          if (RedrawRequested != null)
          {
@@ -107,7 +107,20 @@ namespace PathFind.ViewModels
          }
       }
 
+      delegate void MethodInvoker();
+
+      private void FireRedrawRequested()
+      {
+         if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
+            FireRedrawRequestedWhenOnProperThread();
+         else
+            Application.Current.Dispatcher.BeginInvoke(new MethodInvoker(FireRedrawRequestedWhenOnProperThread));
+      }
+
       public event EventHandler RedrawRequested;
+
+      public event EventHandler PathingStarted;
+      public event EventHandler PathingFinished;
 
       public int GridLineSize
       {
@@ -306,33 +319,41 @@ namespace PathFind.ViewModels
          set
          {
             m_selectedPathingAlgorithm = value;
+            FirePropertyChanged("SelectedPathingAlgorithm");
          }
       }
       private Type m_selectedPathingAlgorithm;
 
-      private DispatcherTimer m_timer;
       public PathFinder CurrentPathFinder { get; private set; }
 
       public bool IsPathing
       {
-         get { return m_timer != null; }
+         get { return ActivePathingTask != null; }
+      }
+
+      public Task ActivePathingTask
+      {
+         get { return (ActivePathingTaskCompletionSource != null) ? ActivePathingTaskCompletionSource.Task : null; }
+      }
+      internal TaskCompletionSource<object> ActivePathingTaskCompletionSource
+      {
+         get;
+         private set;
       }
 
       public void StartPathing()
       {
-         if (m_timer != null)
+         if (ActivePathingTask != null)
          {
             throw new InvalidOperationException("Pathing already running");
          }
 
-         m_timer = new DispatcherTimer();
-         m_timer.Tick += new EventHandler(timer_Tick);
-         m_timer.Interval = new TimeSpan(0, 0, 0, 0, 200);
-         m_timer.Start();
+         ActivePathingTaskCompletionSource = StartPathingTask();
 
-         var constructor = SelectedPathingAlgorithm.GetConstructor(new Type[] { typeof(Map), typeof(ICellColoring) });
-
-         CurrentPathFinder = (PathFinder)constructor.Invoke(new object[] { Map, this });
+         if (PathingStarted != null)
+         {
+            PathingStarted(this, EventArgs.Empty);
+         }
       }
 
       public bool CanStartPathing
@@ -343,36 +364,74 @@ namespace PathFind.ViewModels
          }
       }
 
-      void timer_Tick(object sender, EventArgs e)
+      private TaskCompletionSource<object> StartPathingTask()
       {
-         CurrentPathFinder.Step();
+         var constructor = SelectedPathingAlgorithm.GetConstructor(new Type[] { typeof(Map), typeof(ICellColoring) });
 
-         if (CurrentPathFinder.Result != null)
-         {
-            StopPathing();
-            if (CurrentPathFinder.Result == PathFindResult.PathFound)
+         CurrentPathFinder = (PathFinder)constructor.Invoke(new object[] { Map, (ICellColoring)this });
+
+         TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+
+         var timer = new System.Threading.Timer(x =>
             {
-               foreach (var cell in CurrentPathFinder.Path)
+               lock (CurrentPathFinder)
                {
-                  this.ColoredCells[cell] = Brushes.MediumSeaGreen;
+                  CurrentPathFinder.Step();
+
+                  if (CurrentPathFinder.Result != null)
+                  {
+                     ColoredCells.Clear();
+
+                     if (CurrentPathFinder.Result == PathFindResult.PathFound)
+                     {
+                        foreach (var cell in CurrentPathFinder.Path)
+                        {
+                           ColoredCells[cell] = Brushes.MediumSeaGreen;
+                        }
+                     }
+                     else
+                     {
+                        System.Diagnostics.Debug.WriteLine("No path");
+                     }
+
+                     tcs.SetResult(new object());
+                  }
                }
-            }
-            else
+
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(150));
+
+         tcs.Task.ContinueWith(x =>
             {
-               System.Diagnostics.Debug.WriteLine("No path");
-            }
-         }
+               timer.Dispose();
+
+               ActivePathingTaskCompletionSource = null;
+
+               if (PathingFinished != null)
+               {
+                  PathingFinished(this, EventArgs.Empty);
+               }
+            });
+
+         return tcs;
       }
 
       internal void StopPathing()
       {
-         if (m_timer != null)
+         if (ActivePathingTaskCompletionSource != null)
          {
-            m_timer.Stop();
-            m_timer = null;
+            ActivePathingTaskCompletionSource.SetCanceled();
+            ActivePathingTaskCompletionSource = null;
          }
 
          ColoredCells.Clear();
+      }
+
+      internal bool CanStopPathing
+      {
+         get
+         {
+            return IsPathing;
+         }
       }
 
       #region ICellColoring Implementation
