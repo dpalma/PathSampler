@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using PathFind.Commands;
 using PathFind.Models;
@@ -62,11 +63,24 @@ namespace PathFind.ViewModels
          }
          private set
          {
+            if (MapVM != null)
+            {
+               MapVM.PathingFinished -= new EventHandler(MapVM_PathingFinished);
+            }
+
             m_mapVM = value;
             FirePropertyChanged("MapVM");
+
+            MapVM.PathingFinished += new EventHandler(MapVM_PathingFinished);
          }
       }
+
       private MapVM m_mapVM;
+
+      private void MapVM_PathingFinished(object sender, EventArgs e)
+      {
+         UpdatePathingCommands();
+      }
 
       private const string FileExtension = "mapx";
 
@@ -184,15 +198,24 @@ namespace PathFind.ViewModels
       }
       private DelegateCommand m_saveCommand;
 
+      delegate void MethodInvoker();
+
       private void UpdatePathingCommands()
       {
-         if (m_stopPathingCommand != null)
+         if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
-            m_stopPathingCommand.RaiseCanExecuteChanged();
+            if (m_stopPathingCommand != null)
+            {
+               m_stopPathingCommand.RaiseCanExecuteChanged();
+            }
+            if (m_startPathingCommand != null)
+            {
+               m_startPathingCommand.RaiseCanExecuteChanged();
+            }
          }
-         if (m_startPathingCommand != null)
+         else
          {
-            m_startPathingCommand.RaiseCanExecuteChanged();
+            Application.Current.Dispatcher.BeginInvoke(new MethodInvoker(UpdatePathingCommands));
          }
       }
 

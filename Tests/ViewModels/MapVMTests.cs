@@ -96,10 +96,8 @@ namespace PathFindTests.ViewModels
       {
          vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
          vm.StartPathing();
-         while (!vm.ActivePathingTask.IsCompleted)
-         {
-            Assert.IsTrue(vm.IsPathing);
-         }
+         Assert.IsTrue(vm.IsPathing);
+         vm.ActivePathingTask.Wait();
          Assert.IsFalse(vm.IsPathing);
       }
 

@@ -426,6 +426,11 @@ namespace PathFind.ViewModels
                      }
 
                      tcs.SetResult(new object());
+
+                     if (PathingFinished != null)
+                     {
+                        PathingFinished(this, EventArgs.Empty);
+                     }
                   }
                }
 
@@ -434,13 +439,6 @@ namespace PathFind.ViewModels
          tcs.Task.ContinueWith(x =>
             {
                timer.Dispose();
-
-               ActivePathingTaskCompletionSource = null;
-
-               if (PathingFinished != null)
-               {
-                  PathingFinished(this, EventArgs.Empty);
-               }
             });
 
          return tcs;

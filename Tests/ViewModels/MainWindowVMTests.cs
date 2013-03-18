@@ -44,5 +44,17 @@ namespace PathFindTests.ViewModels
          vm.MapVM.ActivePathingTask.Wait();
          Assert.IsTrue(vm.StartPathingCommand.CanExecute(null));
       }
+
+      [Test, MaxTime(30000)]
+      public void TestStopPathingCanExecuteChangedFiresWhenPathFindingCompletes()
+      {
+         MainWindowVM vm = new MainWindowVM();
+         vm.Map = MapUtilsForTesting.BuildMap(4);
+         int canExecuteChangedCalls = 0;
+         vm.StopPathingCommand.CanExecuteChanged += (object sender, EventArgs e) => { canExecuteChangedCalls++; };
+         vm.StartPathingCommand.Execute(null);
+         vm.MapVM.ActivePathingTask.Wait();
+         Assert.AreEqual(2, canExecuteChangedCalls);
+      }
    }
 }
