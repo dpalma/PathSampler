@@ -82,13 +82,34 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(otherPathingAlgorithm, vm.CurrentPathFinder.GetType());
       }
 
-      [Test]
+      [Test, MaxTime(10000)]
       public void TestPathingTaskCompletes()
       {
          vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
          vm.StartPathing();
          Assert.IsNotNull(vm.ActivePathingTask);
-         Assert.IsTrue(vm.ActivePathingTask.Wait(TimeSpan.FromSeconds(10)));
+         vm.ActivePathingTask.Wait();
+      }
+
+      [Test, MaxTime(30000)]
+      public void TestIsPathingIsFalseWhenPathingTaskCompletes()
+      {
+         vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
+         vm.StartPathing();
+         while (!vm.ActivePathingTask.IsCompleted)
+         {
+            Assert.IsTrue(vm.IsPathing);
+         }
+         Assert.IsFalse(vm.IsPathing);
+      }
+
+      [Test]
+      public void TestChangingGoalStopsPathing()
+      {
+         vm.StartPathing();
+         Assert.IsTrue(vm.IsPathing);
+         map.Goal = map.GetCenter();
+         Assert.IsFalse(vm.IsPathing);
       }
 
       [Test]

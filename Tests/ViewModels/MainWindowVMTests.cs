@@ -15,7 +15,7 @@ namespace PathFindTests.ViewModels
       public void TestStopPathingCanExecuteChangedFiresWhenGoalChanges()
       {
          MainWindowVM vm = new MainWindowVM();
-         Map map = new Map();
+         Map map = MapUtilsForTesting.BuildMap(4);
          vm.Map = map;
          bool canExecuteChanged = false;
          vm.StopPathingCommand.CanExecuteChanged += (object sender, EventArgs e) => { canExecuteChanged = true; };
@@ -27,35 +27,21 @@ namespace PathFindTests.ViewModels
       public void TestStopPathingCanExecuteChangedFiresOnStartingPathing()
       {
          MainWindowVM vm = new MainWindowVM();
-         vm.Map = new Map();
+         vm.Map = MapUtilsForTesting.BuildMap(4);
          bool canExecuteChanged = false;
          vm.StopPathingCommand.CanExecuteChanged += (object sender, EventArgs e) => { canExecuteChanged = true; };
          vm.StartPathingCommand.Execute(null);
          Assert.IsTrue(canExecuteChanged);
       }
 
-      [Test]
-      public void TestChangingGoalStopsPathing()
-      {
-         MainWindowVM vm = new MainWindowVM();
-         Map map = new Map();
-         vm.Map = map;
-         vm.StartPathingCommand.Execute(null);
-         Assert.IsTrue(vm.MapVM.IsPathing);
-         GridCoordinate cell = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
-         map.Goal = cell;
-         Assert.IsFalse(vm.MapVM.IsPathing);
-      }
-
-      [Test]
-      [Ignore]
+      [Test, MaxTime(30000)]
       public void TestPathingCommandsUpdateWhenPathFindingCompletes()
       {
          MainWindowVM vm = new MainWindowVM();
-         vm.Map = new Map() { RowCount = 4, ColumnCount = 4, Goal = new GridCoordinate() { Row = 3, Column = 3 } };
+         vm.Map = MapUtilsForTesting.BuildMap(4);
          vm.StartPathingCommand.Execute(null);
          Assert.IsFalse(vm.StartPathingCommand.CanExecute(null));
-         vm.MapVM.ActivePathingTask.Wait(TimeSpan.FromSeconds(30));
+         vm.MapVM.ActivePathingTask.Wait();
          Assert.IsTrue(vm.StartPathingCommand.CanExecute(null));
       }
    }

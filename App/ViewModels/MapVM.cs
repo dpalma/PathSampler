@@ -328,7 +328,19 @@ namespace PathFind.ViewModels
 
       public bool IsPathing
       {
-         get { return ActivePathingTask != null; }
+         get
+         {
+            if (ActivePathingTask == null)
+            {
+               return false;
+            }
+            else
+            {
+               return !ActivePathingTask.IsCanceled
+                  && !ActivePathingTask.IsCompleted
+                  && !ActivePathingTask.IsFaulted;
+            }
+         }
       }
 
       public Task ActivePathingTask
