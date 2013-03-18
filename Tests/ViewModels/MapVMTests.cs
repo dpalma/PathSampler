@@ -20,7 +20,7 @@ namespace PathFindTests.ViewModels
       [SetUp]
       public void SetUp()
       {
-         map = new Map();
+         map = MapUtilsForTesting.BuildMap(5);
          vm = new MapVM(map);
       }
 
@@ -83,12 +83,12 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
-      [Ignore]
       public void TestPathingTaskCompletes()
       {
+         vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
          vm.StartPathing();
          Assert.IsNotNull(vm.ActivePathingTask);
-         // TODO
+         Assert.IsTrue(vm.ActivePathingTask.Wait(TimeSpan.FromSeconds(10)));
       }
 
       [Test]

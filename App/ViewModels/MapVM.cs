@@ -364,6 +364,25 @@ namespace PathFind.ViewModels
          }
       }
 
+      public TimeSpan PathingStepDelay
+      {
+         get
+         {
+            return m_pathingStepDelay;
+         }
+         set
+         {
+            if (value == TimeSpan.Zero)
+            {
+               throw new ArgumentException("Do not set pathing step delay to zero");
+            }
+
+            m_pathingStepDelay = value;
+            FirePropertyChanged("PathingStepDelay");
+         }
+      }
+      private TimeSpan m_pathingStepDelay = TimeSpan.FromMilliseconds(150);
+
       private TaskCompletionSource<object> StartPathingTask()
       {
          var constructor = SelectedPathingAlgorithm.GetConstructor(new Type[] { typeof(Map), typeof(ICellColoring) });
@@ -398,7 +417,7 @@ namespace PathFind.ViewModels
                   }
                }
 
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(150));
+            }, null, TimeSpan.Zero, PathingStepDelay);
 
          tcs.Task.ContinueWith(x =>
             {
