@@ -16,30 +16,8 @@ namespace PathFindTests.PathFinders
       }
    }
 
-   internal static class MapUtilsForTesting
-   {
-      internal static void BlockRow(this Map map, int row)
-      {
-         for (int i = 0; i < map.ColumnCount; ++i)
-         {
-            map.BlockedCells[new GridCoordinate() { Row = row, Column = i }] = 1;
-         }
-      }
-   }
-
    class AStarTests
    {
-      private static Map BuildMap(int size)
-      {
-         Map map = new Map()
-         {
-            RowCount = size,
-            ColumnCount = size,
-            Goal = new GridCoordinate() { Row = size - 1, Column = size - 1 },
-         };
-         return map;
-      }
-
       private static PathFindResult FindPath(PathFinder pathFinder)
       {
          while (pathFinder.Result == null)
@@ -52,7 +30,7 @@ namespace PathFindTests.PathFinders
       [Test]
       public void TestPathFoundOnTrivialMap()
       {
-         Map map = BuildMap(3);
+         Map map = MapUtilsForTesting.BuildMap(3);
          AStar astar = new AStar(map, new NullCellColoring());
          Assert.AreEqual(PathFindResult.PathFound, FindPath(astar));
       }
@@ -60,7 +38,7 @@ namespace PathFindTests.PathFinders
       [Test]
       public void TestNoPathFoundWhenBlocked()
       {
-         Map map = BuildMap(3);
+         Map map = MapUtilsForTesting.BuildMap(3);
          map.BlockRow(1);
          AStar astar = new AStar(map, new NullCellColoring());
          Assert.AreEqual(PathFindResult.PathNotFound, FindPath(astar));
