@@ -355,7 +355,7 @@ namespace PathFind.ViewModels
 
       public void StartPathing()
       {
-         if (ActivePathingTask != null)
+         if (IsPathing)
          {
             throw new InvalidOperationException("Pathing already running");
          }

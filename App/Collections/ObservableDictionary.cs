@@ -128,6 +128,7 @@ namespace PathFind.Collections
 
       #region INotifyCollectionChanged Implementation
 
+      [field: NonSerialized]
       public event NotifyCollectionChangedEventHandler CollectionChanged;
 
       private void FireCollectionChanged(NotifyCollectionChangedEventArgs args)
@@ -154,6 +155,7 @@ namespace PathFind.Collections
 
       #region INotifyPropertyChanged Implementation
 
+      [field: NonSerialized]
       public event PropertyChangedEventHandler PropertyChanged;
 
       private void FirePropertyChanged(string propertyName)

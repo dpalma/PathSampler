@@ -176,7 +176,7 @@ namespace PathFind.ViewModels
             using (Stream stream = new FileStream(CurrentMapFileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
                IFormatter formatter = new BinaryFormatter();
-               formatter.Serialize(stream, Map);
+               formatter.Serialize(stream, m_map);
             }
          }
       }
