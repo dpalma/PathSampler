@@ -91,11 +91,24 @@ namespace PathFind.ViewModels
 
       private int DefaultFileCounter = 1;
 
-      private string CurrentMapFileName;
+      public string CurrentMapFileName
+      {
+         get
+         {
+            return m_currentMapFileName;
+         }
+         private set
+         {
+            m_currentMapFileName = value;
+            FirePropertyChanged("CurrentMapFileName");
+         }
+      }
+      private string m_currentMapFileName = String.Empty;
 
-      private void New()
+      public void NewMap()
       {
          Map.Assign(new Map());
+         CurrentMapFileName = String.Empty;
       }
 
       public ICommand NewCommand
@@ -107,7 +120,7 @@ namespace PathFind.ViewModels
                m_newCommand = new DelegateCommand(
                         t =>
                         {
-                           New();
+                           NewMap();
                         });
             }
             return m_newCommand;
@@ -125,15 +138,37 @@ namespace PathFind.ViewModels
 
          if (result == true)
          {
-            CurrentMapFileName = openDialog.FileName;
+            if (!OpenMap(openDialog.FileName))
+            {
+               MessageBox.Show(String.Format("Unable to open {0}", openDialog.FileName),
+                  null, MessageBoxButton.OK, MessageBoxImage.Hand);
+            }
+         }
+      }
 
-            using (Stream stream = openDialog.OpenFile())
+      public bool OpenMap(string mapFileName)
+      {
+         bool success = false;
+         try
+         {
+            using (Stream stream = File.OpenRead(mapFileName))
             {
                IFormatter formatter = new BinaryFormatter();
                Map newMap = (Map)formatter.Deserialize(stream);
                Map.Assign(newMap);
+               CurrentMapFileName = mapFileName;
+               success = true;
             }
          }
+         catch (SerializationException ex)
+         {
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+         }
+         catch (FileNotFoundException ex)
+         {
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+         }
+         return success;
       }
 
       public ICommand OpenCommand
@@ -155,7 +190,9 @@ namespace PathFind.ViewModels
 
       private void Save()
       {
-         if (CurrentMapFileName == null)
+         string mapFileName = CurrentMapFileName;
+
+         if (mapFileName == null)
          {
             Microsoft.Win32.SaveFileDialog saveDialog = new Microsoft.Win32.SaveFileDialog();
             saveDialog.FileName = String.Format("Map{0}", DefaultFileCounter); // Default file name
@@ -167,17 +204,23 @@ namespace PathFind.ViewModels
             if (result == true)
             {
                DefaultFileCounter++;
-               CurrentMapFileName = saveDialog.FileName;
+               mapFileName = saveDialog.FileName;
             }
          }
 
-         if (CurrentMapFileName != null)
+         if (mapFileName != null)
          {
-            using (Stream stream = new FileStream(CurrentMapFileName, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-               IFormatter formatter = new BinaryFormatter();
-               formatter.Serialize(stream, m_map);
-            }
+            SaveMap(mapFileName);
+         }
+      }
+
+      public void SaveMap(string mapFileName)
+      {
+         using (Stream stream = File.OpenWrite(mapFileName))
+         {
+            IFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, m_map);
+            CurrentMapFileName = mapFileName;
          }
       }
 

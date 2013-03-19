@@ -425,12 +425,12 @@ namespace PathFind.ViewModels
                         System.Diagnostics.Debug.WriteLine("No path");
                      }
 
-                     tcs.SetResult(new object());
-
                      if (PathingFinished != null)
                      {
                         PathingFinished(this, EventArgs.Empty);
                      }
+
+                     tcs.SetResult(new object());
                   }
                }
 

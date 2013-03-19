@@ -11,23 +11,27 @@ namespace PathFindTests.ViewModels
 {
    class MainWindowVMTests
    {
+      private MainWindowVM vm;
+
+      [SetUp]
+      public void SetUp()
+      {
+         vm = new MainWindowVM();
+         vm.Map = MapUtilsForTesting.BuildMap(4);
+      }
+
       [Test]
       public void TestStopPathingCanExecuteChangedFiresWhenGoalChanges()
       {
-         MainWindowVM vm = new MainWindowVM();
-         Map map = MapUtilsForTesting.BuildMap(4);
-         vm.Map = map;
          bool canExecuteChanged = false;
          vm.StopPathingCommand.CanExecuteChanged += (object sender, EventArgs e) => { canExecuteChanged = true; };
-         map.Goal = map.Start;
+         vm.Map.Goal = vm.Map.Start;
          Assert.IsTrue(canExecuteChanged);
       }
 
       [Test]
       public void TestStopPathingCanExecuteChangedFiresOnStartingPathing()
       {
-         MainWindowVM vm = new MainWindowVM();
-         vm.Map = MapUtilsForTesting.BuildMap(4);
          bool canExecuteChanged = false;
          vm.StopPathingCommand.CanExecuteChanged += (object sender, EventArgs e) => { canExecuteChanged = true; };
          vm.StartPathingCommand.Execute(null);
@@ -37,8 +41,6 @@ namespace PathFindTests.ViewModels
       [Test, MaxTime(30000)]
       public void TestPathingCommandsUpdateWhenPathFindingCompletes()
       {
-         MainWindowVM vm = new MainWindowVM();
-         vm.Map = MapUtilsForTesting.BuildMap(4);
          vm.StartPathingCommand.Execute(null);
          Assert.IsFalse(vm.StartPathingCommand.CanExecute(null));
          vm.MapVM.ActivePathingTask.Wait();
@@ -48,13 +50,51 @@ namespace PathFindTests.ViewModels
       [Test, MaxTime(30000)]
       public void TestStopPathingCanExecuteChangedFiresWhenPathFindingCompletes()
       {
-         MainWindowVM vm = new MainWindowVM();
-         vm.Map = MapUtilsForTesting.BuildMap(4);
          int canExecuteChangedCalls = 0;
          vm.StopPathingCommand.CanExecuteChanged += (object sender, EventArgs e) => { canExecuteChangedCalls++; };
          vm.StartPathingCommand.Execute(null);
          vm.MapVM.ActivePathingTask.Wait();
          Assert.AreEqual(2, canExecuteChangedCalls);
+      }
+
+      [Test]
+      public void TestFileThatSavesSuccessfullyUpdatesCurrentFileName()
+      {
+         var fileName = System.IO.Path.GetTempFileName();
+         try
+         {
+            Assert.AreNotEqual(fileName, vm.CurrentMapFileName);
+            vm.SaveMap(fileName);
+            Assert.AreEqual(fileName, vm.CurrentMapFileName);
+         }
+         finally
+         {
+            System.IO.File.Delete(fileName);
+         }
+      }
+
+      [Test]
+      public void TestNewMapClearsCurrentFileName()
+      {
+         var fileName = System.IO.Path.GetTempFileName();
+         try
+         {
+            vm.SaveMap(fileName);
+            Assert.AreEqual(fileName, vm.CurrentMapFileName);
+            vm.NewMap();
+            Assert.AreEqual(String.Empty, vm.CurrentMapFileName);
+         }
+         finally
+         {
+            System.IO.File.Delete(fileName);
+         }
+      }
+
+      [Test]
+      public void TestFileThatFailsToLoadDoesNotChangeCurrentFileName()
+      {
+         Assert.IsFalse(vm.OpenMap("FileDoesNotExist"));
+         Assert.AreEqual(String.Empty, vm.CurrentMapFileName);
       }
    }
 }
