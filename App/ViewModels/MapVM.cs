@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -82,7 +83,22 @@ namespace PathFind.ViewModels
 
       void BlockedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         FireRedrawRequested();
+         //FireRedrawRequested();
+
+         if (e.Action == NotifyCollectionChangedAction.Add)
+         {
+            foreach (GridCoordinate cell in e.NewItems)
+            {
+               Cells.Add(new CellVM(cell) { Brush = Brushes.Black });
+            }
+         }
+         else if (e.Action == NotifyCollectionChangedAction.Remove)
+         {
+            foreach (GridCoordinate cell in e.OldItems)
+            {
+               Cells.RemoveAll(x => x.Cell.Equals(cell));
+            }
+         }
       }
 
       private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -192,6 +208,12 @@ namespace PathFind.ViewModels
             return (CellSize.Height + GridLineSize) * Map.RowCount;
          }
       }
+
+      public List<CellVM> Cells
+      {
+         get { return m_cells; }
+      }
+      private readonly List<CellVM> m_cells = new List<CellVM>();
 
       private readonly ObservableSet<GridCoordinate> m_selectedCells = new ObservableSet<GridCoordinate>();
       public IObservableSet<GridCoordinate> SelectedCells

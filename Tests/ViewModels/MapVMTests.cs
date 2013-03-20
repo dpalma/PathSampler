@@ -166,6 +166,23 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
+      public void TestAddingBlockedCellToMapAddsACellViewModel()
+      {
+         Assert.AreEqual(0, vm.Cells.Count);
+         map.BlockedCells.Add(map.GetCenter(), 1);
+         Assert.AreEqual(1, vm.Cells.Count);
+      }
+
+      [Test]
+      public void TestRemovingBlockedCellFromMapRemovesCorrespondingCellViewModel()
+      {
+         map.BlockedCells.Add(map.GetCenter(), 1);
+         Assert.AreEqual(1, vm.Cells.Count);
+         Assert.IsTrue(map.BlockedCells.Remove(map.GetCenter()));
+         Assert.AreEqual(0, vm.Cells.Count);
+      }
+
+      [Test]
       public void TestSelectedCellsBinding()
       {
          Target target = new Target();

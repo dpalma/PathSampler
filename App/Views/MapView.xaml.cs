@@ -208,10 +208,14 @@ namespace PathFind.Views
          var vm = DataContext as MapVM;
          if (vm != null)
          {
-            foreach (var cellEntry in vm.Map.BlockedCells)
+            foreach (var cellVM in vm.Cells)
             {
-               dc.DrawRectangle(cellEntry.Value != 0 ? blockedBrush : unblockedBrush, null, GetCellRect(cellEntry.Key));
+               dc.DrawRectangle(cellVM.Brush, null, GetCellRect(cellVM.Cell));
             }
+            //foreach (var cellEntry in vm.Map.BlockedCells)
+            //{
+            //   dc.DrawRectangle(cellEntry.Value != 0 ? blockedBrush : unblockedBrush, null, GetCellRect(cellEntry.Key));
+            //}
          }
       }
 
