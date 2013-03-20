@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -108,6 +109,60 @@ namespace PathFindTests.ViewModels
          Assert.IsTrue(vm.IsPathing);
          map.Goal = map.GetCenter();
          Assert.IsFalse(vm.IsPathing);
+      }
+
+      [Test]
+      public void TestMapWidthAndHeightChangeWhenCellSizeChanges()
+      {
+         var propertiesChanged = new List<string>();
+         vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         vm.CellSize = new Size(64, 64);
+         Assert.IsTrue(propertiesChanged.Contains("CellSize"));
+         Assert.IsTrue(propertiesChanged.Contains("MapWidth"));
+         Assert.IsTrue(propertiesChanged.Contains("MapHeight"));
+      }
+
+      [Test]
+      public void TestMapWidthAndHeightChangeWhenGridLineSizeChanges()
+      {
+         var propertiesChanged = new List<string>();
+         vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         vm.GridLineSize = 8;
+         Assert.IsTrue(propertiesChanged.Contains("GridLineSize"));
+         Assert.IsTrue(propertiesChanged.Contains("MapWidth"));
+         Assert.IsTrue(propertiesChanged.Contains("MapHeight"));
+      }
+
+      [Test]
+      public void TestOnlyMapHeightChangesWhenRowCountChanges()
+      {
+         var propertiesChanged = new List<string>();
+         vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         vm.Map.RowCount = 128;
+         Assert.IsFalse(propertiesChanged.Contains("MapWidth"));
+         Assert.IsTrue(propertiesChanged.Contains("MapHeight"));
+      }
+
+      [Test]
+      public void TestOnlyMapWidthChangesWhenColumnCountChanges()
+      {
+         var propertiesChanged = new List<string>();
+         vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         vm.Map.ColumnCount = 128;
+         Assert.IsTrue(propertiesChanged.Contains("MapWidth"));
+         Assert.IsFalse(propertiesChanged.Contains("MapHeight"));
       }
 
       [Test]

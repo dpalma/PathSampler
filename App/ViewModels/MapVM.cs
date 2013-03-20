@@ -92,6 +92,14 @@ namespace PathFind.ViewModels
             DisconnectMapEventHandlers();
             ConnectMapEventHandlers();
          }
+         else if (e.PropertyName == "RowCount")
+         {
+            FirePropertyChanged("MapHeight"); // MapHeight depends upon RowCount
+         }
+         else if (e.PropertyName == "ColumnCount")
+         {
+            FirePropertyChanged("MapWidth"); // MapWidth depends upon ColumnCount
+         }
 
          StopPathing();
 
@@ -132,6 +140,8 @@ namespace PathFind.ViewModels
          {
             m_gridLineSize = value;
             FirePropertyChanged("GridLineSize");
+            FirePropertyChanged("MapWidth"); // MapWidth depends upon GridLineSize
+            FirePropertyChanged("MapHeight"); // MapHeight depends upon GridLineSize
          }
       }
       private int m_gridLineSize = 1;
@@ -146,15 +156,25 @@ namespace PathFind.ViewModels
          {
             m_cellSize = value;
             FirePropertyChanged("CellSize");
+            FirePropertyChanged("MapWidth"); // MapWidth depends upon CellSize
+            FirePropertyChanged("MapHeight"); // MapHeight depends upon CellSize
          }
       }
       private Size m_cellSize = new Size(16, 16);
 
-      public Size Dimensions
+      public double MapWidth
       {
          get
          {
-            return new Size(Map.ColumnCount, Map.RowCount);
+            return (CellSize.Width + GridLineSize) * Map.ColumnCount;
+         }
+      }
+
+      public double MapHeight
+      {
+         get
+         {
+            return (CellSize.Height + GridLineSize) * Map.RowCount;
          }
       }
 

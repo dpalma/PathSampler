@@ -57,22 +57,6 @@ namespace PathFind.Views
          }
       }
 
-      public double ViewWidth
-      {
-         get
-         {
-            return (CellSize.Width + GridLineSize) * ColumnCount;
-         }
-      }
-
-      public double ViewHeight
-      {
-         get
-         {
-            return (CellSize.Height + GridLineSize) * RowCount;
-         }
-      }
-
       public static readonly DependencyProperty SelectedCellsProperty = DependencyProperty.Register("SelectedCells", typeof(ICollection<GridCoordinate>), typeof(MapView), new PropertyMetadata(new PropertyChangedCallback(SelectedCells_PropertyChanged)));
 
       private static void SelectedCells_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
