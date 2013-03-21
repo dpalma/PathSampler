@@ -81,7 +81,7 @@ namespace PathFind.Views
 
       WeakReference controllerRef;
 
-      private void FrameworkElement_Loaded(object sender, RoutedEventArgs e)
+      private void ItemsControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
       {
          // View model will be null in design mode
          MapVM vm = DataContext as MapVM;
