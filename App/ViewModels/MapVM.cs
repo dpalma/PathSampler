@@ -344,7 +344,7 @@ namespace PathFind.ViewModels
             if (m_setStartCommand == null)
             {
                m_setStartCommand = new DelegateCommand(
-                        t => { Map.Start = SelectedCells.First(); },
+                        t => { Map.Start = SelectedCells.Single(); },
                         t => { return SelectedCells.Count == 1; });
             }
             return m_setStartCommand;
@@ -359,7 +359,7 @@ namespace PathFind.ViewModels
             if (m_setGoalCommand == null)
             {
                m_setGoalCommand = new DelegateCommand(
-                        t => { Map.Goal = SelectedCells.First(); },
+                        t => { Map.Goal = SelectedCells.Single(); },
                         t => { return SelectedCells.Count == 1; });
             }
             return m_setGoalCommand;

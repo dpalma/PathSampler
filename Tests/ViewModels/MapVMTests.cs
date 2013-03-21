@@ -192,6 +192,24 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
+      [ExpectedException(typeof(InvalidOperationException))]
+      public void TestSetGoalCommandThrowsExceptionWhenMoreThanOneCellIsSelected()
+      {
+         vm.SelectedCells.Add(new GridCoordinate() { Row = 0, Column = 1 });
+         vm.SelectedCells.Add(new GridCoordinate() { Row = 0, Column = 2 });
+         vm.SetGoalCommand.Execute(null);
+      }
+
+      [Test]
+      [ExpectedException(typeof(InvalidOperationException))]
+      public void TestSetStartCommandThrowsExceptionWhenMoreThanOneCellIsSelected()
+      {
+         vm.SelectedCells.Add(new GridCoordinate() { Row = 1, Column = 1 });
+         vm.SelectedCells.Add(new GridCoordinate() { Row = 1, Column = 2 });
+         vm.SetStartCommand.Execute(null);
+      }
+
+      [Test]
       public void TestSelectedCellsBinding()
       {
          Target target = new Target();
