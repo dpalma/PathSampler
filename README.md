@@ -1,6 +1,7 @@
 # PathFind
 
-_A Windows app to demonstrate path-finding algorithms._
+A Windows app, written in C# and WPF, to demonstrate the operation of various path-finding algorithms. So far, A* and breadth-first search are implemented.
+To implement additional algorithms, fork the repository, implement the desired path-finding algorithm by extending the PathFinder class, and issue a pull request.
 
 ## Project Setup
 
