@@ -6,6 +6,11 @@
              xmlns:v="clr-namespace:PathFind.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" DataContextChanged="ItemsControl_DataContextChanged">
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Rectangle Fill="Black"></Rectangle>
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
     <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
             <v:MapCanvas />

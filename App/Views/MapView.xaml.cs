@@ -106,8 +106,6 @@ namespace PathFind.Views
 
          DrawGrid(drawingContext);
 
-         DrawBlockedCells(drawingContext);
-
          DrawColoredCells(drawingContext);
 
          DrawStartAndGoalCells(drawingContext);
@@ -172,51 +170,6 @@ namespace PathFind.Views
       {
          Point cellPoint = new Point(cell.Column * (CellSize.Width + GridLineSize) + GridLineSize, cell.Row * (CellSize.Height + GridLineSize) + GridLineSize);
          return new Rect(cellPoint, CellSize);
-      }
-
-      public Color BlockedCellColor
-      {
-         get
-         {
-            return m_blockedCellColor;
-         }
-         set
-         {
-            m_blockedCellColor = value;
-         }
-      }
-      private Color m_blockedCellColor = Colors.Black;
-
-      public Color UnblockedCellColor
-      {
-         get
-         {
-            return m_unblockedCellColor;
-         }
-         set
-         {
-            m_unblockedCellColor = value;
-         }
-      }
-      private Color m_unblockedCellColor = Colors.White;
-
-      private void DrawBlockedCells(DrawingContext dc)
-      {
-         Brush blockedBrush = new SolidColorBrush(BlockedCellColor);
-         Brush unblockedBrush = new SolidColorBrush(UnblockedCellColor);
-
-         var vm = DataContext as MapVM;
-         if (vm != null)
-         {
-            foreach (var cellVM in vm.Cells)
-            {
-               dc.DrawRectangle(cellVM.Brush, null, cellVM.CellRect);
-            }
-            //foreach (var cellEntry in vm.Map.BlockedCells)
-            //{
-            //   dc.DrawRectangle(cellEntry.Value != 0 ? blockedBrush : unblockedBrush, null, GetCellRect(cellEntry.Key));
-            //}
-         }
       }
 
       private void DrawColoredCells(DrawingContext dc)
