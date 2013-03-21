@@ -94,9 +94,13 @@ namespace PathFind.ViewModels
          }
          else if (e.Action == NotifyCollectionChangedAction.Remove)
          {
-            foreach (GridCoordinate cell in e.OldItems)
+            var toRemove = (from c in Cells
+                            where e.OldItems.Contains(c.Cell)
+                            select c).ToList();
+
+            foreach (var cellVM in toRemove)
             {
-               Cells.RemoveAll(x => x.Cell.Equals(cell));
+               Cells.Remove(cellVM);
             }
          }
          else if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -213,11 +217,11 @@ namespace PathFind.ViewModels
          }
       }
 
-      public List<CellVM> Cells
+      public ObservableCollection<CellVM> Cells
       {
          get { return m_cells; }
       }
-      private readonly List<CellVM> m_cells = new List<CellVM>();
+      private ObservableCollection<CellVM> m_cells = new ObservableCollection<CellVM>();
 
       private readonly ObservableSet<GridCoordinate> m_selectedCells = new ObservableSet<GridCoordinate>();
       public IObservableSet<GridCoordinate> SelectedCells
