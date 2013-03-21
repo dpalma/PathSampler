@@ -12,11 +12,42 @@ namespace PathFind.Views
    {
       public MapCanvas()
       {
+         GridLineBrush = Brushes.Black;
       }
 
       protected override void OnRender(DrawingContext drawingContext)
       {
          base.OnRender(drawingContext);
+
+         DrawGrid(drawingContext);
+      }
+
+      public Brush GridLineBrush { get; set; }
+
+      private void DrawGrid(DrawingContext dc)
+      {
+         MapVM vm = DataContext as MapVM;
+         if (vm == null)
+            return;
+
+         Size horizontalGridLineSize = new Size(ActualWidth, vm.GridLineSize);
+         Size verticalGridLineSize = new Size(vm.GridLineSize, ActualHeight);
+
+         // Horizontal grid lines
+         for (int i = 0; i <= vm.Map.RowCount; i++)
+         {
+            int y = (int)(i * (vm.CellSize.Height + vm.GridLineSize));
+            Rect gridLineRect = new Rect(new Point(0, y), horizontalGridLineSize);
+            dc.DrawRectangle(GridLineBrush, null, gridLineRect);
+         }
+
+         // Vertical grid lines
+         for (int j = 0; j <= vm.Map.ColumnCount; j++)
+         {
+            int x = (int)(j * (vm.CellSize.Width + vm.GridLineSize));
+            Rect gridLineRect = new Rect(new Point(x, 0), verticalGridLineSize);
+            dc.DrawRectangle(GridLineBrush, null, gridLineRect);
+         }
       }
 
       protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)

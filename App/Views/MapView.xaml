@@ -13,7 +13,7 @@
     </ItemsControl.ItemTemplate>
     <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
-            <v:MapCanvas />
+            <v:MapCanvas GridLineBrush="Gainsboro" />
         </ItemsPanelTemplate>
     </ItemsControl.ItemsPanel>
 </ItemsControl>

@@ -104,8 +104,6 @@ namespace PathFind.Views
 
          drawingContext.DrawRectangle(Brushes.White, null, new Rect(new Size(ActualWidth, ActualHeight)));
 
-         DrawGrid(drawingContext);
-
          DrawColoredCells(drawingContext);
 
          DrawStartAndGoalCells(drawingContext);
@@ -113,19 +111,6 @@ namespace PathFind.Views
          if (SelectedCells != null && SelectedCells.Count > 0)
          {
             DrawSelectedCells(drawingContext);
-         }
-      }
-
-      private Brush m_gridLineBrush = Brushes.Black;
-      public Brush GridLineBrush
-      {
-         get
-         {
-            return m_gridLineBrush;
-         }
-         set
-         {
-            m_gridLineBrush = value;
          }
       }
 
@@ -142,28 +127,6 @@ namespace PathFind.Views
       {
          get { return (int)GetValue(ColumnCountProperty); }
          set { SetValue(ColumnCountProperty, value); }
-      }
-
-      private void DrawGrid(DrawingContext dc)
-      {
-         Size horizontalGridLineSize = new Size(Width, GridLineSize);
-         Size verticalGridLineSize = new Size(GridLineSize, Height);
-
-         // Horizontal grid lines
-         for (int i = 0; i <= RowCount; i++)
-         {
-            int y = (int)(i * (CellSize.Height + GridLineSize));
-            Rect gridLineRect = new Rect(new Point(0, y), horizontalGridLineSize);
-            dc.DrawRectangle(GridLineBrush, null, gridLineRect);
-         }
-
-         // Vertical grid lines
-         for (int j = 0; j <= ColumnCount; j++)
-         {
-            int x = (int)(j * (CellSize.Width + GridLineSize));
-            Rect gridLineRect = new Rect(new Point(x, 0), verticalGridLineSize);
-            dc.DrawRectangle(GridLineBrush, null, gridLineRect);
-         }
       }
 
       private Rect GetCellRect(GridCoordinate cell)
