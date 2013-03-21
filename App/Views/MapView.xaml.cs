@@ -210,7 +210,7 @@ namespace PathFind.Views
          {
             foreach (var cellVM in vm.Cells)
             {
-               dc.DrawRectangle(cellVM.Brush, null, GetCellRect(cellVM.Cell));
+               dc.DrawRectangle(cellVM.Brush, null, cellVM.CellRect);
             }
             //foreach (var cellEntry in vm.Map.BlockedCells)
             //{

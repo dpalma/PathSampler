@@ -183,6 +183,15 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
+      public void TestResettingMapClearsCellViewModels()
+      {
+         map.Randomize();
+         Assert.AreEqual(map.BlockedCells.Count, vm.Cells.Count);
+         map.Assign(new Map());
+         Assert.AreEqual(0, vm.Cells.Count);
+      }
+
+      [Test]
       public void TestSelectedCellsBinding()
       {
          Target target = new Target();

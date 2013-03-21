@@ -83,13 +83,13 @@ namespace PathFind.ViewModels
 
       void BlockedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         //FireRedrawRequested();
+         FireRedrawRequested(); // TODO: this might not actually be needed
 
          if (e.Action == NotifyCollectionChangedAction.Add)
          {
             foreach (GridCoordinate cell in e.NewItems)
             {
-               Cells.Add(new CellVM(cell) { Brush = Brushes.Black });
+               Cells.Add(new CellVM(this, cell) { Brush = Brushes.Black });
             }
          }
          else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -98,6 +98,10 @@ namespace PathFind.ViewModels
             {
                Cells.RemoveAll(x => x.Cell.Equals(cell));
             }
+         }
+         else if (e.Action == NotifyCollectionChangedAction.Reset)
+         {
+            Cells.Clear();
          }
       }
 
