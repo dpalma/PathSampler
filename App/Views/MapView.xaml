@@ -8,7 +8,12 @@
              d:DesignHeight="300" d:DesignWidth="300" DataContextChanged="ItemsControl_DataContextChanged">
     <ItemsControl.ItemTemplate>
         <DataTemplate>
-            <Rectangle Fill="Black"></Rectangle>
+            <Rectangle x:Name="cellBody"></Rectangle>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Path=IsBlocked}" Value="True">
+                    <Setter TargetName="cellBody" Property="Fill" Value="Black" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
     </ItemsControl.ItemTemplate>
     <ItemsControl.ItemsPanel>

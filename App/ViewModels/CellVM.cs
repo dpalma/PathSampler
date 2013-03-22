@@ -33,6 +33,14 @@ namespace PathFind.ViewModels
       private GridCoordinate m_cell;
       public GridCoordinate Cell { get { return m_cell; } }
 
+      public bool IsBlocked
+      {
+         get
+         {
+            return MapVM.Map.BlockedCells.ContainsKey(Cell);
+         }
+      }
+
       public Point CellPoint
       {
          get

@@ -50,8 +50,8 @@ namespace PathFindTests.ViewModels
       //[Test]
       //public void TestStartPathingTwiceDoesntThrowException()
       //{
-      //   vm.StartPathingCommand.Execute(null);
-      //   vm.StartPathingCommand.Execute(null);
+      //   mapVM.StartPathingCommand.Execute(null);
+      //   mapVM.StartPathingCommand.Execute(null);
 
       [Test]
       public void TestPathingAlgorithmImplementationsAreCollected()
