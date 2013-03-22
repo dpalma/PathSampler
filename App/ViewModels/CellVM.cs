@@ -8,21 +8,32 @@ using PathFind.Core;
 
 namespace PathFind.ViewModels
 {
-   public class CellVM
+   public class CellVM : ViewModel
    {
       public CellVM(MapVM mapVM, GridCoordinate cell)
       {
          m_mapVM = mapVM;
          m_cell = cell;
+         MapVM.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(MapVM_PropertyChanged);
+      }
+
+      void MapVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+      {
+         if (e.PropertyName.Equals("GridLineSize")
+            || e.PropertyName.Equals("CellSize")
+            || e.PropertyName.Equals("CellSizeScalar"))
+         {
+            FirePropertyChanged("CellPoint");
+         }
       }
 
       private MapVM m_mapVM;
-      internal MapVM MapVM { get { return m_mapVM; } }
+      public MapVM MapVM { get { return m_mapVM; } }
 
       private GridCoordinate m_cell;
       public GridCoordinate Cell { get { return m_cell; } }
 
-      internal Point CellPoint
+      public Point CellPoint
       {
          get
          {

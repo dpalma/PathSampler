@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using PathFind.ViewModels;
 
@@ -58,10 +59,10 @@ namespace PathFind.Views
             CellVM vm = (CellVM)contentPresenter.DataContext;
             if (vm != null)
             {
-               Canvas.SetLeft(contentPresenter, vm.CellPoint.X);
-               Canvas.SetTop(contentPresenter, vm.CellPoint.Y);
-               contentPresenter.Width = vm.CellRect.Width;
-               contentPresenter.Height = vm.CellRect.Height;
+               contentPresenter.SetBinding(Canvas.LeftProperty, new Binding("CellPoint.X"));
+               contentPresenter.SetBinding(Canvas.TopProperty, new Binding("CellPoint.Y"));
+               contentPresenter.SetBinding(WidthProperty, new Binding("MapVM.CellSizeScalar"));
+               contentPresenter.SetBinding(HeightProperty, new Binding("MapVM.CellSizeScalar"));
             }
          }
 
