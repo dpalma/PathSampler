@@ -41,6 +41,30 @@ namespace PathFind.ViewModels
          }
       }
 
+      public bool IsGoal
+      {
+         get
+         {
+            return Cell.Equals(MapVM.Map.Goal);
+         }
+      }
+
+      public bool IsStart
+      {
+         get
+         {
+            return Cell.Equals(MapVM.Map.Start);
+         }
+      }
+
+      public bool IsOnPath
+      {
+         get
+         {
+            return (MapVM.CurrentPath != null) && MapVM.CurrentPath.Contains(Cell);
+         }
+      }
+
       public Point CellPoint
       {
          get

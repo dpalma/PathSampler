@@ -94,14 +94,7 @@ namespace PathFind.ViewModels
          }
          else if (e.Action == NotifyCollectionChangedAction.Remove)
          {
-            var toRemove = (from c in Cells
-                            where e.OldItems.Contains(c.Cell)
-                            select c).ToList();
-
-            foreach (var cellVM in toRemove)
-            {
-               Cells.Remove(cellVM);
-            }
+            RemoveCellVMs(e.OldItems);
          }
          else if (e.Action == NotifyCollectionChangedAction.Reset)
          {
@@ -389,6 +382,60 @@ namespace PathFind.ViewModels
       }
       private Type m_selectedPathingAlgorithm;
 
+      delegate void RemoveCellVMsDelegate(System.Collections.IList cells);
+
+      private void RemoveCellVMs(System.Collections.IList cells)
+      {
+         var toRemove = (from c in Cells
+                         where cells.Contains(c.Cell)
+                         select c).ToList();
+
+         foreach (var cellVM in toRemove)
+         {
+            Cells.Remove(cellVM);
+         }
+      }
+
+      delegate void AddCellVMsDelegate(System.Collections.IList cells);
+
+      private void AddCellVMs(System.Collections.IList cells)
+      {
+         foreach (var cell in cells)
+         {
+            Cells.Add(new CellVM(this, cell as GridCoordinate));
+         }
+      }
+
+      public List<GridCoordinate> CurrentPath
+      {
+         get
+         {
+            return m_currentPath;
+         }
+         private set
+         {
+            if (CurrentPath != null)
+            {
+               if (Application.Current == null)
+                  RemoveCellVMs(CurrentPath);
+               else
+                  Application.Current.Dispatcher.BeginInvoke(new RemoveCellVMsDelegate(RemoveCellVMs), CurrentPath);
+            }
+
+            m_currentPath = value;
+
+            ClearCellColors();
+
+            if (Application.Current == null)
+               AddCellVMs(CurrentPath);
+            else
+               Application.Current.Dispatcher.BeginInvoke(new AddCellVMsDelegate(AddCellVMs), CurrentPath);
+
+            FirePropertyChanged("CurrentPath");
+         }
+      }
+      private List<GridCoordinate> m_currentPath;
+
       public PathFinder CurrentPathFinder { get; private set; }
 
       public bool IsPathing
@@ -476,26 +523,14 @@ namespace PathFind.ViewModels
 
                   if (CurrentPathFinder.Result != null)
                   {
-                     ClearCellColors();
-
-                     if (CurrentPathFinder.Result == PathFindResult.PathFound)
-                     {
-                        foreach (var cell in CurrentPathFinder.Path)
-                        {
-                           SetCellColor(cell, Brushes.MediumSeaGreen);
-                        }
-                     }
-                     else
-                     {
-                        System.Diagnostics.Debug.WriteLine("No path");
-                     }
+                     CurrentPath = (CurrentPathFinder.Path != null) ? CurrentPathFinder.Path.ToList() : new List<GridCoordinate>();
 
                      if (PathingFinished != null)
                      {
                         PathingFinished(this, EventArgs.Empty);
                      }
 
-                     tcs.SetResult(new object());
+                     tcs.SetResult(null);
                   }
                }
 
@@ -513,7 +548,7 @@ namespace PathFind.ViewModels
       {
          if (ActivePathingTaskCompletionSource != null)
          {
-            ActivePathingTaskCompletionSource.SetCanceled();
+            ActivePathingTaskCompletionSource.TrySetCanceled();
             ActivePathingTaskCompletionSource = null;
          }
 

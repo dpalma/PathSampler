@@ -20,6 +20,26 @@ namespace PathFindTests
          return map;
       }
 
+      public static GridCoordinate GetTopLeft(this Map map)
+      {
+         return new GridCoordinate() { Row = 0, Column = 0 };
+      }
+
+      public static GridCoordinate GetTopRight(this Map map)
+      {
+         return new GridCoordinate() { Row = 0, Column = map.ColumnCount - 1 };
+      }
+
+      public static GridCoordinate GetBottomLeft(this Map map)
+      {
+         return new GridCoordinate() { Row = map.RowCount - 1, Column = 0 };
+      }
+
+      public static GridCoordinate GetBottomRight(this Map map)
+      {
+         return new GridCoordinate() { Row = map.RowCount - 1, Column = map.ColumnCount - 1 };
+      }
+
       public static void BlockRow(this Map map, int row)
       {
          for (int i = 0; i < map.ColumnCount; ++i)

@@ -23,6 +23,7 @@ namespace PathFindTests.ViewModels
       {
          map = MapUtilsForTesting.BuildMap(5);
          vm = new MapVM(map);
+         vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
       }
 
       [Test]
@@ -83,19 +84,19 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(otherPathingAlgorithm, vm.CurrentPathFinder.GetType());
       }
 
-      [Test, MaxTime(10000)]
+      private const int PathTaskTimeout = 10000;
+
+      [Test, MaxTime(PathTaskTimeout)]
       public void TestPathingTaskCompletes()
       {
-         vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
          vm.StartPathing();
          Assert.IsNotNull(vm.ActivePathingTask);
          vm.ActivePathingTask.Wait();
       }
 
-      [Test, MaxTime(30000)]
+      [Test, MaxTime(PathTaskTimeout)]
       public void TestIsPathingIsFalseWhenPathingTaskCompletes()
       {
-         vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
          vm.StartPathing();
          Assert.IsTrue(vm.IsPathing);
          vm.ActivePathingTask.Wait();
@@ -109,6 +110,61 @@ namespace PathFindTests.ViewModels
          Assert.IsTrue(vm.IsPathing);
          map.Goal = map.GetCenter();
          Assert.IsFalse(vm.IsPathing);
+      }
+
+      [Test, MaxTime(PathTaskTimeout)]
+      public void TestPathingTaskSetsCurentPathProperty()
+      {
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+         int diagonal = (int)map.Start.EuclideanDistance(map.Goal);
+         Assert.AreEqual(diagonal, vm.CurrentPath.Count);
+      }
+
+      [Test, MaxTime(PathTaskTimeout)]
+      public void TestCurrentPathIsEmptyListWhenBlocked()
+      {
+         vm.Map.BlockRow(map.GetCenter().Row);
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+         Assert.AreEqual(0, vm.CurrentPath.Count);
+      }
+
+      [Test, MaxTime(PathTaskTimeout)]
+      public void TestCurrentPathIsRepresentedInCellsCollection()
+      {
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+         Assert.AreEqual(vm.CurrentPath.Count, vm.Cells.Count);
+         foreach (var c in vm.CurrentPath)
+         {
+            Assert.IsNotNull(vm.Cells.Where(x => x.Cell.Equals(c)).Single());
+         }
+      }
+
+      [Test, MaxTime(PathTaskTimeout)]
+      public void TestOldPathCellVMsAreCleared()
+      {
+         vm.Map.Start = vm.Map.GetTopLeft();
+         vm.Map.Goal = vm.Map.GetBottomLeft();
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+         List<GridCoordinate> oldPath = vm.CurrentPath;
+
+         vm.Map.Start = vm.Map.GetTopRight();
+         vm.Map.Goal = vm.Map.GetBottomRight();
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+
+         Assert.AreEqual(vm.CurrentPath.Count, vm.Cells.Count);
+         foreach (var c in oldPath)
+         {
+            Assert.IsNull(vm.Cells.Where(x => x.Cell.Equals(c)).SingleOrDefault());
+         }
+         foreach (var c in vm.CurrentPath)
+         {
+            Assert.IsNotNull(vm.Cells.Where(x => x.Cell.Equals(c)).SingleOrDefault());
+         }
       }
 
       [Test]
