@@ -476,13 +476,13 @@ namespace PathFind.ViewModels
 
                   if (CurrentPathFinder.Result != null)
                   {
-                     ColoredCells.Clear();
+                     ClearCellColors();
 
                      if (CurrentPathFinder.Result == PathFindResult.PathFound)
                      {
                         foreach (var cell in CurrentPathFinder.Path)
                         {
-                           ColoredCells[cell] = Brushes.MediumSeaGreen;
+                           SetCellColor(cell, Brushes.MediumSeaGreen);
                         }
                      }
                      else
@@ -517,7 +517,7 @@ namespace PathFind.ViewModels
             ActivePathingTaskCompletionSource = null;
          }
 
-         ColoredCells.Clear();
+         ClearCellColors();
       }
 
       internal bool CanStopPathing
@@ -545,6 +545,11 @@ namespace PathFind.ViewModels
          }
 
          ColoredCells[cell] = brush;
+      }
+
+      private void ClearCellColors()
+      {
+         ColoredCells.Clear();
       }
 
       #endregion
