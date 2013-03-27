@@ -406,6 +406,8 @@ namespace PathFind.ViewModels
          }
       }
 
+      private static readonly List<GridCoordinate> EmptyPath = new List<GridCoordinate>();
+
       public List<GridCoordinate> CurrentPath
       {
          get
@@ -434,7 +436,7 @@ namespace PathFind.ViewModels
             FirePropertyChanged("CurrentPath");
          }
       }
-      private List<GridCoordinate> m_currentPath;
+      private List<GridCoordinate> m_currentPath = EmptyPath;
 
       public PathFinder CurrentPathFinder { get; private set; }
 
@@ -471,6 +473,8 @@ namespace PathFind.ViewModels
          {
             throw new InvalidOperationException("Pathing already running");
          }
+
+         CurrentPath = EmptyPath;
 
          ActivePathingTaskCompletionSource = StartPathingTask();
 
