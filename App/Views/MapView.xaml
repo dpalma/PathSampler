@@ -6,13 +6,13 @@
              xmlns:v="clr-namespace:PathFind.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" DataContextChanged="ItemsControl_DataContextChanged">
-    <ItemsControl.ItemTemplate>
-        <DataTemplate>
+    <ItemsControl.Resources>
+        <DataTemplate x:Key="blockedCellTemplate">
+            <Rectangle Fill="Black"></Rectangle>
+        </DataTemplate>
+        <DataTemplate x:Key="cellTemplate">
             <Rectangle x:Name="cellBody"></Rectangle>
             <DataTemplate.Triggers>
-                <DataTrigger Binding="{Binding Path=IsBlocked}" Value="True">
-                    <Setter TargetName="cellBody" Property="Fill" Value="Black" />
-                </DataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Path=IsGoal}" Value="False" />
@@ -23,7 +23,10 @@
                 </MultiDataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
-    </ItemsControl.ItemTemplate>
+    </ItemsControl.Resources>
+    <ItemsControl.ItemTemplateSelector>
+        <v:CellTemplateSelector BaseCellTemplate="{StaticResource cellTemplate}" BlockedCellTemplate="{StaticResource blockedCellTemplate}" />
+    </ItemsControl.ItemTemplateSelector>
     <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
             <v:MapCanvas GridLineBrush="Gainsboro" />
