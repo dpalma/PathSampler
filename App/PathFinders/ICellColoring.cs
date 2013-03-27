@@ -7,8 +7,14 @@ using PathFind.Core;
 
 namespace PathFind.PathFinders
 {
+   public enum CellColor
+   {
+      Open,
+      Closed,
+   }
+
    public interface ICellColoring
    {
-      void SetCellColor(GridCoordinate cell, Brush brush);
+      void SetCellColor(GridCoordinate cell, CellColor color);
    }
 }

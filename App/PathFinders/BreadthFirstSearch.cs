@@ -24,13 +24,13 @@ namespace PathFind.PathFinders
       private void AddToOpenList(GridCoordinate cell)
       {
          OpenList.Enqueue(cell);
-         CellColoring.SetCellColor(cell, Brushes.Orange);
+         CellColoring.SetCellColor(cell, CellColor.Open);
       }
 
       private void AddToClosedList(GridCoordinate cell)
       {
          ClosedList.Add(cell);
-         CellColoring.SetCellColor(cell, Brushes.Gray);
+         CellColoring.SetCellColor(cell, CellColor.Closed);
       }
 
       protected bool IsUnseen(GridCoordinate cell)

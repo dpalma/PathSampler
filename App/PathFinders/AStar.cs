@@ -69,13 +69,13 @@ namespace PathFind.PathFinders
       private void AddToOpenList(AStarNode node)
       {
          OpenList.Enqueue(node);
-         CellColoring.SetCellColor(node.Cell, Brushes.Orange);
+         CellColoring.SetCellColor(node.Cell, CellColor.Open);
       }
 
       private void AddToClosedList(GridCoordinate cell)
       {
          ClosedList.Add(cell);
-         CellColoring.SetCellColor(cell, Brushes.Gray);
+         CellColoring.SetCellColor(cell, CellColor.Closed);
       }
 
       private bool IsOnOpenList(GridCoordinate cell)

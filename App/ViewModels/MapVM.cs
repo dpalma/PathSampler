@@ -572,11 +572,21 @@ namespace PathFind.ViewModels
          get { return m_coloredCells; }
       }
 
-      public void SetCellColor(GridCoordinate cell, Brush brush)
+      public void SetCellColor(GridCoordinate cell, CellColor color)
       {
          if (Map.BlockedCells.ContainsKey(cell))
          {
             throw new InvalidOperationException("Attempting to color a blocked cell");
+         }
+
+         Brush brush = Brushes.White;
+         if (color == CellColor.Open)
+         {
+            brush = Brushes.Orange;
+         }
+         else if (color == CellColor.Closed)
+         {
+            brush = Brushes.Gray;
          }
 
          ColoredCells[cell] = brush;

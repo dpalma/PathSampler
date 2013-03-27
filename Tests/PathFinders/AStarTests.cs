@@ -11,7 +11,7 @@ namespace PathFindTests.PathFinders
 {
    internal class NullCellColoring : ICellColoring
    {
-      public void SetCellColor(GridCoordinate cell, System.Windows.Media.Brush brush)
+      public void SetCellColor(GridCoordinate cell, CellColor color)
       {
       }
    }
