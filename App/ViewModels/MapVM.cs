@@ -163,6 +163,22 @@ namespace PathFind.ViewModels
          }
       }
 
+      public int RowCount
+      {
+         get
+         {
+            return Map.RowCount;
+         }
+      }
+
+      public int ColumnCount
+      {
+         get
+         {
+            return Map.ColumnCount;
+         }
+      }
+
       public int GridLineSize
       {
          get
