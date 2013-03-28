@@ -35,6 +35,20 @@ namespace PathFindTests.Models
       }
 
       [Test]
+      [ExpectedException(typeof(ArgumentNullException))]
+      public void TestSettingNullGoalThrowsException()
+      {
+         map.Goal = null;
+      }
+
+      [Test]
+      [ExpectedException(typeof(ArgumentNullException))]
+      public void TestSettingNullStartThrowsException()
+      {
+         map.Start = null;
+      }
+
+      [Test]
       public void TestTopLeftCellHasOnlyThreeNeighbors()
       {
          GridCoordinate[] neighbors = map.GetNeighbors(new GridCoordinate());

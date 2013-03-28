@@ -74,6 +74,10 @@ namespace PathFind.Models
          }
          set
          {
+            if (value == null)
+            {
+               throw new ArgumentNullException("Start");
+            }
             if (value.Equals(Start))
             {
                return;
@@ -101,6 +105,10 @@ namespace PathFind.Models
          }
          set
          {
+            if (value == null)
+            {
+               throw new ArgumentNullException("Goal");
+            }
             if (value.Equals(Goal))
             {
                return;
