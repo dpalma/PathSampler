@@ -561,7 +561,7 @@ namespace PathFind.ViewModels
 
                   if (CurrentPathFinder.Result != null)
                   {
-                     CurrentPath = (CurrentPathFinder.Path != null) ? CurrentPathFinder.Path.ToList() : new List<GridCoordinate>();
+                     CurrentPath = (CurrentPathFinder.Path != null) ? CurrentPathFinder.Path.ToList() : EmptyPath;
 
                      if (PathingFinished != null)
                      {
