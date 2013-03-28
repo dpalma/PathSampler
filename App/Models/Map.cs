@@ -7,7 +7,7 @@ using PathFind.Collections;
 namespace PathFind.Models
 {
    [Serializable]
-   public class Map : INotifyPropertyChanged
+   public class Map : INotifyPropertyChanging, INotifyPropertyChanged
    {
       public const int DefaultRowColumnCount = 16;
 
@@ -19,10 +19,15 @@ namespace PathFind.Models
          }
          set
          {
+            if (value == RowCount)
+            {
+               return;
+            }
             if (value < 0)
             {
                throw new ArgumentException("RowCount must be non-negative");
             }
+            FirePropertyChanging("RowCount");
             m_rowCount = value;
             FirePropertyChanged("RowCount");
          }
@@ -37,10 +42,15 @@ namespace PathFind.Models
          }
          set
          {
+            if (value == ColumnCount)
+            {
+               return;
+            }
             if (value < 0)
             {
                throw new ArgumentException("ColumnCount must be non-negative");
             }
+            FirePropertyChanging("ColumnCount");
             m_columnCount = value;
             FirePropertyChanged("ColumnCount");
          }
@@ -64,6 +74,10 @@ namespace PathFind.Models
          }
          set
          {
+            if (value.Equals(Start))
+            {
+               return;
+            }
             if (value.Row < 0 || value.Row >= RowCount)
             {
                throw new ArgumentException("Start's row is outside the extents of the map");
@@ -72,6 +86,7 @@ namespace PathFind.Models
             {
                throw new ArgumentException(String.Format("Cell {0} is blocked and cannot be the start", value));
             }
+            FirePropertyChanging("Start");
             m_start = value;
             FirePropertyChanged("Start");
          }
@@ -86,6 +101,10 @@ namespace PathFind.Models
          }
          set
          {
+            if (value.Equals(Goal))
+            {
+               return;
+            }
             if (value.Row < 0 || value.Row >= RowCount)
             {
                throw new ArgumentException("Goal's row is outside the extents of the map");
@@ -94,6 +113,7 @@ namespace PathFind.Models
             {
                throw new ArgumentException(String.Format("Cell {0} is blocked and cannot be the goal", value));
             }
+            FirePropertyChanging("Goal");
             m_goal = value;
             FirePropertyChanged("Goal");
          }
@@ -199,6 +219,20 @@ namespace PathFind.Models
          if (PropertyChanged != null)
          {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+         }
+      }
+
+      #region INotifyPropertyChanging Members
+
+      public event PropertyChangingEventHandler PropertyChanging;
+
+      #endregion
+
+      private void FirePropertyChanging(string propertyName)
+      {
+         if (PropertyChanging != null)
+         {
+            PropertyChanging(this, new PropertyChangingEventArgs(propertyName));
          }
       }
    }

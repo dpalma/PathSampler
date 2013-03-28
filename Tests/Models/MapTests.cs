@@ -129,5 +129,44 @@ namespace PathFindTests.Models
          Assert.AreEqual(map.BlockedCells.Count, newMap.BlockedCells.Count);
          Assert.AreEqual(map.BlockedCells, newMap.BlockedCells);
       }
+
+      [Test]
+      public void TestPropertyChangingHappensBeforePropertyChanged()
+      {
+         var propertiesChanging = new List<string>();
+         var propertiesChanged = new List<string>();
+
+         map.PropertyChanging += (s, e) =>
+         {
+            propertiesChanging.Add(e.PropertyName);
+            Assert.AreEqual(0, propertiesChanged.Count, "PropertyChanged shouldn't have happened yet");
+         };
+
+         map.PropertyChanged += (s, e) =>
+            {
+               propertiesChanged.Add(e.PropertyName);
+               Assert.AreEqual(e.PropertyName, propertiesChanging.FirstOrDefault());
+               Assert.AreEqual(1, propertiesChanging.Count, "PropertyChanging should have happend already");
+            };
+
+         map.Goal = map.GetTopRight();
+      }
+
+      [Test]
+      public void TestPropertyNotificationsAreSkippedWhenNoNetChange()
+      {
+         var propertiesChanged = new List<string>();
+         map.PropertyChanged += (s, e) =>
+         {
+            propertiesChanged.Add(e.PropertyName);
+         };
+
+         map.RowCount = Map.DefaultRowColumnCount;
+         map.ColumnCount = Map.DefaultRowColumnCount;
+         map.Goal = map.GetBottomRight();
+         map.Start = map.GetTopLeft();
+
+         Assert.AreEqual(0, propertiesChanged.Count);
+      }
    }
 }
