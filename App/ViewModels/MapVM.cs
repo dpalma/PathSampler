@@ -147,6 +147,22 @@ namespace PathFind.ViewModels
       public event EventHandler PathingStarted;
       public event EventHandler PathingFinished;
 
+      public GridCoordinate Goal
+      {
+         get
+         {
+            return Map.Goal;
+         }
+      }
+
+      public GridCoordinate Start
+      {
+         get
+         {
+            return Map.Start;
+         }
+      }
+
       public int GridLineSize
       {
          get
