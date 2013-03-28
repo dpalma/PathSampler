@@ -58,6 +58,8 @@ namespace PathFind.ViewModels
 
             m_map = value;
 
+            FirePropertyChanged("Map");
+
             ConnectMapEventHandlers();
          }
       }
