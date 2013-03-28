@@ -232,6 +232,7 @@ namespace PathFind.Models
 
       #region INotifyPropertyChanging Members
 
+      [field: NonSerialized]
       public event PropertyChangingEventHandler PropertyChanging;
 
       #endregion
