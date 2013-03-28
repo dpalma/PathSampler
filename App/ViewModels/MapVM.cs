@@ -89,7 +89,7 @@ namespace PathFind.ViewModels
          {
             foreach (GridCoordinate cell in e.NewItems)
             {
-               Cells.Add(new CellVM(this, cell) { Brush = Brushes.Black });
+               Cells.Add(new CellVM(this, cell));
             }
          }
          else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -548,7 +548,7 @@ namespace PathFind.ViewModels
          return tcs;
       }
 
-      internal void StopPathing()
+      public void StopPathing()
       {
          if (ActivePathingTaskCompletionSource != null)
          {

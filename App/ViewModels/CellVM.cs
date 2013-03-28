@@ -82,7 +82,5 @@ namespace PathFind.ViewModels
             return new Rect(CellPoint, MapVM.CellSize);
          }
       }
-
-      public Brush Brush;
    }
 }

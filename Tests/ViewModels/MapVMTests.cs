@@ -15,34 +15,38 @@ namespace PathFindTests.ViewModels
 {
    class MapVMTests
    {
-      private Map map;
-      private MapVM vm;
-
-      [SetUp]
-      public void SetUp()
+      private static MapVM CreateDefaultMapVM(int mapSize)
       {
-         map = MapUtilsForTesting.BuildMap(5);
-         vm = new MapVM(map);
+         return new MapVM(MapUtilsForTesting.BuildMap(mapSize));
+      }
+
+      private static MapVM CreateFastPathingMapVM(int mapSize)
+      {
+         MapVM vm = CreateDefaultMapVM(mapSize);
          vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
+         vm.SelectedPathingAlgorithm = typeof(PathFind.PathFinders.AStar);
+         return vm;
       }
 
       [Test]
       public void TestMapChangeTriggersRedrawRequest()
       {
+         MapVM vm = CreateDefaultMapVM(8);
          var redrawRequests = new List<EventArgs>();
          vm.RedrawRequested += (sender, eventArgs) =>
             {
                redrawRequests.Add(eventArgs);
             };
          GridCoordinate cell = new GridCoordinate() { Row = 1, Column = 1 };
-         map.BlockedCells[cell] = 1;
+         vm.Map.BlockedCells[cell] = 1;
          Assert.AreEqual(1, redrawRequests.Count);
       }
 
       [Test]
       public void TestSelectSameCellTwiceOnlyAddsOnce()
       {
-         GridCoordinate cell = new GridCoordinate() { Row = map.RowCount / 2, Column = map.ColumnCount / 2 };
+         MapVM vm = CreateDefaultMapVM(8);
+         GridCoordinate cell = new GridCoordinate() { Row = vm.Map.RowCount / 2, Column = vm.Map.ColumnCount / 2 };
          vm.SelectedCells.Add(cell);
          vm.SelectedCells.Add(cell);
          Assert.AreEqual(1, vm.SelectedCells.Count);
@@ -57,24 +61,28 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestPathingAlgorithmImplementationsAreCollected()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          Assert.IsTrue(vm.PathingAlgorithms.Count > 0);
       }
 
       [Test]
       public void TestThereIsADefaultPathingAlgorithmSelected()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          Assert.IsNotNull(vm.SelectedPathingAlgorithm);
       }
 
       [Test]
       public void TestDefaultPathingAlgorithmIsBFS()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          Assert.AreEqual("BreadthFirstSearch", vm.SelectedPathingAlgorithm.Name);
       }
 
       [Test]
       public void TestPathingUsesSelectedAlgorithm()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          var otherPathingAlgorithm = (from t in vm.PathingAlgorithms
                                       where !t.Equals(vm.SelectedPathingAlgorithm)
                                       select t).Single();
@@ -82,6 +90,7 @@ namespace PathFindTests.ViewModels
          vm.SelectedPathingAlgorithm = otherPathingAlgorithm;
          vm.StartPathing();
          Assert.AreEqual(otherPathingAlgorithm, vm.CurrentPathFinder.GetType());
+         vm.StopPathing();
       }
 
       private const int PathTaskTimeout = 10000;
@@ -89,6 +98,7 @@ namespace PathFindTests.ViewModels
       [Test, MaxTime(PathTaskTimeout)]
       public void TestPathingTaskCompletes()
       {
+         MapVM vm = CreateFastPathingMapVM(4);
          vm.StartPathing();
          Assert.IsNotNull(vm.ActivePathingTask);
          vm.ActivePathingTask.Wait();
@@ -97,6 +107,7 @@ namespace PathFindTests.ViewModels
       [Test, MaxTime(PathTaskTimeout)]
       public void TestIsPathingIsFalseWhenPathingTaskCompletes()
       {
+         MapVM vm = CreateFastPathingMapVM(4);
          vm.StartPathing();
          Assert.IsTrue(vm.IsPathing);
          vm.ActivePathingTask.Wait();
@@ -106,25 +117,29 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestChangingGoalStopsPathing()
       {
+         MapVM vm = CreateFastPathingMapVM(5);
          vm.StartPathing();
          Assert.IsTrue(vm.IsPathing);
-         map.Goal = map.GetCenter();
+         vm.Map.Goal = vm.Map.GetCenter();
          Assert.IsFalse(vm.IsPathing);
       }
 
       [Test, MaxTime(PathTaskTimeout)]
       public void TestPathingTaskSetsCurentPathProperty()
       {
+         MapVM vm = CreateDefaultMapVM(4);
+         vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
          vm.StartPathing();
          vm.ActivePathingTask.Wait();
-         int diagonal = (int)map.Start.EuclideanDistance(map.Goal);
+         int diagonal = (int)vm.Map.Start.EuclideanDistance(vm.Map.Goal);
          Assert.AreEqual(diagonal, vm.CurrentPath.Count);
       }
 
       [Test, MaxTime(PathTaskTimeout)]
       public void TestCurrentPathIsEmptyListWhenBlocked()
       {
-         vm.Map.BlockRow(map.GetCenter().Row);
+         MapVM vm = CreateDefaultMapVM(4);
+         vm.Map.BlockRow(vm.Map.GetCenter().Row);
          vm.StartPathing();
          vm.ActivePathingTask.Wait();
          Assert.AreEqual(0, vm.CurrentPath.Count);
@@ -133,6 +148,7 @@ namespace PathFindTests.ViewModels
       [Test, MaxTime(PathTaskTimeout)]
       public void TestCurrentPathIsRepresentedInCellsCollection()
       {
+         MapVM vm = CreateFastPathingMapVM(4);
          vm.StartPathing();
          vm.ActivePathingTask.Wait();
          Assert.AreEqual(vm.CurrentPath.Count, vm.Cells.Count);
@@ -145,6 +161,8 @@ namespace PathFindTests.ViewModels
       [Test, MaxTime(PathTaskTimeout)]
       public void TestOldPathCellVMsAreCleared()
       {
+         MapVM vm = CreateFastPathingMapVM(4);
+
          vm.Map.Start = vm.Map.GetTopLeft();
          vm.Map.Goal = vm.Map.GetBottomLeft();
          vm.StartPathing();
@@ -170,6 +188,7 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestMapWidthAndHeightChangeWhenCellSizeChanges()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          var propertiesChanged = new List<string>();
          vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
          {
@@ -184,6 +203,7 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestMapWidthAndHeightChangeWhenGridLineSizeChanges()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          var propertiesChanged = new List<string>();
          vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
          {
@@ -198,6 +218,7 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestOnlyMapHeightChangesWhenRowCountChanges()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          var propertiesChanged = new List<string>();
          vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
          {
@@ -211,6 +232,7 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestOnlyMapWidthChangesWhenColumnCountChanges()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          var propertiesChanged = new List<string>();
          vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
          {
@@ -224,26 +246,29 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestAddingBlockedCellToMapAddsACellViewModel()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          Assert.AreEqual(0, vm.Cells.Count);
-         map.BlockedCells.Add(map.GetCenter(), 1);
+         vm.Map.BlockedCells.Add(vm.Map.GetCenter(), 1);
          Assert.AreEqual(1, vm.Cells.Count);
       }
 
       [Test]
       public void TestRemovingBlockedCellFromMapRemovesCorrespondingCellViewModel()
       {
-         map.BlockedCells.Add(map.GetCenter(), 1);
+         MapVM vm = CreateDefaultMapVM(5);
+         vm.Map.BlockedCells.Add(vm.Map.GetCenter(), 1);
          Assert.AreEqual(1, vm.Cells.Count);
-         Assert.IsTrue(map.BlockedCells.Remove(map.GetCenter()));
+         Assert.IsTrue(vm.Map.BlockedCells.Remove(vm.Map.GetCenter()));
          Assert.AreEqual(0, vm.Cells.Count);
       }
 
       [Test]
       public void TestResettingMapClearsCellViewModels()
       {
-         map.Randomize();
-         Assert.AreEqual(map.BlockedCells.Count, vm.Cells.Count);
-         map.Assign(new Map());
+         MapVM vm = CreateDefaultMapVM(5);
+         vm.Map.Randomize();
+         Assert.AreEqual(vm.Map.BlockedCells.Count, vm.Cells.Count);
+         vm.Map.Assign(new Map());
          Assert.AreEqual(0, vm.Cells.Count);
       }
 
@@ -251,6 +276,7 @@ namespace PathFindTests.ViewModels
       [ExpectedException(typeof(InvalidOperationException))]
       public void TestSetGoalCommandThrowsExceptionWhenMoreThanOneCellIsSelected()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          vm.SelectedCells.Add(new GridCoordinate() { Row = 0, Column = 1 });
          vm.SelectedCells.Add(new GridCoordinate() { Row = 0, Column = 2 });
          vm.SetGoalCommand.Execute(null);
@@ -260,6 +286,7 @@ namespace PathFindTests.ViewModels
       [ExpectedException(typeof(InvalidOperationException))]
       public void TestSetStartCommandThrowsExceptionWhenMoreThanOneCellIsSelected()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          vm.SelectedCells.Add(new GridCoordinate() { Row = 1, Column = 1 });
          vm.SelectedCells.Add(new GridCoordinate() { Row = 1, Column = 2 });
          vm.SetStartCommand.Execute(null);
@@ -268,6 +295,7 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestSelectedCellsBinding()
       {
+         MapVM vm = CreateDefaultMapVM(5);
          Target target = new Target();
          BindingOperations.SetBinding(target, Target.SelectedCellsProperty,
             new Binding()
@@ -276,7 +304,7 @@ namespace PathFindTests.ViewModels
                   Path = new PropertyPath("SelectedCells", null),
                });
          Assert.AreEqual(0, target.SelectedCells.Count);
-         vm.SelectedCells.Add(map.GetCenter());
+         vm.SelectedCells.Add(vm.Map.GetCenter());
          Assert.AreEqual(1, target.SelectedCells.Count);
       }
    }
