@@ -199,7 +199,7 @@ namespace PathFind.ViewModels
       {
          string mapFileName = CurrentMapFileName;
 
-         if (mapFileName == null)
+         if (String.IsNullOrEmpty(mapFileName))
          {
             Microsoft.Win32.SaveFileDialog saveDialog = new Microsoft.Win32.SaveFileDialog();
             saveDialog.FileName = String.Format("Map{0}", DefaultFileCounter); // Default file name
