@@ -47,7 +47,7 @@ namespace PathFind.ViewModels
          {
             return m_map;
          }
-         private set
+         internal set
          {
             if (value == null)
             {

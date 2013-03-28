@@ -44,7 +44,14 @@ namespace PathFind.ViewModels
 
             Map.PropertyChanged += new PropertyChangedEventHandler(Map_PropertyChanged);
 
-            MapVM = new MapVM(Map);
+            if (MapVM == null)
+            {
+               MapVM = new MapVM(Map);
+            }
+            else
+            {
+               MapVM.Map = Map;
+            }
          }
       }
 
