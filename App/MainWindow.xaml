@@ -5,7 +5,7 @@
         xmlns:m="clr-namespace:PathFind.Models"
         xmlns:vm="clr-namespace:PathFind.ViewModels"
         xmlns:v="clr-namespace:PathFind.Views"
-        Title="PathFinder" Height="620" Width="700">
+        Title="PathFinder" Height="620" Width="700" Loaded="Window_Loaded">
     <Window.CommandBindings>
         <CommandBinding Command="cmd:MainCommands.Exit" Executed="OnExit" />
     </Window.CommandBindings>
@@ -25,7 +25,7 @@
     <Window.DataContext>
       <StaticResource ResourceKey="mainWindowVM"/>
     </Window.DataContext>
-    <Grid>
+    <Grid x:Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" Name="MenuRow" />
             <RowDefinition Height="Auto" Name="ToolbarRow" />
