@@ -177,12 +177,25 @@ namespace PathFindTests.Models
             propertiesChanged.Add(e.PropertyName);
          };
 
+         map.CellSizeScalar = Map.DefaultCellSizeScalar;
          map.RowCount = Map.DefaultRowColumnCount;
          map.ColumnCount = Map.DefaultRowColumnCount;
          map.Goal = map.GetBottomRight();
          map.Start = map.GetTopLeft();
 
          Assert.AreEqual(0, propertiesChanged.Count);
+      }
+
+      [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+      public void TestExceptionThrownWhenSettingCellSizeBelowMinimum()
+      {
+         map.CellSizeScalar = Map.MinimumCellSizeScalar - 1;
+      }
+
+      [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+      public void TestExceptionThrownWhenSettingCellSizeAboveMaximum()
+      {
+         map.CellSizeScalar = Map.MaximumCellSizeScalar + 1;
       }
    }
 }

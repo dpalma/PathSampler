@@ -11,6 +11,10 @@ namespace PathFind.Models
    {
       public const int DefaultRowColumnCount = 16;
 
+      public const double DefaultCellSizeScalar = 16;
+      public static double MinimumCellSizeScalar { get { return 4; } }
+      public static double MaximumCellSizeScalar { get { return 50; } }
+
       public int RowCount
       {
          get
@@ -136,12 +140,24 @@ namespace PathFind.Models
          }
          set
          {
+            if (CellSizeScalar == value)
+            {
+               return;
+            }
+            if (value < MinimumCellSizeScalar)
+            {
+               throw new ArgumentOutOfRangeException("CellSizeScalar", String.Format("Map.CellSizeScalar cannot be less than {0}", MinimumCellSizeScalar));
+            }
+            if (value > MaximumCellSizeScalar)
+            {
+               throw new ArgumentOutOfRangeException("CellSizeScalar", String.Format("Map.CellSizeScalar cannot be more than {0}", MaximumCellSizeScalar));
+            }
             FirePropertyChanging("CellSizeScalar");
             m_cellSizeScalar = value;
             FirePropertyChanged("CellSizeScalar");
          }
       }
-      private double m_cellSizeScalar = 16;
+      private double m_cellSizeScalar = DefaultCellSizeScalar;
 
       private bool IsAtLeftEdge(GridCoordinate cell)
       {
