@@ -35,7 +35,7 @@ namespace PathFind.Views
          Size verticalGridLineSize = new Size(vm.GridLineSize, ActualHeight);
 
          // Horizontal grid lines
-         for (int i = 0; i <= vm.Map.RowCount; i++)
+         for (int i = 1; i < vm.Map.RowCount; i++)
          {
             int y = (int)(i * (vm.CellSize.Height + vm.GridLineSize));
             Rect gridLineRect = new Rect(new Point(0, y), horizontalGridLineSize);
@@ -43,7 +43,7 @@ namespace PathFind.Views
          }
 
          // Vertical grid lines
-         for (int j = 0; j <= vm.Map.ColumnCount; j++)
+         for (int j = 1; j < vm.Map.ColumnCount; j++)
          {
             int x = (int)(j * (vm.CellSize.Width + vm.GridLineSize));
             Rect gridLineRect = new Rect(new Point(x, 0), verticalGridLineSize);

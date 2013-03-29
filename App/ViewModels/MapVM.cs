@@ -215,7 +215,7 @@ namespace PathFind.ViewModels
       {
          get
          {
-            return (CellSize.Width + GridLineSize) * Map.ColumnCount;
+            return (CellSize.Width * Map.ColumnCount) + (GridLineSize * (Map.ColumnCount - 1));
          }
       }
 
@@ -223,7 +223,7 @@ namespace PathFind.ViewModels
       {
          get
          {
-            return (CellSize.Height + GridLineSize) * Map.RowCount;
+            return (CellSize.Height * Map.RowCount) + (GridLineSize * (Map.RowCount - 1));
          }
       }
 

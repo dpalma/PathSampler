@@ -69,8 +69,8 @@ namespace PathFind.ViewModels
          get
          {
             return new Point(
-               Cell.Column * (MapVM.CellSize.Width + MapVM.GridLineSize) + MapVM.GridLineSize,
-               Cell.Row * (MapVM.CellSize.Height + MapVM.GridLineSize) + MapVM.GridLineSize);
+               (MapVM.CellSize.Width * Cell.Column) + (MapVM.GridLineSize * (Cell.Column + 1)),
+               (MapVM.CellSize.Height * Cell.Row) + (MapVM.GridLineSize * (Cell.Row + 1)));
          }
       }
 
