@@ -206,8 +206,10 @@ namespace PathFind.ViewModels
          set
          {
             m_cellSizeScalar = value;
-            CellSize = new Size(CellSizeScalar, CellSizeScalar);
             FirePropertyChanged("CellSizeScalar");
+            FirePropertyChanged("CellSize");
+            FirePropertyChanged("MapWidth"); // MapWidth depends upon CellSize
+            FirePropertyChanged("MapHeight"); // MapHeight depends upon CellSize
          }
       }
       private double m_cellSizeScalar = 16;
@@ -216,17 +218,9 @@ namespace PathFind.ViewModels
       {
          get
          {
-            return m_cellSize;
-         }
-         set
-         {
-            m_cellSize = value;
-            FirePropertyChanged("CellSize");
-            FirePropertyChanged("MapWidth"); // MapWidth depends upon CellSize
-            FirePropertyChanged("MapHeight"); // MapHeight depends upon CellSize
+            return new Size(CellSizeScalar, CellSizeScalar);
          }
       }
-      private Size m_cellSize = new Size(16, 16);
 
       public double MapWidth
       {
