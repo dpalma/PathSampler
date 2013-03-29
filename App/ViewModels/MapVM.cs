@@ -106,6 +106,8 @@ namespace PathFind.ViewModels
 
       private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
       {
+         bool stopPathingTask = true;
+
          if (e.PropertyName == "BlockedCells")
          {
             DisconnectMapEventHandlers();
@@ -121,12 +123,16 @@ namespace PathFind.ViewModels
          }
          else if (e.PropertyName == "CellSizeScalar")
          {
+            stopPathingTask = false;
             FirePropertyChanged("CellSize");
             FirePropertyChanged("MapWidth"); // MapWidth depends upon CellSize
             FirePropertyChanged("MapHeight"); // MapHeight depends upon CellSize
          }
 
-         StopPathing();
+         if (stopPathingTask)
+         {
+            StopPathing();
+         }
 
          FirePropertyChanged(e.PropertyName);
          FireRedrawRequested();
@@ -570,7 +576,6 @@ namespace PathFind.ViewModels
          if (ActivePathingTaskCompletionSource != null)
          {
             ActivePathingTaskCompletionSource.TrySetCanceled();
-            ActivePathingTaskCompletionSource = null;
          }
 
          ClearCellColors();

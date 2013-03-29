@@ -292,6 +292,15 @@ namespace PathFindTests.ViewModels
          vm.SetStartCommand.Execute(null);
       }
 
+      [Test, MaxTime(PathTaskTimeout)]
+      public void TestChangingCellSizeDoesNotStopPathing_Issue8()
+      {
+         MapVM vm = CreateFastPathingMapVM(4);
+         vm.StartPathing();
+         vm.Map.CellSizeScalar = 30;
+         Assert.IsFalse(vm.ActivePathingTask.IsCanceled);
+      }
+
       [Test]
       public void TestSelectedCellsBinding()
       {
