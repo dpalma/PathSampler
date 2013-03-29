@@ -54,6 +54,7 @@
     <Compile Include="Collections\PriorityQueueTests.cs" />
     <Compile Include="Core\GridCoordinateTests.cs" />
     <Compile Include="MapUtilsForTesting.cs" />
+    <Compile Include="MapVMUtilsForTesting.cs" />
     <Compile Include="Models\MapExtensionsTests.cs" />
     <Compile Include="Models\MapTests.cs" />
     <Compile Include="PathFinders\AStarTests.cs" />

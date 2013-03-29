@@ -138,11 +138,21 @@ namespace PathFindTests.ViewModels
       [Test, MaxTime(PathTaskTimeout)]
       public void TestCurrentPathIsEmptyListWhenBlocked()
       {
-         MapVM vm = CreateDefaultMapVM(4);
+         MapVM vm = CreateFastPathingMapVM(4);
          vm.Map.BlockRow(vm.Map.GetCenter().Row);
          vm.StartPathing();
          vm.ActivePathingTask.Wait();
          Assert.AreEqual(0, vm.CurrentPath.Count);
+      }
+
+      [Test, MaxTime(PathTaskTimeout)]
+      public void TestCurrentPathIncludesStartAndGoal()
+      {
+         MapVM vm = CreateFastPathingMapVM(4);
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+         Assert.IsTrue(vm.CurrentPath.Contains(vm.Map.Start));
+         Assert.IsTrue(vm.CurrentPath.Contains(vm.Map.Goal));
       }
 
       [Test, MaxTime(PathTaskTimeout)]
@@ -154,7 +164,7 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(vm.CurrentPath.Count, vm.Cells.Count);
          foreach (var c in vm.CurrentPath)
          {
-            Assert.IsNotNull(vm.Cells.Where(x => x.Cell.Equals(c)).Single());
+            Assert.IsTrue(vm.HasCell(c));
          }
       }
 
@@ -177,11 +187,11 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(vm.CurrentPath.Count, vm.Cells.Count);
          foreach (var c in oldPath)
          {
-            Assert.IsNull(vm.Cells.Where(x => x.Cell.Equals(c)).SingleOrDefault());
+            Assert.IsFalse(vm.HasCell(c));
          }
          foreach (var c in vm.CurrentPath)
          {
-            Assert.IsNotNull(vm.Cells.Where(x => x.Cell.Equals(c)).SingleOrDefault());
+            Assert.IsTrue(vm.HasCell(c));
          }
       }
 
