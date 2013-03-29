@@ -7,6 +7,8 @@ using System.Windows.Documents;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Input;
+using PathFind.Models;
+using PathFind.ViewModels;
 
 namespace PathFind.Views
 {
@@ -23,27 +25,55 @@ namespace PathFind.Views
 
          m_bottomRight = BuildAdornerCorner(Cursors.SizeNWSE);
 
-         m_bottomRight.DragDelta += new DragDeltaEventHandler(HandleBottomRight);
+         m_bottomRight.DragDelta += new DragDeltaEventHandler(BottomRight_DragDelta);
+         m_bottomRight.DragStarted += new DragStartedEventHandler(BottomRight_DragStarted);
+
+         MapView mapView = AdornedElement as MapView;
+         this.DataContext = mapView.DataContext;
+         this.SetBinding(MapProperty, "Map");
       }
 
-      void HandleBottomRight(object sender, DragDeltaEventArgs args)
+      private static readonly DependencyProperty MapProperty = DependencyProperty.Register("Map", typeof(Map), typeof(ResizingAdorner));
+
+      public Map Map
       {
-         FrameworkElement adornedElement = this.AdornedElement as FrameworkElement;
-         Thumb hitThumb = sender as Thumb;
+         get { return (Map)GetValue(MapProperty); }
+         set { SetValue(MapProperty, value); }
+      }
 
-         if (adornedElement == null || hitThumb == null)
-            return;
-         FrameworkElement parentElement = adornedElement.Parent as FrameworkElement;
+      private double m_cumulativeHorizontalChange = 0;
+      private double m_cumulativeVerticalChange = 0;
 
-         //System.Diagnostics.Debug.WriteLine(String.Format("H {0}, V {0}", args.HorizontalChange, args.VerticalChange));
+      private int m_rowCountAtDragStart;
+      private int m_columnCountAtDragStart;
 
-         // Ensure that the Width and Height are properly initialized after the resize.
-         EnforceSize(adornedElement);
+      private Size m_cellSize;
+      private int m_gridLineSize;
 
-         // Change the size by the amount the user drags the mouse, as long as it's larger 
-         // than the width or height of an adorner, respectively.
-         adornedElement.Width = Math.Max(adornedElement.Width + args.HorizontalChange, hitThumb.DesiredSize.Width);
-         adornedElement.Height = Math.Max(args.VerticalChange + adornedElement.Height, hitThumb.DesiredSize.Height);
+      void BottomRight_DragStarted(object sender, DragStartedEventArgs e)
+      {
+         m_rowCountAtDragStart = Map.RowCount;
+         m_columnCountAtDragStart = Map.ColumnCount;
+
+         MapView mapView = AdornedElement as MapView;
+         MapVM mapVM = mapView.DataContext as MapVM;
+         m_cellSize = mapVM.CellSize;
+         m_gridLineSize = mapVM.GridLineSize;
+
+         m_cumulativeHorizontalChange = 0;
+         m_cumulativeVerticalChange = 0;
+      }
+
+      void BottomRight_DragDelta(object sender, DragDeltaEventArgs args)
+      {
+         m_cumulativeHorizontalChange += args.HorizontalChange;
+         m_cumulativeVerticalChange += args.VerticalChange;
+
+         int addRows = (int)(m_cumulativeVerticalChange / (m_cellSize.Height + m_gridLineSize));
+         int addCols = (int)(m_cumulativeHorizontalChange / (m_cellSize.Width + m_gridLineSize));
+
+         Map.RowCount = m_rowCountAtDragStart + addRows;
+         Map.ColumnCount = m_columnCountAtDragStart + addCols;
       }
 
       protected override Size ArrangeOverride(Size finalSize)
@@ -78,24 +108,6 @@ namespace PathFind.Views
          m_visualChildren.Add(cornerThumb);
 
          return cornerThumb;
-      }
-
-      // This method ensures that the Widths and Heights are initialized.  Sizing to content produces
-      // Width and Height values of Double.NaN.  Because this Adorner explicitly resizes, the Width and Height
-      // need to be set first.  It also sets the maximum size of the adorned element.
-      void EnforceSize(FrameworkElement adornedElement)
-      {
-         if (adornedElement.Width.Equals(Double.NaN))
-            adornedElement.Width = adornedElement.DesiredSize.Width;
-         if (adornedElement.Height.Equals(Double.NaN))
-            adornedElement.Height = adornedElement.DesiredSize.Height;
-
-         FrameworkElement parent = adornedElement.Parent as FrameworkElement;
-         if (parent != null)
-         {
-            adornedElement.MaxHeight = parent.ActualHeight;
-            adornedElement.MaxWidth = parent.ActualWidth;
-         }
       }
 
       protected override int VisualChildrenCount

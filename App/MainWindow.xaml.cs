@@ -21,8 +21,8 @@ namespace PathFind
 
       private void Window_Loaded(object sender, RoutedEventArgs e)
       {
-         //AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(mainGrid);
-         //adornerLayer.Add(new PathFind.Views.ResizingAdorner(mapView1));
+         AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(mainGrid);
+         adornerLayer.Add(new PathFind.Views.ResizingAdorner(mapView1));
       }
 
    }
