@@ -136,6 +136,7 @@ namespace PathFind.Models
          }
          set
          {
+            FirePropertyChanging("CellSizeScalar");
             m_cellSizeScalar = value;
             FirePropertyChanged("CellSizeScalar");
          }
