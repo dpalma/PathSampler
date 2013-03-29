@@ -61,8 +61,8 @@ namespace PathFind.Views
             {
                contentPresenter.SetBinding(Canvas.LeftProperty, new Binding("CellPoint.X"));
                contentPresenter.SetBinding(Canvas.TopProperty, new Binding("CellPoint.Y"));
-               contentPresenter.SetBinding(WidthProperty, new Binding("MapVM.CellSizeScalar"));
-               contentPresenter.SetBinding(HeightProperty, new Binding("MapVM.CellSizeScalar"));
+               contentPresenter.SetBinding(WidthProperty, new Binding("MapVM.Map.CellSizeScalar"));
+               contentPresenter.SetBinding(HeightProperty, new Binding("MapVM.Map.CellSizeScalar"));
             }
          }
 

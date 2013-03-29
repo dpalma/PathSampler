@@ -63,7 +63,7 @@
             </ToolBar>
         </ToolBarTray>
         <StatusBar Grid.Row="3" Height="24" Name="statusBar1" VerticalAlignment="Stretch" Margin="0,0,226,0" />
-        <Slider Grid.Row="3" Height="24" Name="slider1" VerticalAlignment="Center" Value="{Binding Path=MapVM.CellSizeScalar}" Minimum="4" Maximum="50" Margin="0,2" HorizontalAlignment="Right" Width="171" />
+        <Slider Grid.Row="3" Height="24" Name="slider1" VerticalAlignment="Center" Value="{Binding Path=Map.CellSizeScalar}" Minimum="4" Maximum="50" Margin="0,2" HorizontalAlignment="Right" Width="171" />
         <Label Content="Zoom" Grid.Row="3" Height="24" Margin="0,0,172,4" Name="label1" VerticalAlignment="Center" HorizontalAlignment="Right" Width="43" />
     </Grid>
 </Window>

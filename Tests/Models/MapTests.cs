@@ -136,12 +136,14 @@ namespace PathFindTests.Models
       [Test]
       public void TestAssign()
       {
+         map.CellSizeScalar = 38;
          map.Randomize();
          Assert.IsTrue(map.BlockedCells.Count > 0);
          Map newMap = new Map();
          newMap.Assign(map);
          Assert.AreEqual(map.BlockedCells.Count, newMap.BlockedCells.Count);
          Assert.AreEqual(map.BlockedCells, newMap.BlockedCells);
+         Assert.AreEqual(map.CellSizeScalar, newMap.CellSizeScalar);
       }
 
       [Test]

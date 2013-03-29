@@ -194,7 +194,7 @@ namespace PathFindTests.ViewModels
          {
             propertiesChanged.Add(eventArgs.PropertyName);
          };
-         vm.CellSizeScalar = 64;
+         vm.Map.CellSizeScalar = 64;
          Assert.IsTrue(propertiesChanged.Contains("CellSize"), "No change notification for CellSize property");
          Assert.IsTrue(propertiesChanged.Contains("MapWidth"), "No change notification for MapWidth property");
          Assert.IsTrue(propertiesChanged.Contains("MapHeight"), "No change notification for MapHeight property");

@@ -128,6 +128,20 @@ namespace PathFind.Models
       }
       private GridCoordinate m_goal = new GridCoordinate() { Row = DefaultRowColumnCount - 1, Column = DefaultRowColumnCount - 1 };
 
+      public double CellSizeScalar
+      {
+         get
+         {
+            return m_cellSizeScalar;
+         }
+         set
+         {
+            m_cellSizeScalar = value;
+            FirePropertyChanged("CellSizeScalar");
+         }
+      }
+      private double m_cellSizeScalar = 16;
+
       private bool IsAtLeftEdge(GridCoordinate cell)
       {
          return cell.Column == 0;
@@ -213,6 +227,7 @@ namespace PathFind.Models
          }
          this.Goal = other.Goal;
          this.Start = other.Start;
+         this.CellSizeScalar = other.CellSizeScalar;
       }
 
       #region INotifyPropertyChanged Members

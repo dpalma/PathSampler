@@ -20,8 +20,7 @@ namespace PathFind.ViewModels
       void MapVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
       {
          if (e.PropertyName.Equals("GridLineSize")
-            || e.PropertyName.Equals("CellSize")
-            || e.PropertyName.Equals("CellSizeScalar"))
+            || e.PropertyName.Equals("CellSize"))
          {
             FirePropertyChanged("CellPoint");
          }
