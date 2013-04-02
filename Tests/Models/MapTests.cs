@@ -233,5 +233,37 @@ namespace PathFindTests.Models
          map.RowCount = map.RowCount * 2;
          Assert.AreEqual(map.RowCount - 1, map.Start.Row);
       }
+
+      [Test]
+      public void TestIsInBoundsReturnsTrueForCenter()
+      {
+         Assert.IsTrue(map.IsInBounds(map.GetCenter()));
+      }
+
+      [Test]
+      public void TestIsInBoundsReturnsFalseForNegativeRows()
+      {
+         Assert.IsFalse(map.IsInBounds(new GridCoordinate() { Row = -10, Column = 1 }));
+      }
+
+      [Test]
+      public void TestBlockedCellsAreRemovedWhenMapShrinksVertically()
+      {
+         map.Goal = map.GetTopRight();
+         map.BlockRow(map.RowCount - 1);
+         Assert.AreEqual(map.ColumnCount, map.BlockedCells.Count);
+         map.RowCount -= 1;
+         Assert.AreEqual(0, map.BlockedCells.Count);
+      }
+
+      [Test]
+      public void TestBlockedCellsAreRemovedWhenMapShrinksHorizontally()
+      {
+         map.Goal = map.GetBottomLeft();
+         map.BlockColumn(map.ColumnCount - 1);
+         Assert.AreEqual(map.RowCount, map.BlockedCells.Count);
+         map.ColumnCount -= 1;
+         Assert.AreEqual(0, map.BlockedCells.Count);
+      }
    }
 }

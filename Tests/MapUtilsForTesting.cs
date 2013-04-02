@@ -48,6 +48,14 @@ namespace PathFindTests
          }
       }
 
+      public static void BlockColumn(this Map map, int column)
+      {
+         for (int i = 0; i < map.RowCount; ++i)
+         {
+            map.BlockedCells[new GridCoordinate() { Row = i, Column = column }] = 1;
+         }
+      }
+
       public static void Randomize(this Map map)
       {
          Random rand = new Random();

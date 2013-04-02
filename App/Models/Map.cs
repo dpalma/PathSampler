@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using PathFind.Core;
 using PathFind.Collections;
 
@@ -38,12 +39,17 @@ namespace PathFind.Models
             FirePropertyChanged("RowCount");
             if (goalAtBottomEdge)
             {
-               Goal = new GridCoordinate() { Column = Goal.Column, Row = RowCount - 1 };
+               var newGoal = new GridCoordinate() { Column = Goal.Column, Row = RowCount - 1 };
+               BlockedCells.Remove(newGoal);
+               Goal = newGoal;
             }
             if (startAtBottomEdge)
             {
-               Start = new GridCoordinate() { Column = Start.Column, Row = RowCount - 1 };
+               var newStart  = new GridCoordinate() { Column = Start.Column, Row = RowCount - 1 };
+               BlockedCells.Remove(newStart);
+               Start = newStart;
             }
+            RemoveOutOfBoundsBlockedCells();
          }
       }
       private int m_rowCount = DefaultRowColumnCount;
@@ -71,15 +77,37 @@ namespace PathFind.Models
             FirePropertyChanged("ColumnCount");
             if (goalAtRightEdge)
             {
-               Goal = new GridCoordinate() { Column = ColumnCount - 1, Row = Goal.Row };
+               var newGoal = new GridCoordinate() { Column = ColumnCount - 1, Row = Goal.Row };
+               BlockedCells.Remove(newGoal);
+               Goal = newGoal;
             }
             if (startAtRightEdge)
             {
-               Start = new GridCoordinate() { Column = ColumnCount - 1, Row = Start.Row };
+               var newStart = new GridCoordinate() { Column = ColumnCount - 1, Row = Start.Row };
+               BlockedCells.Remove(newStart);
+               Start = newStart;
             }
+            RemoveOutOfBoundsBlockedCells();
          }
       }
       private int m_columnCount = DefaultRowColumnCount;
+
+      private void RemoveOutOfBoundsBlockedCells()
+      {
+         var toRemove = (from k in BlockedCells.Keys
+                         where !IsInBounds(k)
+                         select k).ToList();
+         foreach (var c in toRemove)
+         {
+            BlockedCells.Remove(c);
+         }
+      }
+
+      public bool IsInBounds(GridCoordinate cell)
+      {
+         return cell.Row >= 0 && cell.Row < RowCount
+            && cell.Column >= 0 && cell.Column < ColumnCount;
+      }
 
       public IObservableDictionary<GridCoordinate, double> BlockedCells
       {
