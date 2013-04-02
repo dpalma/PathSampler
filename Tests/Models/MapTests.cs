@@ -197,5 +197,41 @@ namespace PathFindTests.Models
       {
          map.CellSizeScalar = Map.MaximumCellSizeScalar + 1;
       }
+
+      [Test]
+      public void TestGoalAtRightEdgeMovesWhenColumnCountIncreases()
+      {
+         Assert.AreEqual(map.ColumnCount - 1, map.Goal.Column);
+         map.ColumnCount = map.ColumnCount * 2;
+         Assert.AreEqual(map.ColumnCount - 1, map.Goal.Column);
+      }
+
+      [Test]
+      public void TestGoalAtBottomEdgeMovesWhenRowCountIncreases()
+      {
+         Assert.AreEqual(map.RowCount - 1, map.Goal.Row);
+         map.RowCount = map.RowCount * 2;
+         Assert.AreEqual(map.RowCount - 1, map.Goal.Row);
+      }
+
+      [Test]
+      public void TestStartAtRightEdgeMovesWhenColumnCountIncreases()
+      {
+         map.Goal = map.GetTopLeft();
+         map.Start = map.GetBottomRight();
+         Assert.AreEqual(map.ColumnCount - 1, map.Start.Column);
+         map.ColumnCount = map.ColumnCount * 2;
+         Assert.AreEqual(map.ColumnCount - 1, map.Start.Column);
+      }
+
+      [Test]
+      public void TestStartAtBottomEdgeMovesWhenRowCountIncreases()
+      {
+         map.Goal = map.GetTopLeft();
+         map.Start = map.GetBottomRight();
+         Assert.AreEqual(map.RowCount - 1, map.Start.Row);
+         map.RowCount = map.RowCount * 2;
+         Assert.AreEqual(map.RowCount - 1, map.Start.Row);
+      }
    }
 }

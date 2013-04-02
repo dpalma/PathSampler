@@ -31,9 +31,19 @@ namespace PathFind.Models
             {
                throw new ArgumentException("RowCount must be non-negative");
             }
+            bool goalAtBottomEdge = (Goal.Row == RowCount - 1);
+            bool startAtBottomEdge = (Start.Row == RowCount - 1);
             FirePropertyChanging("RowCount");
             m_rowCount = value;
             FirePropertyChanged("RowCount");
+            if (goalAtBottomEdge)
+            {
+               Goal = new GridCoordinate() { Column = Goal.Column, Row = RowCount - 1 };
+            }
+            if (startAtBottomEdge)
+            {
+               Start = new GridCoordinate() { Column = Start.Column, Row = RowCount - 1 };
+            }
          }
       }
       private int m_rowCount = DefaultRowColumnCount;
@@ -54,9 +64,19 @@ namespace PathFind.Models
             {
                throw new ArgumentException("ColumnCount must be non-negative");
             }
+            bool goalAtRightEdge = (Goal.Column == ColumnCount - 1);
+            bool startAtRightEdge = (Start.Column == ColumnCount - 1);
             FirePropertyChanging("ColumnCount");
             m_columnCount = value;
             FirePropertyChanged("ColumnCount");
+            if (goalAtRightEdge)
+            {
+               Goal = new GridCoordinate() { Column = ColumnCount - 1, Row = Goal.Row };
+            }
+            if (startAtRightEdge)
+            {
+               Start = new GridCoordinate() { Column = ColumnCount - 1, Row = Start.Row };
+            }
          }
       }
       private int m_columnCount = DefaultRowColumnCount;
