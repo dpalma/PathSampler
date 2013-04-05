@@ -449,8 +449,6 @@ namespace PathFind.ViewModels
 
             m_currentPath = value;
 
-            ClearCellColors();
-
             if (CurrentPath != null && CurrentPath.Count > 0)
             {
                if (Application.Current == null)
@@ -504,6 +502,10 @@ namespace PathFind.ViewModels
 
          ActivePathingTaskCompletionSource = StartPathingTask();
 
+         FirePropertyChanged("IsPathing");
+         FirePropertyChanged("CanStartPathing");
+         FirePropertyChanged("CanStopPathing");
+
          if (PathingStarted != null)
          {
             PathingStarted(this, EventArgs.Empty);
@@ -555,6 +557,8 @@ namespace PathFind.ViewModels
                   {
                      CurrentPath = (CurrentPathFinder.Path != null) ? CurrentPathFinder.Path.ToList() : EmptyPath;
 
+                     OnPathingDone();
+
                      if (PathingFinished != null)
                      {
                         PathingFinished(this, EventArgs.Empty);
@@ -581,7 +585,16 @@ namespace PathFind.ViewModels
             ActivePathingTaskCompletionSource.TrySetCanceled();
          }
 
+         OnPathingDone(true);
+      }
+
+      private void OnPathingDone(bool stopped = false)
+      {
          ClearCellColors();
+
+         FirePropertyChanged("IsPathing");
+         FirePropertyChanged("CanStartPathing");
+         FirePropertyChanged("CanStopPathing");
       }
 
       internal bool CanStopPathing

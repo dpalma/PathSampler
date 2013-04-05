@@ -324,6 +324,62 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
+      public void TestIsPathingPropertyChangesWhenPathingStarts()
+      {
+         MapVM vm = CreateFastPathingMapVM(4);
+         Assert.IsFalse(vm.IsPathing);
+         var propertiesChanged = new List<string>();
+         vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         vm.StartPathing();
+         Assert.IsTrue(vm.IsPathing);
+         Assert.IsTrue(propertiesChanged.Contains("IsPathing"));
+      }
+
+      [Test]
+      public void TestCanStartPathingPropertyChangesWhenPathingStarts()
+      {
+         MapVM vm = CreateFastPathingMapVM(4);
+         var propertiesChanged = new List<string>();
+         vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         vm.StartPathing();
+         Assert.IsTrue(propertiesChanged.Contains("CanStartPathing"));
+      }
+
+      [Test]
+      public void TestIsPathingPropertyChangesWhenPathingStops()
+      {
+         MapVM vm = CreateFastPathingMapVM(4);
+         var propertiesChanged = new List<string>();
+         vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         vm.StartPathing();
+         vm.StopPathing();
+         Assert.AreEqual(2, propertiesChanged.Count(x => x == "IsPathing"));
+      }
+
+      [Test]
+      public void TestCanStartPathingPropertyChangesWhenPathingStops()
+      {
+         MapVM vm = CreateFastPathingMapVM(4);
+         var propertiesChanged = new List<string>();
+         vm.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         vm.StartPathing();
+         vm.StopPathing();
+         Assert.AreEqual(2, propertiesChanged.Count(x => x == "CanStartPathing"));
+      }
+
+      [Test]
       public void TestSelectedCellsBinding()
       {
          MapVM vm = CreateDefaultMapVM(5);
