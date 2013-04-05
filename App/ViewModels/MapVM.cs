@@ -437,7 +437,7 @@ namespace PathFind.ViewModels
          {
             return m_currentPath;
          }
-         private set
+         set
          {
             if (CurrentPath != null)
             {
@@ -451,10 +451,13 @@ namespace PathFind.ViewModels
 
             ClearCellColors();
 
-            if (Application.Current == null)
-               AddCellVMs(CurrentPath);
-            else
-               Application.Current.Dispatcher.BeginInvoke(new AddCellVMsDelegate(AddCellVMs), CurrentPath);
+            if (CurrentPath != null && CurrentPath.Count > 0)
+            {
+               if (Application.Current == null)
+                  AddCellVMs(CurrentPath);
+               else
+                  Application.Current.Dispatcher.BeginInvoke(new AddCellVMsDelegate(AddCellVMs), CurrentPath);
+            }
 
             FirePropertyChanged("CurrentPath");
          }

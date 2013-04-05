@@ -169,7 +169,7 @@ namespace PathFindTests.ViewModels
       }
 
       [Test, MaxTime(PathTaskTimeout)]
-      public void TestOldPathCellVMsAreCleared()
+      public void TestOldPathCellVMsAreClearedByNewPath()
       {
          MapVM vm = CreateFastPathingMapVM(4);
 
@@ -193,6 +193,18 @@ namespace PathFindTests.ViewModels
          {
             Assert.IsTrue(vm.HasCell(c));
          }
+      }
+
+      [Test]
+      public void TestSettingCurrentPathNullRemovesCellVMs()
+      {
+         MapVM vm = CreateFastPathingMapVM(4);
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+         Assert.IsTrue(vm.CurrentPath.Count > 0);
+         Assert.AreEqual(vm.CurrentPath.Count, vm.Cells.Count);
+         vm.CurrentPath = null;
+         Assert.AreEqual(0, vm.Cells.Count);
       }
 
       [Test]
