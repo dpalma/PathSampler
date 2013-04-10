@@ -69,18 +69,28 @@ namespace PathFindTests.Models
          Assert.AreEqual(4, neighbors.Length);
       }
 
-      [Test]
-      [ExpectedException(typeof(ArgumentException))]
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "RowCount must be greater than zero")]
       public void TestSettingNegativeRowCountThrowsException()
       {
          map.RowCount = -1;
       }
 
-      [Test]
-      [ExpectedException(typeof(ArgumentException))]
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "ColumnCount must be greater than zero")]
       public void TestSettingNegativeColumnCountThrowsException()
       {
          map.ColumnCount = -1;
+      }
+
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "RowCount must be greater than zero")]
+      public void TestSettingRowCountToZeroThrowsException()
+      {
+         map.RowCount = 0;
+      }
+
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "ColumnCount must be greater than zero")]
+      public void TestSettingColumnCountToZeroThrowsException()
+      {
+         map.ColumnCount = 0;
       }
 
       [Test]

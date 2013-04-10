@@ -28,9 +28,9 @@ namespace PathFind.Models
             {
                return;
             }
-            if (value < 0)
+            if (value <= 0)
             {
-               throw new ArgumentException("RowCount must be non-negative");
+               throw new ArgumentException("RowCount must be greater than zero");
             }
             bool goalAtBottomEdge = (Goal.Row == RowCount - 1);
             bool startAtBottomEdge = (Start.Row == RowCount - 1);
@@ -66,9 +66,9 @@ namespace PathFind.Models
             {
                return;
             }
-            if (value < 0)
+            if (value <= 0)
             {
-               throw new ArgumentException("ColumnCount must be non-negative");
+               throw new ArgumentException("ColumnCount must be greater than zero");
             }
             bool goalAtRightEdge = (Goal.Column == ColumnCount - 1);
             bool startAtRightEdge = (Start.Column == ColumnCount - 1);
