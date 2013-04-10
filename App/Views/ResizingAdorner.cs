@@ -41,8 +41,7 @@ namespace PathFind.Views
          set { SetValue(MapProperty, value); }
       }
 
-      private double m_cumulativeHorizontalChange = 0;
-      private double m_cumulativeVerticalChange = 0;
+      private Point m_mousePositionAtDragStart;
 
       private int m_rowCountAtDragStart;
       private int m_columnCountAtDragStart;
@@ -52,6 +51,8 @@ namespace PathFind.Views
 
       void BottomRight_DragStarted(object sender, DragStartedEventArgs e)
       {
+         m_mousePositionAtDragStart = Mouse.GetPosition(AdornedElement);
+
          m_rowCountAtDragStart = Map.RowCount;
          m_columnCountAtDragStart = Map.ColumnCount;
 
@@ -59,18 +60,16 @@ namespace PathFind.Views
          MapVM mapVM = mapView.DataContext as MapVM;
          m_cellSize = mapVM.CellSize;
          m_gridLineSize = mapVM.GridLineSize;
-
-         m_cumulativeHorizontalChange = 0;
-         m_cumulativeVerticalChange = 0;
       }
 
       void BottomRight_DragDelta(object sender, DragDeltaEventArgs args)
       {
-         m_cumulativeHorizontalChange += args.HorizontalChange;
-         m_cumulativeVerticalChange += args.VerticalChange;
+         Point mousePosition = Mouse.GetPosition(AdornedElement);
 
-         int addRows = (int)(m_cumulativeVerticalChange / (m_cellSize.Height + m_gridLineSize));
-         int addCols = (int)(m_cumulativeHorizontalChange / (m_cellSize.Width + m_gridLineSize));
+         Vector displacement = mousePosition - m_mousePositionAtDragStart;
+
+         int addRows = (int)(displacement.Y / (m_cellSize.Height + m_gridLineSize));
+         int addCols = (int)(displacement.X / (m_cellSize.Width + m_gridLineSize));
 
          Map.RowCount = m_rowCountAtDragStart + addRows;
          Map.ColumnCount = m_columnCountAtDragStart + addCols;
