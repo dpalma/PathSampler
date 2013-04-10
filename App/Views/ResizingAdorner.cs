@@ -71,8 +71,18 @@ namespace PathFind.Views
          int addRows = (int)(displacement.Y / (m_cellSize.Height + m_gridLineSize));
          int addCols = (int)(displacement.X / (m_cellSize.Width + m_gridLineSize));
 
-         Map.RowCount = m_rowCountAtDragStart + addRows;
-         Map.ColumnCount = m_columnCountAtDragStart + addCols;
+         int newRowCount = m_rowCountAtDragStart + addRows;
+         int newColumnCount = m_columnCountAtDragStart + addCols;
+
+         if (newRowCount > 0)
+         {
+            Map.RowCount = newRowCount;
+         }
+
+         if (newColumnCount > 0)
+         {
+            Map.ColumnCount = newColumnCount;
+         }
       }
 
       protected override Size ArrangeOverride(Size finalSize)
