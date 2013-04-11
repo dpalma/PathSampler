@@ -405,27 +405,40 @@ namespace PathFind.ViewModels
       }
       private Type m_selectedPathingAlgorithm;
 
-      delegate void RemoveCellVMsDelegate(System.Collections.IList cells);
+      private delegate void RemoveCellVMsDelegate(System.Collections.IList cells);
 
       private void RemoveCellVMs(System.Collections.IList cells)
       {
-         var toRemove = (from c in Cells
-                         where cells.Contains(c.Cell)
-                         select c).ToList();
-
-         foreach (var cellVM in toRemove)
+         if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
-            Cells.Remove(cellVM);
+            var toRemove = (from c in Cells
+                            where cells.Contains(c.Cell)
+                            select c).ToList();
+            foreach (var cellVM in toRemove)
+            {
+               Cells.Remove(cellVM);
+            }
+         }
+         else
+         {
+            Application.Current.Dispatcher.BeginInvoke(new RemoveCellVMsDelegate(RemoveCellVMs), CurrentPath);
          }
       }
 
-      delegate void AddCellVMsDelegate(System.Collections.IList cells);
+      private delegate void AddCellVMsDelegate(System.Collections.IList cells);
 
       private void AddCellVMs(System.Collections.IList cells)
       {
-         foreach (var cell in cells)
+         if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
-            Cells.Add(new CellVM(this, cell as GridCoordinate));
+            foreach (var cell in cells)
+            {
+               Cells.Add(new CellVM(this, cell as GridCoordinate));
+            }
+         }
+         else
+         {
+            Application.Current.Dispatcher.BeginInvoke(new AddCellVMsDelegate(AddCellVMs), CurrentPath);
          }
       }
 
@@ -441,20 +454,14 @@ namespace PathFind.ViewModels
          {
             if (CurrentPath != null)
             {
-               if (Application.Current == null)
-                  RemoveCellVMs(CurrentPath);
-               else
-                  Application.Current.Dispatcher.BeginInvoke(new RemoveCellVMsDelegate(RemoveCellVMs), CurrentPath);
+               RemoveCellVMs(CurrentPath);
             }
 
             m_currentPath = value;
 
             if (CurrentPath != null && CurrentPath.Count > 0)
             {
-               if (Application.Current == null)
-                  AddCellVMs(CurrentPath);
-               else
-                  Application.Current.Dispatcher.BeginInvoke(new AddCellVMsDelegate(AddCellVMs), CurrentPath);
+               AddCellVMs(CurrentPath);
             }
 
             FirePropertyChanged("CurrentPath");
