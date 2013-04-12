@@ -91,7 +91,7 @@ namespace PathFind.ViewModels
          {
             foreach (GridCoordinate cell in e.NewItems)
             {
-               Cells.Add(new CellVM(this, cell));
+               AddCellVMs(e.NewItems);
             }
          }
          else if (e.Action == NotifyCollectionChangedAction.Remove)

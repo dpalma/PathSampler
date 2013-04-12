@@ -134,9 +134,9 @@ namespace PathFind.Models
             {
                return;
             }
-            if (value.Row < 0 || value.Row >= RowCount)
+            if (!IsInBounds(value))
             {
-               throw new ArgumentException("Start's row is outside the extents of the map");
+               throw new ArgumentException("Cell is out of bounds");
             }
             if (BlockedCells.ContainsKey(value))
             {
@@ -165,9 +165,9 @@ namespace PathFind.Models
             {
                return;
             }
-            if (value.Row < 0 || value.Row >= RowCount)
+            if (!IsInBounds(value))
             {
-               throw new ArgumentException("Goal's row is outside the extents of the map");
+               throw new ArgumentException("Cell is out of bounds");
             }
             if (BlockedCells.ContainsKey(value))
             {

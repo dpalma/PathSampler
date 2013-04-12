@@ -93,29 +93,37 @@ namespace PathFindTests.Models
          map.ColumnCount = 0;
       }
 
-      [Test]
-      [ExpectedException(typeof(ArgumentException))]
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
       public void TestSettingAboveRowRangeGoalThrowsException()
       {
          map.Goal = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 };
       }
 
-      [Test]
-      [ExpectedException(typeof(ArgumentException))]
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
       public void TestSettingBelowRowRangeGoalThrowsException()
       {
          map.Goal = new GridCoordinate() { Column = 0, Row = -1 };
       }
 
-      [Test]
-      [ExpectedException(typeof(ArgumentException))]
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
+      public void TestSettingBelowColumnRangeGoalThrowsException()
+      {
+         map.Goal = new GridCoordinate() { Column = -1, Row = 0 };
+      }
+
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
       public void TestSettingAboveRowRangeStartThrowsException()
       {
          map.Start = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 };
       }
 
-      [Test]
-      [ExpectedException(typeof(ArgumentException))]
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
+      public void TestSettingAboveColumnRangeStartThrowsException()
+      {
+         map.Start = new GridCoordinate() { Column = map.ColumnCount + 1, Row = 0 };
+      }
+
+      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
       public void TestSettingBelowRowRangeStartThrowsException()
       {
          map.Start = new GridCoordinate() { Column = 0, Row = -1 };
@@ -138,6 +146,7 @@ namespace PathFindTests.Models
             Map loadedMap = (Map)formatter.Deserialize(stream);
             Assert.AreEqual(map.RowCount, loadedMap.RowCount);
             Assert.AreEqual(map.ColumnCount, loadedMap.ColumnCount);
+            Assert.AreEqual(map.CellSizeScalar, loadedMap.CellSizeScalar);
             Assert.AreEqual(map.Start, loadedMap.Start);
             Assert.AreEqual(map.Goal, loadedMap.Goal);
          }
