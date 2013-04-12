@@ -49,9 +49,9 @@
             <v:MapView x:Name="mapView1" SelectedCellBrush="{Binding Path=SelectedCellBrush}" RowCount="{Binding Path=RowCount}" ColumnCount="{Binding Path=ColumnCount}" Width="{Binding Path=MapWidth}" Height="{Binding Path=MapHeight}" SnapsToDevicePixels="True" SelectedCells="{Binding Path=SelectedCells}" StartCellBrush="{Binding Path=StartCellBrush}" GoalCellBrush="{Binding Path=GoalCellBrush}" GoalCell="{Binding Path=Goal}" StartCell="{Binding Path=Start}" DataContext="{Binding Path=MapVM}" GridLineSize="{Binding Path=GridLineSize}" CellSize="{Binding Path=CellSize}" ItemsSource="{Binding Path=Cells}">
             </v:MapView>
         </ScrollViewer>
-        <ToolBarTray Height="26" Name="toolBarTray1" VerticalAlignment="Top" Grid.Row="1">
-            <ToolBar Height="26" HorizontalAlignment="Left" Name="pathToolBar" VerticalAlignment="Center" Width="350">
-                <ComboBox HorizontalAlignment="Left" Name="comboBox1" VerticalAlignment="Top" Width="150" ItemsSource="{Binding Path=MapVM.PathingAlgorithms}" SelectedItem="{Binding Path=MapVM.SelectedPathingAlgorithm}" IsEnabled="{Binding Path=MapVM.CanStartPathing}">
+        <ToolBarTray Height="Auto" Name="toolBarTray1" VerticalAlignment="Top" Grid.Row="1">
+            <ToolBar Height="Auto" HorizontalAlignment="Left" Name="pathToolBar" VerticalAlignment="Center" Width="350">
+                <ComboBox HorizontalAlignment="Left" Name="comboBox1" VerticalAlignment="Center" Width="150" ItemsSource="{Binding Path=MapVM.PathingAlgorithms}" SelectedItem="{Binding Path=MapVM.SelectedPathingAlgorithm}" IsEnabled="{Binding Path=MapVM.CanStartPathing}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource displayNameConverter}}"></TextBlock>
