@@ -58,11 +58,14 @@ namespace PathFind.ViewModels
 
             m_map = value;
 
+            InitializeCells();
+
             FirePropertyChanged("Map");
 
             ConnectMapEventHandlers();
          }
       }
+
       private Map m_map;
 
       private void ConnectMapEventHandlers()
@@ -70,6 +73,7 @@ namespace PathFind.ViewModels
          if (Map != null)
          {
             Map.PropertyChanged += new PropertyChangedEventHandler(Map_PropertyChanged);
+            Map.PropertyChanging += new PropertyChangingEventHandler(Map_PropertyChanging);
             Map.BlockedCells.CollectionChanged += new NotifyCollectionChangedEventHandler(BlockedCells_CollectionChanged);
          }
       }
@@ -79,8 +83,16 @@ namespace PathFind.ViewModels
          if (Map != null)
          {
             Map.PropertyChanged -= new PropertyChangedEventHandler(Map_PropertyChanged);
+            Map.PropertyChanging -= new PropertyChangingEventHandler(Map_PropertyChanging);
             Map.BlockedCells.CollectionChanged -= new NotifyCollectionChangedEventHandler(BlockedCells_CollectionChanged);
          }
+      }
+
+      private void InitializeCells()
+      {
+         Cells.Clear();
+         Cells.Add(new CellVM(this, Map.Goal));
+         Cells.Add(new CellVM(this, Map.Start));
       }
 
       void BlockedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -100,12 +112,14 @@ namespace PathFind.ViewModels
          }
          else if (e.Action == NotifyCollectionChangedAction.Reset)
          {
-            Cells.Clear();
+            InitializeCells();
          }
       }
 
       private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
       {
+         Map map = sender as Map;
+
          bool stopPathingTask = true;
 
          if (e.PropertyName == "BlockedCells")
@@ -128,6 +142,14 @@ namespace PathFind.ViewModels
             FirePropertyChanged("MapWidth"); // MapWidth depends upon CellSize
             FirePropertyChanged("MapHeight"); // MapHeight depends upon CellSize
          }
+         else if (e.PropertyName == "Start")
+         {
+            AddCellVMs(new List<GridCoordinate>() { map.Start });
+         }
+         else if (e.PropertyName == "Goal")
+         {
+            AddCellVMs(new List<GridCoordinate>() { map.Goal });
+         }
 
          if (stopPathingTask)
          {
@@ -136,6 +158,20 @@ namespace PathFind.ViewModels
 
          FirePropertyChanged(e.PropertyName);
          FireRedrawRequested();
+      }
+
+      private void Map_PropertyChanging(object sender, PropertyChangingEventArgs e)
+      {
+         Map map = sender as Map;
+
+         if (e.PropertyName == "Start")
+         {
+            RemoveCellVMs(new List<GridCoordinate>() { map.Start });
+         }
+         else if (e.PropertyName == "Goal")
+         {
+            RemoveCellVMs(new List<GridCoordinate>() { map.Goal });
+         }
       }
 
       private void FireRedrawRequestedWhenOnProperThread()
@@ -405,6 +441,18 @@ namespace PathFind.ViewModels
       }
       private Type m_selectedPathingAlgorithm;
 
+      private void PruneCellVMs()
+      {
+         if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
+         {
+            // TODO
+         }
+         else
+         {
+            Application.Current.Dispatcher.BeginInvoke(new MethodInvoker(PruneCellVMs));
+         }
+      }
+
       private delegate void RemoveCellVMsDelegate(System.Collections.IList cells);
 
       private void RemoveCellVMs(System.Collections.IList cells)
@@ -421,7 +469,7 @@ namespace PathFind.ViewModels
          }
          else
          {
-            Application.Current.Dispatcher.BeginInvoke(new RemoveCellVMsDelegate(RemoveCellVMs), CurrentPath);
+            Application.Current.Dispatcher.BeginInvoke(new RemoveCellVMsDelegate(RemoveCellVMs), cells);
          }
       }
 
@@ -438,7 +486,7 @@ namespace PathFind.ViewModels
          }
          else
          {
-            Application.Current.Dispatcher.BeginInvoke(new AddCellVMsDelegate(AddCellVMs), CurrentPath);
+            Application.Current.Dispatcher.BeginInvoke(new AddCellVMsDelegate(AddCellVMs), cells);
          }
       }
 
@@ -454,14 +502,32 @@ namespace PathFind.ViewModels
          {
             if (CurrentPath != null)
             {
-               RemoveCellVMs(CurrentPath);
+               var toRemove = new List<GridCoordinate>();
+               foreach (var c in CurrentPath)
+               {
+                  if (c.Equals(Map.Goal) || c.Equals(Map.Start))
+                  {
+                     continue;
+                  }
+                  toRemove.Add(c);
+               }
+               RemoveCellVMs(toRemove);
             }
 
             m_currentPath = value;
 
             if (CurrentPath != null && CurrentPath.Count > 0)
             {
-               AddCellVMs(CurrentPath);
+               var toAdd = new List<GridCoordinate>();
+               foreach (var c in CurrentPath)
+               {
+                  if (c.Equals(Map.Goal) || c.Equals(Map.Start))
+                  {
+                     continue;
+                  }
+                  toAdd.Add(c);
+               }
+               AddCellVMs(toAdd);
             }
 
             FirePropertyChanged("CurrentPath");

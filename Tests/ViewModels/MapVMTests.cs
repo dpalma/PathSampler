@@ -204,7 +204,18 @@ namespace PathFindTests.ViewModels
          Assert.IsTrue(vm.CurrentPath.Count > 0);
          Assert.AreEqual(vm.CurrentPath.Count, vm.Cells.Count);
          vm.CurrentPath = null;
-         Assert.AreEqual(0, vm.Cells.Count);
+         Assert.AreEqual(2, vm.Cells.Count);
+      }
+
+      [Test]
+      public void TestClearingCurrentPathDoesNotRemoveStartAndGoalCellVMs()
+      {
+         MapVM vm = CreateFastPathingMapVM(4);
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+         vm.CurrentPath = null;
+         Assert.IsTrue(vm.HasCell(vm.Map.Goal));
+         Assert.IsTrue(vm.HasCell(vm.Map.Start));
       }
 
       [Test]
@@ -269,9 +280,9 @@ namespace PathFindTests.ViewModels
       public void TestAddingBlockedCellToMapAddsACellViewModel()
       {
          MapVM vm = CreateDefaultMapVM(5);
-         Assert.AreEqual(0, vm.Cells.Count);
+         Assert.AreEqual(0 + 2, vm.Cells.Count);
          vm.Map.BlockedCells.Add(vm.Map.GetCenter(), 1);
-         Assert.AreEqual(1, vm.Cells.Count);
+         Assert.AreEqual(1 + 2, vm.Cells.Count);
       }
 
       [Test]
@@ -279,9 +290,39 @@ namespace PathFindTests.ViewModels
       {
          MapVM vm = CreateDefaultMapVM(5);
          vm.Map.BlockedCells.Add(vm.Map.GetCenter(), 1);
-         Assert.AreEqual(1, vm.Cells.Count);
+         Assert.AreEqual(1 + 2, vm.Cells.Count);
          Assert.IsTrue(vm.Map.BlockedCells.Remove(vm.Map.GetCenter()));
-         Assert.AreEqual(0, vm.Cells.Count);
+         Assert.AreEqual(0 + 2, vm.Cells.Count);
+      }
+
+      [Test]
+      public void TestNewMapHasViewModelsForStartAndGoalCells()
+      {
+         MapVM vm = CreateDefaultMapVM(10);
+         Assert.IsTrue(vm.HasCell(vm.Map.Goal));
+         Assert.IsTrue(vm.HasCell(vm.Map.Start));
+      }
+
+      [Test]
+      public void TestStartCellViewModelChangesWhenMapStartPropertyChanges()
+      {
+         MapVM vm = CreateDefaultMapVM(12);
+         Assert.IsTrue(vm.HasCell(vm.Map.Start));
+         GridCoordinate oldStart = vm.Map.Start;
+         vm.Map.Start = vm.Map.GetBottomLeft();
+         Assert.IsFalse(vm.HasCell(oldStart));
+         Assert.IsTrue(vm.HasCell(vm.Map.Start));
+      }
+
+      [Test]
+      public void TestGoalCellViewModelChangesWhenMapGoalPropertyChanges()
+      {
+         MapVM vm = CreateDefaultMapVM(12);
+         Assert.IsTrue(vm.HasCell(vm.Map.Goal));
+         GridCoordinate oldGoal = vm.Map.Goal;
+         vm.Map.Goal = vm.Map.GetBottomLeft();
+         Assert.IsFalse(vm.HasCell(oldGoal));
+         Assert.IsTrue(vm.HasCell(vm.Map.Goal));
       }
 
       [Test]
@@ -289,9 +330,9 @@ namespace PathFindTests.ViewModels
       {
          MapVM vm = CreateDefaultMapVM(5);
          vm.Map.Randomize();
-         Assert.AreEqual(vm.Map.BlockedCells.Count, vm.Cells.Count);
+         Assert.AreEqual(vm.Map.BlockedCells.Count + 2, vm.Cells.Count);
          vm.Map.Assign(new Map());
-         Assert.AreEqual(0, vm.Cells.Count);
+         Assert.AreEqual(0 + 2, vm.Cells.Count);
       }
 
       [Test]

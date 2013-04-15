@@ -21,6 +21,12 @@
                     </MultiDataTrigger.Conditions>
                     <Setter TargetName="cellBody" Property="Fill" Value="MediumSeaGreen" />
                 </MultiDataTrigger>
+                <DataTrigger Binding="{Binding Path=IsGoal}" Value="True">
+                    <Setter TargetName="cellBody" Property="Fill" Value="Red" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=IsStart}" Value="True">
+                    <Setter TargetName="cellBody" Property="Fill" Value="Green" />
+                </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
     </ItemsControl.Resources>

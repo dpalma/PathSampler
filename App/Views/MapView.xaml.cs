@@ -106,8 +106,6 @@ namespace PathFind.Views
 
          DrawColoredCells(drawingContext);
 
-         DrawStartAndGoalCells(drawingContext);
-
          if (SelectedCells != null && SelectedCells.Count > 0)
          {
             DrawSelectedCells(drawingContext);
@@ -180,28 +178,9 @@ namespace PathFind.Views
          set { SetValue(GoalCellProperty, value); }
       }
 
-      private void DrawStartAndGoalCells(DrawingContext dc)
-      {
-         if (GoalCell != null)
-         {
-            DrawCellEllipse(dc, GoalCell, GoalCellBrush);
-         }
-
-         if (StartCell != null)
-         {
-            DrawCellEllipse(dc, StartCell, StartCellBrush);
-         }
-      }
-
       private static Point RectCenter(Rect rect)
       {
          return new Point((rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2);
-      }
-
-      private void DrawCellEllipse(DrawingContext dc, GridCoordinate cell, Brush brush, Pen pen = null)
-      {
-         Rect cellRect = GetCellRect(cell);
-         dc.DrawEllipse(brush, pen, RectCenter(cellRect), cellRect.Width / 2, cellRect.Height / 2);
       }
 
       private static readonly DependencyProperty SelectedCellBrushProperty = DependencyProperty.Register("SelectedCellBrush", typeof(Brush), typeof(MapView));
