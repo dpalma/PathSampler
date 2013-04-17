@@ -36,11 +36,6 @@ namespace PathFind.ViewModels
                                      select t).Single();
       }
 
-      void ColoredCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-      {
-         FireRedrawRequested();
-      }
-
       public Map Map
       {
          get
@@ -95,10 +90,20 @@ namespace PathFind.ViewModels
          Cells.Add(new CellVM(this, Map.Start));
       }
 
+      void ColoredCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+      {
+         FireRedrawRequested();
+
+         //UpdateCells(e);
+      }
+
       void BlockedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         FireRedrawRequested(); // TODO: this might not actually be needed
+         UpdateCells(e);
+      }
 
+      private void UpdateCells(NotifyCollectionChangedEventArgs e)
+      {
          if (e.Action == NotifyCollectionChangedAction.Add)
          {
             foreach (GridCoordinate cell in e.NewItems)
@@ -112,7 +117,7 @@ namespace PathFind.ViewModels
          }
          else if (e.Action == NotifyCollectionChangedAction.Reset)
          {
-            InitializeCells();
+            PruneCellVMs();
          }
       }
 
@@ -445,7 +450,13 @@ namespace PathFind.ViewModels
       {
          if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
-            // TODO
+            var toRemove = (from c in Cells
+                            where !c.IsBlocked && !c.IsStart && !c.IsGoal && !c.IsOnPath
+                            select c).ToList();
+            foreach (var cellVM in toRemove)
+            {
+               Cells.Remove(cellVM);
+            }
          }
          else
          {
@@ -707,7 +718,7 @@ namespace PathFind.ViewModels
          ColoredCells[cell] = brush;
       }
 
-      private void ClearCellColors()
+      public void ClearCellColors()
       {
          ColoredCells.Clear();
       }

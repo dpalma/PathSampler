@@ -29,20 +29,6 @@ namespace PathFindTests.ViewModels
       }
 
       [Test]
-      public void TestMapChangeTriggersRedrawRequest()
-      {
-         MapVM vm = CreateDefaultMapVM(8);
-         var redrawRequests = new List<EventArgs>();
-         vm.RedrawRequested += (sender, eventArgs) =>
-            {
-               redrawRequests.Add(eventArgs);
-            };
-         GridCoordinate cell = new GridCoordinate() { Row = 1, Column = 1 };
-         vm.Map.BlockedCells[cell] = 1;
-         Assert.AreEqual(1, redrawRequests.Count);
-      }
-
-      [Test]
       public void TestSelectSameCellTwiceOnlyAddsOnce()
       {
          MapVM vm = CreateDefaultMapVM(8);
@@ -52,11 +38,13 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(1, vm.SelectedCells.Count);
       }
 
-      //[Test]
-      //public void TestStartPathingTwiceDoesntThrowException()
-      //{
-      //   mapVM.StartPathingCommand.Execute(null);
-      //   mapVM.StartPathingCommand.Execute(null);
+      [Test, ExpectedException(typeof(InvalidOperationException), ExpectedMessage="Pathing already running")]
+      public void TestStartPathingTwiceThrowsException()
+      {
+         MapVM vm = CreateDefaultMapVM(10);
+         vm.StartPathing();
+         vm.StartPathing();
+      }
 
       [Test]
       public void TestPathingAlgorithmImplementationsAreCollected()
@@ -293,6 +281,37 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(1 + 2, vm.Cells.Count);
          Assert.IsTrue(vm.Map.BlockedCells.Remove(vm.Map.GetCenter()));
          Assert.AreEqual(0 + 2, vm.Cells.Count);
+      }
+
+      [Ignore]
+      [Test]
+      public void TestSettingCellColorAddsACellViewModel()
+      {
+         MapVM vm = CreateDefaultMapVM(15);
+         int preCellCount = vm.Cells.Count;
+         vm.SetCellColor(vm.Map.GetCenter(), PathFind.PathFinders.CellColor.Open);
+         Assert.IsTrue(vm.HasCell(vm.Map.GetCenter()));
+         Assert.AreEqual(preCellCount + 1, vm.Cells.Count);
+      }
+
+      [Ignore]
+      [Test]
+      public void TestClearingCellColorsRemovesColoredCellViewModels()
+      {
+         MapVM vm = CreateDefaultMapVM(15);
+         int preCellCount = vm.Cells.Count;
+         var coloredCells = new List<GridCoordinate>() { vm.Map.GetCenter(), vm.Map.GetTopRight() }.AsReadOnly();
+         foreach (var c in coloredCells)
+         {
+            vm.SetCellColor(c, PathFind.PathFinders.CellColor.Open);
+            Assert.IsTrue(vm.HasCell(c));
+         }
+         Assert.AreEqual(preCellCount + coloredCells.Count, vm.Cells.Count);
+         vm.ClearCellColors();
+         foreach (var c in coloredCells)
+         {
+            Assert.IsFalse(vm.HasCell(c));
+         }
       }
 
       [Test]
