@@ -94,7 +94,7 @@ namespace PathFind.ViewModels
       {
          FireRedrawRequested();
 
-         //UpdateCells(e);
+         UpdateCells(e);
       }
 
       void BlockedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

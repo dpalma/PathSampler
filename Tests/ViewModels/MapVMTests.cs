@@ -292,7 +292,6 @@ namespace PathFindTests.ViewModels
          Assert.IsTrue(vm.HasCell(vm.Map.Goal));
       }
 
-      [Ignore]
       [Test]
       public void TestSettingCellColorAddsACellViewModel()
       {
@@ -303,7 +302,6 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(preCellCount + 1, vm.Cells.Count);
       }
 
-      [Ignore]
       [Test]
       public void TestClearingCellColorsRemovesColoredCellViewModels()
       {
