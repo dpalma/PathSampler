@@ -26,5 +26,23 @@ namespace PathFindTests.ViewModels
          mapVM.Map.BlockedCells[mapVM.Map.GetCenter()] = 1;
          Assert.IsTrue(cellVM.IsBlocked);
       }
+
+      [Test]
+      public void TestIsInOpenListIsTrueWhenCellColorIsOpen()
+      {
+         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathFind.PathFinders.CellColor.Open);
+         CellVM cellVM = mapVM.GetCell(mapVM.Map.GetCenter());
+         Assert.IsNotNull(cellVM);
+         Assert.IsTrue(cellVM.IsInOpenList);
+      }
+
+      [Test]
+      public void TestIsInClosedListIsTrueWhenCellColorIsClosed()
+      {
+         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathFind.PathFinders.CellColor.Closed);
+         CellVM cellVM = mapVM.GetCell(mapVM.Map.GetCenter());
+         Assert.IsNotNull(cellVM);
+         Assert.IsTrue(cellVM.IsInClosedList);
+      }
    }
 }

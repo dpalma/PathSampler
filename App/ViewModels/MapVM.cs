@@ -702,6 +702,16 @@ namespace PathFind.ViewModels
          get { return m_coloredCells; }
       }
 
+      public CellColor? GetCellColor(GridCoordinate cell)
+      {
+         Brush brush;
+         if (ColoredCells.TryGetValue(cell, out brush))
+         {
+            return brush == Brushes.Orange ? CellColor.Open : CellColor.Closed;
+         }
+         return null;
+      }
+
       public void SetCellColor(GridCoordinate cell, CellColor color)
       {
          if (Map.BlockedCells.ContainsKey(cell))

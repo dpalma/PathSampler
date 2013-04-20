@@ -9,9 +9,14 @@ namespace PathFindTests
 {
    public static class MapVMUtilsForTesting
    {
+      public static CellVM GetCell(this MapVM mapVM, GridCoordinate cell)
+      {
+         return mapVM.Cells.Where(x => x.Cell.Equals(cell)).SingleOrDefault();
+      }
+
       public static bool HasCell(this MapVM mapVM, GridCoordinate cell)
       {
-         return mapVM.Cells.Where(x => x.Cell.Equals(cell)).SingleOrDefault() != null;
+         return mapVM.GetCell(cell) != null;
       }
    }
 }

@@ -64,6 +64,24 @@ namespace PathFind.ViewModels
          }
       }
 
+      public bool IsInOpenList
+      {
+         get
+         {
+            PathFind.PathFinders.CellColor? color = MapVM.GetCellColor(Cell);
+            return color.HasValue && color.Value == PathFinders.CellColor.Open;
+         }
+      }
+
+      public bool IsInClosedList
+      {
+         get
+         {
+            PathFind.PathFinders.CellColor? color = MapVM.GetCellColor(Cell);
+            return color.HasValue && color.Value == PathFinders.CellColor.Closed;
+         }
+      }
+
       public Point CellPoint
       {
          get
