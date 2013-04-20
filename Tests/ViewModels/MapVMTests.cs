@@ -283,6 +283,15 @@ namespace PathFindTests.ViewModels
          Assert.AreEqual(0 + 2, vm.Cells.Count);
       }
 
+      [Test]
+      public void TestBlockingTheGoalCellDoesNotCreateRedundantCellVM()
+      {
+         MapVM vm = CreateDefaultMapVM(5);
+         vm.Map.BlockedCells.Add(vm.Map.Goal, 1);
+         Assert.AreEqual(2, vm.Cells.Count);
+         Assert.IsTrue(vm.HasCell(vm.Map.Goal));
+      }
+
       [Ignore]
       [Test]
       public void TestSettingCellColorAddsACellViewModel()

@@ -106,10 +106,7 @@ namespace PathFind.ViewModels
       {
          if (e.Action == NotifyCollectionChangedAction.Add)
          {
-            foreach (GridCoordinate cell in e.NewItems)
-            {
-               AddCellVMs(e.NewItems);
-            }
+            AddCellVMs(e.NewItems);
          }
          else if (e.Action == NotifyCollectionChangedAction.Remove)
          {
@@ -490,8 +487,15 @@ namespace PathFind.ViewModels
       {
          if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
+            var existing = (from c in Cells
+                            where cells.Contains(c.Cell)
+                            select c.Cell).ToList();
             foreach (var cell in cells)
             {
+               if (existing.Contains(cell))
+               {
+                  continue;
+               }
                Cells.Add(new CellVM(this, cell as GridCoordinate));
             }
          }
