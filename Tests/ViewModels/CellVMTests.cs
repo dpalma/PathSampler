@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using PathFind.Models;
 using PathFind.ViewModels;
+using System.ComponentModel;
 
 namespace PathFindTests.ViewModels
 {
@@ -43,6 +44,21 @@ namespace PathFindTests.ViewModels
          CellVM cellVM = mapVM.GetCell(mapVM.Map.GetCenter());
          Assert.IsNotNull(cellVM);
          Assert.IsTrue(cellVM.IsInClosedList);
+      }
+
+      [Test]
+      public void TestPropertyChangeNotificationHappensWhenColorChanges()
+      {
+         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathFind.PathFinders.CellColor.Open);
+         CellVM cellVM = mapVM.GetCell(mapVM.Map.GetCenter());
+         var propertiesChanged = new List<string>();
+         cellVM.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
+         {
+            propertiesChanged.Add(eventArgs.PropertyName);
+         };
+         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathFind.PathFinders.CellColor.Closed);
+         Assert.IsTrue(propertiesChanged.Contains("IsInOpenList"));
+         Assert.IsTrue(propertiesChanged.Contains("IsInClosedList"));
       }
    }
 }

@@ -27,6 +27,22 @@
                 <DataTrigger Binding="{Binding Path=IsStart}" Value="True">
                     <Setter TargetName="cellBody" Property="Fill" Value="Green" />
                 </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Path=IsGoal}" Value="False" />
+                        <Condition Binding="{Binding Path=IsStart}" Value="False" />
+                        <Condition Binding="{Binding Path=IsInOpenList}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="cellBody" Property="Fill" Value="Orange" />
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Path=IsGoal}" Value="False" />
+                        <Condition Binding="{Binding Path=IsStart}" Value="False" />
+                        <Condition Binding="{Binding Path=IsInClosedList}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="cellBody" Property="Fill" Value="Gray" />
+                </MultiDataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
     </ItemsControl.Resources>

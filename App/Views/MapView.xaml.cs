@@ -104,8 +104,6 @@ namespace PathFind.Views
 
          drawingContext.DrawRectangle(Brushes.White, null, new Rect(new Size(ActualWidth, ActualHeight)));
 
-         DrawColoredCells(drawingContext);
-
          if (SelectedCells != null && SelectedCells.Count > 0)
          {
             DrawSelectedCells(drawingContext);
@@ -131,36 +129,6 @@ namespace PathFind.Views
       {
          Point cellPoint = new Point(cell.Column * (CellSize.Width + GridLineSize) + GridLineSize, cell.Row * (CellSize.Height + GridLineSize) + GridLineSize);
          return new Rect(cellPoint, CellSize);
-      }
-
-      private void DrawColoredCells(DrawingContext dc)
-      {
-         MapVM vm = DataContext as MapVM;
-         if (vm != null)
-         {
-            if (Monitor.TryEnter(vm.ColoredCells))
-            {
-               foreach (var entry in vm.ColoredCells)
-               {
-                  dc.DrawRectangle(entry.Value, null, GetCellRect(entry.Key));
-               }
-            }
-         }
-      }
-
-      private static readonly DependencyProperty GoalCellBrushProperty = DependencyProperty.Register("GoalCellBrush", typeof(Brush), typeof(MapView));
-      private static readonly DependencyProperty StartCellBrushProperty = DependencyProperty.Register("StartCellBrush", typeof(Brush), typeof(MapView));
-
-      public Brush StartCellBrush
-      {
-         get { return (Brush)GetValue(StartCellBrushProperty); }
-         set { SetValue(StartCellBrushProperty, value); }
-      }
-
-      public Brush GoalCellBrush
-      {
-         get { return (Brush)GetValue(GoalCellBrushProperty); }
-         set { SetValue(GoalCellBrushProperty, value); }
       }
 
       private static readonly DependencyProperty GoalCellProperty = DependencyProperty.Register("GoalCell", typeof(GridCoordinate), typeof(MapView));

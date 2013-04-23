@@ -82,6 +82,12 @@ namespace PathFind.ViewModels
          }
       }
 
+      internal void OnColorChanged()
+      {
+         FirePropertyChanged("IsInOpenList");
+         FirePropertyChanged("IsInClosedList");
+      }
+
       public Point CellPoint
       {
          get

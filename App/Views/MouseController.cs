@@ -75,13 +75,13 @@ namespace PathFind.Views
                if (hitCell.Equals(MapViewModel.Map.Goal))
                {
                   Command = MapViewModel.SetGoalCommand;
-                  MapViewModel.SelectedCellBrush = MapViewModel.GoalCellBrush;
+                  //MapViewModel.SelectedCellBrush = MapViewModel.GoalCellBrush;
                   CellSelectionBehavior = CellSelectSingle;
                }
                else if (hitCell.Equals(MapViewModel.Map.Start))
                {
                   Command = MapViewModel.SetStartCommand;
-                  MapViewModel.SelectedCellBrush = MapViewModel.StartCellBrush;
+                  //MapViewModel.SelectedCellBrush = MapViewModel.StartCellBrush;
                   CellSelectionBehavior = CellSelectSingle;
                }
                else if (MapViewModel.Map.BlockedCells.ContainsKey(hitCell))

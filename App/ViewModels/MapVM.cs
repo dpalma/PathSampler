@@ -92,8 +92,6 @@ namespace PathFind.ViewModels
 
       void ColoredCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         FireRedrawRequested();
-
          UpdateCells(e);
       }
 
@@ -297,34 +295,6 @@ namespace PathFind.ViewModels
          {
             m_selectedCellBrush = value;
             FirePropertyChanged("SelectedCellBrush");
-         }
-      }
-
-      private Brush m_startCellBrush = Brushes.Green;
-      public Brush StartCellBrush
-      {
-         get
-         {
-            return m_startCellBrush;
-         }
-         set
-         {
-            m_startCellBrush = value;
-            FirePropertyChanged("StartCellBrush");
-         }
-      }
-
-      private Brush m_goalCellBrush = Brushes.Red;
-      public Brush GoalCellBrush
-      {
-         get
-         {
-            return m_goalCellBrush;
-         }
-         set
-         {
-            m_goalCellBrush = value;
-            FirePropertyChanged("GoalCellBrush");
          }
       }
 
@@ -730,6 +700,13 @@ namespace PathFind.ViewModels
          }
 
          ColoredCells[cell] = brush;
+
+         var cellVM = (from cvm in Cells where cvm.Cell.Equals(cell) select cvm).SingleOrDefault();
+
+         if (cellVM != null)
+         {
+            cellVM.OnColorChanged();
+         }
       }
 
       public void ClearCellColors()
