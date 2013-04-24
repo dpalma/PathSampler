@@ -697,6 +697,9 @@ namespace PathFind.ViewModels
          {
             cellVM.OnColorChanged();
          }
+         else
+         {
+         }
       }
 
       public void ClearCellColors()

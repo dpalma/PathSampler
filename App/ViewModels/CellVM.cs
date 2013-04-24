@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using PathFind.Core;
+using PathFind.PathFinders;
 
 namespace PathFind.ViewModels
 {
@@ -64,11 +65,19 @@ namespace PathFind.ViewModels
          }
       }
 
+      public CellColor? CellColor
+      {
+         get
+         {
+            return MapVM.GetCellColor(Cell);
+         }
+      }
+
       public bool IsInOpenList
       {
          get
          {
-            PathFind.PathFinders.CellColor? color = MapVM.GetCellColor(Cell);
+            CellColor? color = CellColor;
             return color.HasValue && color.Value == PathFinders.CellColor.Open;
          }
       }
@@ -77,7 +86,7 @@ namespace PathFind.ViewModels
       {
          get
          {
-            PathFind.PathFinders.CellColor? color = MapVM.GetCellColor(Cell);
+            CellColor? color = CellColor;
             return color.HasValue && color.Value == PathFinders.CellColor.Closed;
          }
       }
