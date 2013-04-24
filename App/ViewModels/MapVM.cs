@@ -144,11 +144,11 @@ namespace PathFind.ViewModels
          }
          else if (e.PropertyName == "Start")
          {
-            AddCellVMs(new List<GridCoordinate>() { map.Start });
+            AddCellVM(new CellVM(this, map.Start));
          }
          else if (e.PropertyName == "Goal")
          {
-            AddCellVMs(new List<GridCoordinate>() { map.Goal });
+            AddCellVM(new CellVM(this, map.Goal));
          }
 
          if (stopPathingTask)
@@ -472,6 +472,26 @@ namespace PathFind.ViewModels
          else
          {
             Application.Current.Dispatcher.BeginInvoke(new AddCellVMsDelegate(AddCellVMs), cells);
+         }
+      }
+
+      private delegate void AddCellVMDelegate(CellVM cellVM);
+
+      private void AddCellVM(CellVM cellVM)
+      {
+         if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
+         {
+            var existing = (from c in Cells
+                            where c.Cell.Equals(cellVM.Cell)
+                            select c.Cell).SingleOrDefault();
+            if (existing == null)
+            {
+               Cells.Add(cellVM);
+            }
+         }
+         else
+         {
+            Application.Current.Dispatcher.BeginInvoke(new AddCellVMDelegate(AddCellVM), cellVM);
          }
       }
 
