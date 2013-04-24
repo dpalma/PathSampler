@@ -65,11 +65,19 @@ namespace PathFind.ViewModels
          }
       }
 
+      private CellColor? m_cellColor = null;
+
       public CellColor? CellColor
       {
          get
          {
-            return MapVM.GetCellColor(Cell);
+            return m_cellColor;
+         }
+         set
+         {
+            m_cellColor = value;
+            OnColorChanged();
+            FirePropertyChanged("CellColor");
          }
       }
 
@@ -91,7 +99,7 @@ namespace PathFind.ViewModels
          }
       }
 
-      internal void OnColorChanged()
+      private void OnColorChanged()
       {
          FirePropertyChanged("IsInOpenList");
          FirePropertyChanged("IsInClosedList");

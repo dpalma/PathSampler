@@ -24,8 +24,6 @@ namespace PathFind.ViewModels
       {
          Map = map;
 
-         ColoredCells.CollectionChanged += new NotifyCollectionChangedEventHandler(ColoredCells_CollectionChanged);
-
          var q = from t in Assembly.GetExecutingAssembly().GetTypes()
                  where t.IsClass && t.BaseType.Equals(typeof(PathFinder))
                  select t;
@@ -88,11 +86,6 @@ namespace PathFind.ViewModels
          Cells.Clear();
          Cells.Add(new CellVM(this, Map.Goal));
          Cells.Add(new CellVM(this, Map.Start));
-      }
-
-      void ColoredCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-      {
-         UpdateCells(e);
       }
 
       void BlockedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -417,12 +410,15 @@ namespace PathFind.ViewModels
       {
          if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
-            var toRemove = (from c in Cells
-                            where !c.IsBlocked && !c.IsStart && !c.IsGoal && !c.IsOnPath
-                            select c).ToList();
-            foreach (var cellVM in toRemove)
+            lock (Cells)
             {
-               Cells.Remove(cellVM);
+               var toRemove = (from c in Cells
+                               where !c.IsBlocked && !c.IsStart && !c.IsGoal && !c.IsOnPath
+                               select c).ToList();
+               foreach (var cellVM in toRemove)
+               {
+                  Cells.Remove(cellVM);
+               }
             }
          }
          else
@@ -437,12 +433,15 @@ namespace PathFind.ViewModels
       {
          if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
-            var toRemove = (from c in Cells
-                            where cells.Contains(c.Cell)
-                            select c).ToList();
-            foreach (var cellVM in toRemove)
+            lock (Cells)
             {
-               Cells.Remove(cellVM);
+               var toRemove = (from c in Cells
+                               where cells.Contains(c.Cell)
+                               select c).ToList();
+               foreach (var cellVM in toRemove)
+               {
+                  Cells.Remove(cellVM);
+               }
             }
          }
          else
@@ -457,16 +456,19 @@ namespace PathFind.ViewModels
       {
          if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
-            var existing = (from c in Cells
-                            where cells.Contains(c.Cell)
-                            select c.Cell).ToList();
-            foreach (var cell in cells)
+            lock (Cells)
             {
-               if (existing.Contains(cell))
+               var existing = (from c in Cells
+                               where cells.Contains(c.Cell)
+                               select c.Cell).ToList();
+               foreach (var cell in cells)
                {
-                  continue;
+                  if (existing.Contains(cell))
+                  {
+                     continue;
+                  }
+                  Cells.Add(new CellVM(this, cell as GridCoordinate));
                }
-               Cells.Add(new CellVM(this, cell as GridCoordinate));
             }
          }
          else
@@ -481,12 +483,15 @@ namespace PathFind.ViewModels
       {
          if (Application.Current == null || Application.Current.Dispatcher.CheckAccess())
          {
-            var existing = (from c in Cells
-                            where c.Cell.Equals(cellVM.Cell)
-                            select c.Cell).SingleOrDefault();
-            if (existing == null)
+            lock (Cells)
             {
-               Cells.Add(cellVM);
+               var existing = (from c in Cells
+                               where c.Cell.Equals(cellVM.Cell)
+                               select c.Cell).SingleOrDefault();
+               if (existing == null)
+               {
+                  Cells.Add(cellVM);
+               }
             }
          }
          else
@@ -685,23 +690,6 @@ namespace PathFind.ViewModels
 
       #region ICellColoring Implementation
 
-      private ObservableDictionary<GridCoordinate, CellColor> m_coloredCells = new ObservableDictionary<GridCoordinate, CellColor>();
-
-      public IObservableDictionary<GridCoordinate, CellColor> ColoredCells
-      {
-         get { return m_coloredCells; }
-      }
-
-      public CellColor? GetCellColor(GridCoordinate cell)
-      {
-         CellColor color;
-         if (ColoredCells.TryGetValue(cell, out color))
-         {
-            return color;
-         }
-         return null;
-      }
-
       public void SetCellColor(GridCoordinate cell, CellColor color)
       {
          if (Map.BlockedCells.ContainsKey(cell))
@@ -709,22 +697,31 @@ namespace PathFind.ViewModels
             throw new InvalidOperationException("Attempting to color a blocked cell");
          }
 
-         ColoredCells[cell] = color;
+         CellVM cellVM = null;
 
-         var cellVM = (from cvm in Cells where cvm.Cell.Equals(cell) select cvm).SingleOrDefault();
+         lock (Cells)
+         {
+            cellVM = (from cvm in Cells
+                      where cvm.Cell.Equals(cell)
+                      select cvm).SingleOrDefault();
+         }
 
          if (cellVM != null)
          {
-            cellVM.OnColorChanged();
+            cellVM.CellColor = color;
          }
          else
          {
+            AddCellVM(new CellVM(this, cell) { CellColor = color });
          }
       }
 
       public void ClearCellColors()
       {
-         ColoredCells.Clear();
+         var toRemove = (from cvm in Cells
+                         where cvm.CellColor.HasValue && !cvm.IsGoal && !cvm.IsStart && !cvm.IsOnPath
+                         select cvm.Cell).ToList();
+         RemoveCellVMs(toRemove);
       }
 
       #endregion
