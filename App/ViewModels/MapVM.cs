@@ -665,19 +665,19 @@ namespace PathFind.ViewModels
 
       #region ICellColoring Implementation
 
-      private ObservableDictionary<GridCoordinate, Brush> m_coloredCells = new ObservableDictionary<GridCoordinate, Brush>();
+      private ObservableDictionary<GridCoordinate, CellColor> m_coloredCells = new ObservableDictionary<GridCoordinate, CellColor>();
 
-      public IObservableDictionary<GridCoordinate, Brush> ColoredCells
+      public IObservableDictionary<GridCoordinate, CellColor> ColoredCells
       {
          get { return m_coloredCells; }
       }
 
       public CellColor? GetCellColor(GridCoordinate cell)
       {
-         Brush brush;
-         if (ColoredCells.TryGetValue(cell, out brush))
+         CellColor color;
+         if (ColoredCells.TryGetValue(cell, out color))
          {
-            return brush == Brushes.Orange ? CellColor.Open : CellColor.Closed;
+            return color;
          }
          return null;
       }
@@ -689,17 +689,7 @@ namespace PathFind.ViewModels
             throw new InvalidOperationException("Attempting to color a blocked cell");
          }
 
-         Brush brush = Brushes.White;
-         if (color == CellColor.Open)
-         {
-            brush = Brushes.Orange;
-         }
-         else if (color == CellColor.Closed)
-         {
-            brush = Brushes.Gray;
-         }
-
-         ColoredCells[cell] = brush;
+         ColoredCells[cell] = color;
 
          var cellVM = (from cvm in Cells where cvm.Cell.Equals(cell) select cvm).SingleOrDefault();
 
