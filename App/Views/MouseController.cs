@@ -56,6 +56,7 @@ namespace PathFind.Views
                   m_oldSelectedCellBrush = null;
                }
                MapViewModel.SelectedCells.Clear();
+               LastHitCell = null;
             }
          }
       }
@@ -147,13 +148,29 @@ namespace PathFind.Views
          }
       }
 
+      private GridCoordinate LastHitCell;
+
       private void HitTestAndSelect(System.Windows.Input.MouseEventArgs mouseEventArgs)
       {
          GridCoordinate hitCell = GetHitCell(mouseEventArgs);
 
          if (hitCell != null)
          {
-            CellSelectionBehavior(hitCell);
+            if (hitCell.Equals(LastHitCell))
+            {
+               return;
+            }
+
+            if (LastHitCell != null)
+            {
+               LastHitCell.LineTo(hitCell, new PlotCoordinate(CellSelectionBehavior));
+            }
+            else
+            {
+               CellSelectionBehavior(hitCell);
+            }
+
+            LastHitCell = hitCell;
          }
       }
 
