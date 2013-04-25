@@ -278,6 +278,11 @@ namespace PathFind.Models
 
          neighbors.RemoveAll(c => BlockedCells.ContainsKey(c));
 
+         neighbors.Sort((a, b) =>
+            {
+               return (int)(a.EuclideanDistanceSquared(Goal) - b.EuclideanDistanceSquared(Goal));
+            });
+
          return neighbors.ToArray();
       }
 

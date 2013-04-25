@@ -69,6 +69,20 @@ namespace PathFindTests.Models
          Assert.AreEqual(4, neighbors.Length);
       }
 
+      [Test]
+      public void TestNeighborsAreSortedInOrderOfDistanceToGoal()
+      {
+         map.Goal = map.GetBottomLeft();
+         GridCoordinate[] neighbors = map.GetNeighbors(map.GetCenter());
+         var lastDist = Double.NegativeInfinity;
+         foreach (var c in neighbors)
+         {
+            double dist = c.EuclideanDistance(map.Goal);
+            Assert.IsTrue(dist >= lastDist);
+            lastDist = dist;
+         }
+      }
+
       [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "RowCount must be greater than zero")]
       public void TestSettingNegativeRowCountThrowsException()
       {

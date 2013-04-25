@@ -10,12 +10,15 @@ namespace PathFind.Core
 
    public static class GridCoordinateUtils
    {
+      public static double EuclideanDistanceSquared(this GridCoordinate from, GridCoordinate to)
+      {
+         return ((to.Column - from.Column) * (to.Column - from.Column)) +
+            ((to.Row - from.Row) * (to.Row - from.Row));
+      }
+
       public static double EuclideanDistance(this GridCoordinate from, GridCoordinate to)
       {
-         return Math.Sqrt(
-            ((to.Column - from.Column) * (to.Column - from.Column)) +
-            ((to.Row - from.Row) * (to.Row - from.Row))
-            );
+         return Math.Sqrt(from.EuclideanDistanceSquared(to));
       }
 
       public static double ManhattanDistance(this GridCoordinate from, GridCoordinate to)
