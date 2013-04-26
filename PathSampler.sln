@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFind", "App\PathFind.csproj", "{3369792F-7813-4415-A8EE-ABDE134C2951}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathSampler", "App\PathSampler.csproj", "{3369792F-7813-4415-A8EE-ABDE134C2951}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFindTests", "Tests\PathFindTests.csproj", "{1D6D0E50-B53A-4F50-9553-1BCAD12D261A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathSamplerTests", "Tests\PathSamplerTests.csproj", "{1D6D0E50-B53A-4F50-9553-1BCAD12D261A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

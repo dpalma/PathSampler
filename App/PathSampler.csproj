@@ -8,8 +8,8 @@
     <ProjectGuid>{3369792F-7813-4415-A8EE-ABDE134C2951}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PathFind</RootNamespace>
-    <AssemblyName>PathFind</AssemblyName>
+    <RootNamespace>PathSampler</RootNamespace>
+    <AssemblyName>PathSampler</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

@@ -8,8 +8,8 @@
     <ProjectGuid>{1D6D0E50-B53A-4F50-9553-1BCAD12D261A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PathFindTests</RootNamespace>
-    <AssemblyName>PathFindTests</AssemblyName>
+    <RootNamespace>PathSamplerTests</RootNamespace>
+    <AssemblyName>PathSamplerTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -65,9 +65,9 @@
     <Compile Include="Views\DisplayNameConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\App\PathFind.csproj">
+    <ProjectReference Include="..\App\PathSampler.csproj">
       <Project>{3369792F-7813-4415-A8EE-ABDE134C2951}</Project>
-      <Name>PathFind</Name>
+      <Name>PathSampler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
