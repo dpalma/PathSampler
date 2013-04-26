@@ -1,4 +1,4 @@
-# PathFind
+# PathSampler
 
 A Windows app, written in C# and WPF, to demonstrate the operation of various path-finding algorithms. So far, A* and breadth-first search are implemented.
 To implement additional algorithms, fork the repository, implement the desired path-finding algorithm by extending the PathFinder class, and issue a pull request.
@@ -10,10 +10,10 @@ To implement additional algorithms, fork the repository, implement the desired p
 
 ## Testing
 
-1. Build the PathFindTests project.
-2. Run NUnit, one of the required libraries, and open `Tests\bin\Debug\PathFindTests.dll`.
+1. Build the PathSamplerTests project.
+2. Run NUnit, one of the required libraries, and open `Tests\bin\Debug\PathSamplerTests.dll`.
 3. From NUnit's `Tools` menu,
     * Choose `Settings...`
     * Go to the `Assembly Reload` section
     * Enable `Reload when test assembly changes` and `Re-run last tests run`
-    * Tests will run automatically whenever `PathFindTests.dll` builds
+    * Tests will run automatically whenever `PathSamplerTests.dll` builds
