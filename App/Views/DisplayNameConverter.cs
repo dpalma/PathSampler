@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Data;
 
-namespace PathFind.Views
+namespace PathSampler.Views
 {
    public class DisplayNameConverter : IValueConverter
    {

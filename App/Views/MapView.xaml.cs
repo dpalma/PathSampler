@@ -13,11 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using PathFind.Core;
-using PathFind.Models;
-using PathFind.ViewModels;
+using PathSampler.Core;
+using PathSampler.Models;
+using PathSampler.ViewModels;
 
-namespace PathFind.Views
+namespace PathSampler.Views
 {
    /// <summary>
    /// Interaction logic for MapView.xaml

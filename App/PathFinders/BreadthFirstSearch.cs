@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
-using PathFind.Core;
-using PathFind.Models;
+using PathSampler.Core;
+using PathSampler.Models;
 
-namespace PathFind.PathFinders
+namespace PathSampler.PathFinders
 {
    [DisplayName("Breadth-First Search")]
    public class BreadthFirstSearch : PathFinder

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using PathFind.Core;
-using PathFind.PathFinders;
+using PathSampler.Core;
+using PathSampler.PathFinders;
 
-namespace PathFind.ViewModels
+namespace PathSampler.ViewModels
 {
    public class CellVM : ViewModel
    {

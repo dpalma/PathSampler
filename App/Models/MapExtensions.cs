@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PathFind.Core;
+using PathSampler.Core;
 
-namespace PathFind.Models
+namespace PathSampler.Models
 {
    public static class MapExtensions
    {

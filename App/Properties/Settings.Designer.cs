@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PathFind.Properties
+namespace PathSampler.Properties
 {
 
 

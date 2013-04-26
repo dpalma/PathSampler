@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using NUnit.Framework;
-using PathFind.Core;
-using PathFind.Models;
-using PathFind.ViewModels;
+using PathSampler.Core;
+using PathSampler.Models;
+using PathSampler.ViewModels;
 
-namespace PathFindTests.ViewModels
+namespace PathSamplerTests.ViewModels
 {
    class MapVMTests
    {
@@ -24,7 +24,7 @@ namespace PathFindTests.ViewModels
       {
          MapVM vm = CreateDefaultMapVM(mapSize);
          vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
-         vm.SelectedPathingAlgorithm = typeof(PathFind.PathFinders.AStar);
+         vm.SelectedPathingAlgorithm = typeof(PathSampler.PathFinders.AStar);
          return vm;
       }
 
@@ -297,7 +297,7 @@ namespace PathFindTests.ViewModels
       {
          MapVM vm = CreateDefaultMapVM(15);
          int preCellCount = vm.Cells.Count;
-         vm.SetCellColor(vm.Map.GetCenter(), PathFind.PathFinders.CellColor.Open);
+         vm.SetCellColor(vm.Map.GetCenter(), PathSampler.PathFinders.CellColor.Open);
          Assert.IsTrue(vm.HasCell(vm.Map.GetCenter()));
          Assert.AreEqual(preCellCount + 1, vm.Cells.Count);
       }
@@ -310,7 +310,7 @@ namespace PathFindTests.ViewModels
          var coloredCells = new List<GridCoordinate>() { vm.Map.GetCenter(), vm.Map.GetTopRight() }.AsReadOnly();
          foreach (var c in coloredCells)
          {
-            vm.SetCellColor(c, PathFind.PathFinders.CellColor.Open);
+            vm.SetCellColor(c, PathSampler.PathFinders.CellColor.Open);
             Assert.IsTrue(vm.HasCell(c));
          }
          Assert.AreEqual(preCellCount + coloredCells.Count, vm.Cells.Count);

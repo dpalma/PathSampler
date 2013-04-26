@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Models;
+using PathSampler.Models;
 
-namespace PathFindTests.Models
+namespace PathSamplerTests.Models
 {
    class MapExtensionsTests
    {

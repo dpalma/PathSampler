@@ -6,10 +6,10 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Core;
-using PathFind.Models;
+using PathSampler.Core;
+using PathSampler.Models;
 
-namespace PathFindTests.Models
+namespace PathSamplerTests.Models
 {
    class MapTests
    {

@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
-using PathFind.Collections;
-using PathFind.Core;
-using PathFind.Models;
+using PathSampler.Collections;
+using PathSampler.Core;
+using PathSampler.Models;
 
-namespace PathFind.PathFinders
+namespace PathSampler.PathFinders
 {
    internal sealed class AStarNode : IComparable<AStarNode>
    {

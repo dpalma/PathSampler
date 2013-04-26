@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Collections;
+using PathSampler.Collections;
 
-namespace PathFindTests.Collections
+namespace PathSamplerTests.Collections
 {
    class PriorityQueueTests
    {

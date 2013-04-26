@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PathFind.Core;
-using PathFind.Models;
+using PathSampler.Core;
+using PathSampler.Models;
 
-namespace PathFindTests
+namespace PathSamplerTests
 {
    public static class MapUtilsForTesting
    {

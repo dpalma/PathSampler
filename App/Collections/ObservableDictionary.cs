@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 
-namespace PathFind.Collections
+namespace PathSampler.Collections
 {
    [Serializable]
    public class ObservableDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue>

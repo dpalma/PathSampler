@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PathFind.Collections
+namespace PathSampler.Collections
 {
    public class PriorityQueue<T> : IEnumerable<T>, ICollection where T : IComparable<T>
    {

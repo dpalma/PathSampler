@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace PathFind.Collections
+namespace PathSampler.Collections
 {
    public class ObservableSet<T> : IObservableSet<T>
    {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using PathFind.Core;
-using PathFind.Collections;
+using PathSampler.Core;
+using PathSampler.Collections;
 
-namespace PathFind.Models
+namespace PathSampler.Models
 {
    [Serializable]
    public class Map : INotifyPropertyChanging, INotifyPropertyChanged

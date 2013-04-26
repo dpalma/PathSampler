@@ -10,13 +10,13 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using PathFind.Collections;
-using PathFind.Commands;
-using PathFind.Core;
-using PathFind.Models;
-using PathFind.PathFinders;
+using PathSampler.Collections;
+using PathSampler.Commands;
+using PathSampler.Core;
+using PathSampler.Models;
+using PathSampler.PathFinders;
 
-namespace PathFind.ViewModels
+namespace PathSampler.ViewModels
 {
    public class MapVM : ViewModel, ICellColoring
    {

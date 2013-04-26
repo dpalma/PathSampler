@@ -1,10 +1,10 @@
-﻿<Window x:Class="PathFind.MainWindow"
+﻿<Window x:Class="PathSampler.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cmd="clr-namespace:PathFind.Commands"
-        xmlns:m="clr-namespace:PathFind.Models"
-        xmlns:vm="clr-namespace:PathFind.ViewModels"
-        xmlns:v="clr-namespace:PathFind.Views"
+        xmlns:cmd="clr-namespace:PathSampler.Commands"
+        xmlns:m="clr-namespace:PathSampler.Models"
+        xmlns:vm="clr-namespace:PathSampler.ViewModels"
+        xmlns:v="clr-namespace:PathSampler.Views"
         Title="PathSampler" Height="620" Width="700" Loaded="Window_Loaded">
     <Window.CommandBindings>
         <CommandBinding Command="cmd:MainCommands.Exit" Executed="OnExit" />

@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using System.Windows.Documents;
 
-namespace PathFind
+namespace PathSampler
 {
    /// <summary>
    /// Interaction logic for MainWindow.xaml
@@ -22,7 +22,7 @@ namespace PathFind
       private void Window_Loaded(object sender, RoutedEventArgs e)
       {
          AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(mainGrid);
-         adornerLayer.Add(new PathFind.Views.ResizingAdorner(mapView1));
+         adornerLayer.Add(new PathSampler.Views.ResizingAdorner(mapView1));
       }
 
    }

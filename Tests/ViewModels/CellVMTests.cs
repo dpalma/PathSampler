@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Models;
-using PathFind.ViewModels;
-using System.ComponentModel;
+using PathSampler.Models;
+using PathSampler.ViewModels;
 
-namespace PathFindTests.ViewModels
+namespace PathSamplerTests.ViewModels
 {
    class CellVMTests
    {
@@ -31,7 +31,7 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestIsInOpenListIsTrueWhenCellColorIsOpen()
       {
-         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathFind.PathFinders.CellColor.Open);
+         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathSampler.PathFinders.CellColor.Open);
          CellVM cellVM = mapVM.GetCell(mapVM.Map.GetCenter());
          Assert.IsNotNull(cellVM);
          Assert.IsTrue(cellVM.IsInOpenList);
@@ -40,7 +40,7 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestIsInClosedListIsTrueWhenCellColorIsClosed()
       {
-         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathFind.PathFinders.CellColor.Closed);
+         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathSampler.PathFinders.CellColor.Closed);
          CellVM cellVM = mapVM.GetCell(mapVM.Map.GetCenter());
          Assert.IsNotNull(cellVM);
          Assert.IsTrue(cellVM.IsInClosedList);
@@ -49,14 +49,14 @@ namespace PathFindTests.ViewModels
       [Test]
       public void TestPropertyChangeNotificationHappensWhenColorChanges()
       {
-         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathFind.PathFinders.CellColor.Open);
+         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathSampler.PathFinders.CellColor.Open);
          CellVM cellVM = mapVM.GetCell(mapVM.Map.GetCenter());
          var propertiesChanged = new List<string>();
          cellVM.PropertyChanged += (object sender, PropertyChangedEventArgs eventArgs) =>
          {
             propertiesChanged.Add(eventArgs.PropertyName);
          };
-         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathFind.PathFinders.CellColor.Closed);
+         mapVM.SetCellColor(mapVM.Map.GetCenter(), PathSampler.PathFinders.CellColor.Closed);
          Assert.IsTrue(propertiesChanged.Contains("IsInOpenList"));
          Assert.IsTrue(propertiesChanged.Contains("IsInClosedList"));
       }

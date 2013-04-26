@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace PathFind.Commands
+namespace PathSampler.Commands
 {
    public class DelegateCommand : ICommand
    {

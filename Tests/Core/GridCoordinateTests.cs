@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Core;
+using PathSampler.Core;
 
-namespace PathFindTests.Core
+namespace PathSamplerTests.Core
 {
    class GridCoordinateTests
    {

@@ -3,11 +3,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using PathFind.Core;
-using PathFind.Models;
-using PathFind.ViewModels;
+using PathSampler.Core;
+using PathSampler.Models;
+using PathSampler.ViewModels;
 
-namespace PathFind.Views
+namespace PathSampler.Views
 {
    class MouseController
    {

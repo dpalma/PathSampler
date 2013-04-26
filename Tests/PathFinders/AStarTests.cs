@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Core;
-using PathFind.Models;
-using PathFind.PathFinders;
+using PathSampler.Core;
+using PathSampler.Models;
+using PathSampler.PathFinders;
 
-namespace PathFindTests.PathFinders
+namespace PathSamplerTests.PathFinders
 {
    internal class NullCellColoring : ICellColoring
    {

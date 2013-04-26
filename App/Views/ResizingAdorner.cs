@@ -7,10 +7,10 @@ using System.Windows.Documents;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Input;
-using PathFind.Models;
-using PathFind.ViewModels;
+using PathSampler.Models;
+using PathSampler.ViewModels;
 
-namespace PathFind.Views
+namespace PathSampler.Views
 {
    public class ResizingAdorner : Adorner
    {

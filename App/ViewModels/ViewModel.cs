@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace PathFind.ViewModels
+namespace PathSampler.ViewModels
 {
    public abstract class ViewModel : INotifyPropertyChanged
    {

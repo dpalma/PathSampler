@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Core;
-using PathFind.Models;
-using PathFind.ViewModels;
+using PathSampler.Core;
+using PathSampler.Models;
+using PathSampler.ViewModels;
 
-namespace PathFindTests.ViewModels
+namespace PathSamplerTests.ViewModels
 {
    class MainWindowVMTests
    {

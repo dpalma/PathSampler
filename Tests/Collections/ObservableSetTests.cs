@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Collections;
+using PathSampler.Collections;
 using System.Collections.Specialized;
 
-namespace PathFindTests.Collections
+namespace PathSamplerTests.Collections
 {
    class ObservableSetTests
    {

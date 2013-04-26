@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace PathFind.Collections
+namespace PathSampler.Collections
 {
    public interface IObservableSet<T> : ISet<T>, INotifyCollectionChanged
    {

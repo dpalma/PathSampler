@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PathFind.Views;
-using PathFind.PathFinders;
+using PathSampler.Views;
+using PathSampler.PathFinders;
 
-namespace PathFindTests.Views
+namespace PathSamplerTests.Views
 {
    class DisplayNameConverterTests
    {

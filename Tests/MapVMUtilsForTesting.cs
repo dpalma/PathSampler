@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PathFind.Core;
-using PathFind.ViewModels;
+using PathSampler.Core;
+using PathSampler.ViewModels;
 
-namespace PathFindTests
+namespace PathSamplerTests
 {
    public static class MapVMUtilsForTesting
    {

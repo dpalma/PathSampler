@@ -9,11 +9,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using PathFind.Commands;
-using PathFind.Models;
-using PathFind.PathFinders;
+using PathSampler.Commands;
+using PathSampler.Models;
+using PathSampler.PathFinders;
 
-namespace PathFind.ViewModels
+namespace PathSampler.ViewModels
 {
    public class MainWindowVM : ViewModel
    {

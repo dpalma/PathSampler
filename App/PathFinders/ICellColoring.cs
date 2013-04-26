@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
-using PathFind.Core;
+using PathSampler.Core;
 
-namespace PathFind.PathFinders
+namespace PathSampler.PathFinders
 {
    public enum CellColor
    {

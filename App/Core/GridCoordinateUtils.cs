@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace PathFind.Core
+namespace PathSampler.Core
 {
    public delegate void PlotCoordinate(GridCoordinate coordinate);
 

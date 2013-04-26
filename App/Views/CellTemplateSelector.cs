@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using PathFind.ViewModels;
+using PathSampler.ViewModels;
 
-namespace PathFind.Views
+namespace PathSampler.Views
 {
    public class CellTemplateSelector : DataTemplateSelector
    {

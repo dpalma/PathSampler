@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using PathFind.ViewModels;
+using PathSampler.ViewModels;
 
-namespace PathFind.Views
+namespace PathSampler.Views
 {
    public class MapCanvas : Canvas
    {
