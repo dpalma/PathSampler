@@ -262,6 +262,14 @@ namespace PathSampler.ViewModels
             {
                m_startPathingCommand.RaiseCanExecuteChanged();
             }
+            if (m_pathSlowerCommand != null)
+            {
+               m_pathSlowerCommand.RaiseCanExecuteChanged();
+            }
+            if (m_pathFasterCommand != null)
+            {
+               m_pathFasterCommand.RaiseCanExecuteChanged();
+            }
          }
          else
          {
@@ -304,6 +312,36 @@ namespace PathSampler.ViewModels
                         t => { return MapVM.CanStopPathing; });
             }
             return m_stopPathingCommand;
+         }
+      }
+
+      private DelegateCommand m_pathSlowerCommand;
+      public ICommand PathSlowerCommand
+      {
+         get
+         {
+            if (m_pathSlowerCommand == null)
+            {
+               m_pathSlowerCommand = new DelegateCommand(
+                  t => { MapVM.PathSlower(); UpdatePathingCommands(); },
+                  t => { return MapVM.CanPathSlower; });
+            }
+            return m_pathSlowerCommand;
+         }
+      }
+
+      private DelegateCommand m_pathFasterCommand;
+      public ICommand PathFasterCommand
+      {
+         get
+         {
+            if (m_pathFasterCommand == null)
+            {
+               m_pathFasterCommand = new DelegateCommand(
+                  t => { MapVM.PathFaster(); UpdatePathingCommands(); },
+                  t => { return MapVM.CanPathFaster; });
+            }
+            return m_pathFasterCommand;
          }
       }
    }

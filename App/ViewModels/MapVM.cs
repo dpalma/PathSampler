@@ -573,6 +573,11 @@ namespace PathSampler.ViewModels
          get;
          private set;
       }
+      internal System.Threading.Timer ActivePathingTaskTimer
+      {
+         get;
+         private set;
+      }
 
       public void StartPathing()
       {
@@ -583,7 +588,7 @@ namespace PathSampler.ViewModels
 
          CurrentPath = EmptyPath;
 
-         ActivePathingTaskCompletionSource = StartPathingTask();
+         StartPathingTask();
 
          FirePropertyChanged("IsPathing");
          FirePropertyChanged("CanStartPathing");
@@ -603,6 +608,9 @@ namespace PathSampler.ViewModels
          }
       }
 
+      public static readonly TimeSpan PathingStepDelayMinimum = TimeSpan.FromMilliseconds(1);
+      public static readonly TimeSpan PathingStepDelayMaximum = TimeSpan.FromSeconds(10);
+
       public TimeSpan PathingStepDelay
       {
          get
@@ -611,9 +619,14 @@ namespace PathSampler.ViewModels
          }
          set
          {
-            if (value == TimeSpan.Zero)
+            if (value.CompareTo(PathingStepDelayMinimum) < 0)
             {
-               throw new ArgumentException("Do not set pathing step delay to zero");
+               throw new ArgumentOutOfRangeException("PathingStepDelay", "The given value is too low");
+            }
+
+            if (value.CompareTo(PathingStepDelayMaximum) > 0)
+            {
+               throw new ArgumentOutOfRangeException("PathingStepDelay", "The given value is too high");
             }
 
             m_pathingStepDelay = value;
@@ -622,7 +635,7 @@ namespace PathSampler.ViewModels
       }
       private TimeSpan m_pathingStepDelay = TimeSpan.FromMilliseconds(150);
 
-      private TaskCompletionSource<object> StartPathingTask()
+      private void StartPathingTask()
       {
          var constructor = SelectedPathingAlgorithm.GetConstructor(new Type[] { typeof(Map), typeof(ICellColoring) });
 
@@ -630,7 +643,7 @@ namespace PathSampler.ViewModels
 
          TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
 
-         var timer = new System.Threading.Timer(x =>
+         ActivePathingTaskTimer = new System.Threading.Timer(x =>
             {
                lock (CurrentPathFinder)
                {
@@ -647,7 +660,7 @@ namespace PathSampler.ViewModels
                         PathingFinished(this, EventArgs.Empty);
                      }
 
-                     tcs.SetResult(null);
+                     tcs.TrySetResult(null);
                   }
                }
 
@@ -655,10 +668,11 @@ namespace PathSampler.ViewModels
 
          tcs.Task.ContinueWith(x =>
             {
-               timer.Dispose();
+               ActivePathingTaskTimer.Dispose();
+               ActivePathingTaskTimer = null;
             });
 
-         return tcs;
+         ActivePathingTaskCompletionSource = tcs;
       }
 
       public void StopPathing()
@@ -685,6 +699,50 @@ namespace PathSampler.ViewModels
          get
          {
             return IsPathing;
+         }
+      }
+
+      private static readonly TimeSpan PathingStepDelayIncrement = TimeSpan.FromMilliseconds((PathingStepDelayMaximum.Milliseconds - PathingStepDelayMinimum.Milliseconds) / 8);
+
+      internal void PathSlower()
+      {
+         PathingStepDelay = PathingStepDelay.Add(PathingStepDelayIncrement);
+         if (PathingStepDelay.CompareTo(PathingStepDelayMaximum) > 0)
+         {
+            PathingStepDelay = PathingStepDelayMaximum;
+         }
+         if (ActivePathingTaskTimer != null)
+         {
+            ActivePathingTaskTimer.Change(TimeSpan.Zero, PathingStepDelay);
+         }
+      }
+
+      internal bool CanPathSlower
+      {
+         get
+         {
+            return true;
+         }
+      }
+
+      internal void PathFaster()
+      {
+         PathingStepDelay = PathingStepDelay.Subtract(PathingStepDelayIncrement);
+         if (PathingStepDelay.CompareTo(PathingStepDelayMinimum) < 0)
+         {
+            PathingStepDelay = PathingStepDelayMinimum;
+         }
+         if (ActivePathingTaskTimer != null)
+         {
+            ActivePathingTaskTimer.Change(TimeSpan.Zero, PathingStepDelay);
+         }
+      }
+
+      internal bool CanPathFaster
+      {
+         get
+         {
+            return true;
          }
       }
 

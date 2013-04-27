@@ -115,8 +115,7 @@ namespace PathSamplerTests.ViewModels
       [Test, MaxTime(PathTaskTimeout)]
       public void TestPathingTaskSetsCurentPathProperty()
       {
-         MapVM vm = CreateDefaultMapVM(4);
-         vm.PathingStepDelay = TimeSpan.FromMilliseconds(1);
+         MapVM vm = CreateFastPathingMapVM(4);
          vm.StartPathing();
          vm.ActivePathingTask.Wait();
          int diagonal = (int)vm.Map.Start.EuclideanDistance(vm.Map.Goal);
@@ -444,6 +443,20 @@ namespace PathSamplerTests.ViewModels
          vm.StartPathing();
          vm.StopPathing();
          Assert.AreEqual(2, propertiesChanged.Count(x => x == "CanStartPathing"));
+      }
+
+      [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+      public void TestSettingPathingStepDelayTooLowThrowsException()
+      {
+         MapVM vm = CreateDefaultMapVM(5);
+         vm.PathingStepDelay = MapVM.PathingStepDelayMinimum.Subtract(TimeSpan.FromMinutes(1));
+      }
+
+      [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+      public void TestSettingPathingStepDelayTooHighThrowsException()
+      {
+         MapVM vm = CreateDefaultMapVM(5);
+         vm.PathingStepDelay = MapVM.PathingStepDelayMaximum.Add(TimeSpan.FromMinutes(1));
       }
 
       [Test]
