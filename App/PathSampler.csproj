@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Views\MouseController.cs" />
     <Compile Include="Views\ResizingAdorner.cs" />
+    <Compile Include="Views\PathingStepDelayConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

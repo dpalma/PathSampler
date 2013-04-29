@@ -63,6 +63,7 @@
     <Compile Include="ViewModels\MainWindowVMTests.cs" />
     <Compile Include="ViewModels\MapVMTests.cs" />
     <Compile Include="Views\DisplayNameConverterTests.cs" />
+    <Compile Include="Views\PathingStepDelayConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\PathSampler.csproj">
