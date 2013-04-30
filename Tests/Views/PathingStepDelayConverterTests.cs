@@ -10,17 +10,10 @@ namespace PathSamplerTests.Views
    class PathingStepDelayConverterTests
    {
       [Test]
-      public void TestCanConvertToReturnsTrueForDouble()
-      {
-         var converter = new PathingStepDelayConverter();
-         Assert.IsTrue(converter.CanConvertTo(typeof(double)));
-      }
-
-      [Test]
       public void TestConvertToDoubleReturnsZeroForMin()
       {
          var converter = new PathingStepDelayConverter();
-         var result = converter.ConvertTo(converter.Minimum, typeof(double));
+         var result = converter.Convert(converter.Minimum, typeof(double), null, null);
          Assert.AreEqual(0, result);
       }
 
@@ -28,7 +21,7 @@ namespace PathSamplerTests.Views
       public void TestConvertToDoubleReturnsOneForMax()
       {
          var converter = new PathingStepDelayConverter();
-         var result = converter.ConvertTo(converter.Maximum, typeof(double));
+         var result = converter.Convert(converter.Maximum, typeof(double), null, null);
          Assert.AreEqual(1, result);
       }
 
@@ -37,22 +30,15 @@ namespace PathSamplerTests.Views
       {
          var converter = new PathingStepDelayConverter();
          var middle = TimeSpan.FromMilliseconds((converter.Maximum + converter.Minimum).TotalMilliseconds / 2);
-         var result = converter.ConvertTo(middle, typeof(double));
+         var result = converter.Convert(middle, typeof(double), null, null);
          Assert.AreEqual(0.5, result);
-      }
-
-      [Test]
-      public void TestCanConvertFromReturnsTrueForDouble()
-      {
-         var converter = new PathingStepDelayConverter();
-         Assert.IsTrue(converter.CanConvertFrom(typeof(double)));
       }
 
       [Test]
       public void TestConvertFromReturnsMinForZeroDouble()
       {
          var converter = new PathingStepDelayConverter();
-         var result = converter.ConvertFrom(0.0);
+         var result = converter.ConvertBack(0.0, typeof(TimeSpan), null, null);
          Assert.AreEqual(converter.Minimum, result);
       }
 
@@ -60,7 +46,7 @@ namespace PathSamplerTests.Views
       public void TestConvertFromReturnsMaxForOneDouble()
       {
          var converter = new PathingStepDelayConverter();
-         var result = converter.ConvertFrom(1.0);
+         var result = converter.ConvertBack(1.0, typeof(TimeSpan), null, null);
          Assert.AreEqual(converter.Maximum, result);
       }
 
@@ -69,7 +55,7 @@ namespace PathSamplerTests.Views
       {
          var converter = new PathingStepDelayConverter();
          converter.Maximum = TimeSpan.FromMinutes(30);
-         var result = converter.ConvertFrom(0.5);
+         var result = converter.ConvertBack(0.5, typeof(TimeSpan), null, null);
          Assert.AreEqual(TimeSpan.FromMinutes(15), result);
       }
    }
