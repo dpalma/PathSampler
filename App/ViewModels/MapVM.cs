@@ -608,8 +608,25 @@ namespace PathSampler.ViewModels
          }
       }
 
-      public static readonly TimeSpan PathingStepDelayMinimum = TimeSpan.FromMilliseconds(1);
-      public static readonly TimeSpan PathingStepDelayMaximum = TimeSpan.FromSeconds(10);
+      private static readonly TimeSpan m_pathingStepDelayMinimum = TimeSpan.FromMilliseconds(1);
+
+      public static TimeSpan PathingStepDelayMinimum
+      {
+         get
+         {
+            return m_pathingStepDelayMinimum;
+         }
+      }
+
+      private static readonly TimeSpan m_pathingStepDelayMaximum = TimeSpan.FromMilliseconds(401);
+
+      public static TimeSpan PathingStepDelayMaximum
+      {
+         get
+         {
+            return m_pathingStepDelayMaximum;
+         }
+      }
 
       public TimeSpan PathingStepDelay
       {
@@ -630,6 +647,12 @@ namespace PathSampler.ViewModels
             }
 
             m_pathingStepDelay = value;
+
+            if (ActivePathingTaskTimer != null)
+            {
+               ActivePathingTaskTimer.Change(PathingStepDelay, PathingStepDelay);
+            }
+
             FirePropertyChanged("PathingStepDelay");
          }
       }
@@ -711,10 +734,6 @@ namespace PathSampler.ViewModels
          {
             PathingStepDelay = PathingStepDelayMaximum;
          }
-         if (ActivePathingTaskTimer != null)
-         {
-            ActivePathingTaskTimer.Change(TimeSpan.Zero, PathingStepDelay);
-         }
       }
 
       internal bool CanPathSlower
@@ -731,10 +750,6 @@ namespace PathSampler.ViewModels
          if (PathingStepDelay.CompareTo(PathingStepDelayMinimum) < 0)
          {
             PathingStepDelay = PathingStepDelayMinimum;
-         }
-         if (ActivePathingTaskTimer != null)
-         {
-            ActivePathingTaskTimer.Change(TimeSpan.Zero, PathingStepDelay);
          }
       }
 

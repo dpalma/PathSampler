@@ -35,7 +35,7 @@ namespace PathSamplerTests.Views
       }
 
       [Test]
-      public void TestConvertFromReturnsMinForZeroDouble()
+      public void TestConvertBackReturnsMinForZeroDouble()
       {
          var converter = new PathingStepDelayConverter();
          var result = converter.ConvertBack(0.0, typeof(TimeSpan), null, null);
@@ -43,7 +43,7 @@ namespace PathSamplerTests.Views
       }
 
       [Test]
-      public void TestConvertFromReturnsMaxForOneDouble()
+      public void TestConvertBackReturnsMaxForOneDouble()
       {
          var converter = new PathingStepDelayConverter();
          var result = converter.ConvertBack(1.0, typeof(TimeSpan), null, null);
@@ -51,9 +51,10 @@ namespace PathSamplerTests.Views
       }
 
       [Test]
-      public void TestConvertFromReturnsMiddleForPointFiveDouble()
+      public void TestConvertBackReturnsMiddleForPointFiveDouble()
       {
          var converter = new PathingStepDelayConverter();
+         converter.Minimum = TimeSpan.FromMinutes(0);
          converter.Maximum = TimeSpan.FromMinutes(30);
          var result = converter.ConvertBack(0.5, typeof(TimeSpan), null, null);
          Assert.AreEqual(TimeSpan.FromMinutes(15), result);

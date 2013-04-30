@@ -21,6 +21,7 @@
         </RadialGradientBrush>
         <vm:MainWindowVM x:Key="mainWindowVM" Map="{StaticResource ResourceKey=map}" />
         <v:DisplayNameConverter x:Key="displayNameConverter" />
+        <v:PathingStepDelayConverter x:Key="pathingStepDelayConverter" />
     </Window.Resources>
     <Window.DataContext>
       <StaticResource ResourceKey="mainWindowVM"/>
@@ -50,7 +51,7 @@
             </v:MapView>
         </ScrollViewer>
         <ToolBarTray Height="Auto" Name="toolBarTray1" VerticalAlignment="Top" Grid.Row="1">
-            <ToolBar Height="Auto" HorizontalAlignment="Left" Name="pathToolBar" VerticalAlignment="Center" Width="350">
+            <ToolBar Height="Auto" HorizontalAlignment="Left" Name="pathToolBar" VerticalAlignment="Center" Width="600">
                 <ComboBox HorizontalAlignment="Left" Name="comboBox1" VerticalAlignment="Center" Width="150" ItemsSource="{Binding Path=MapVM.PathingAlgorithms}" SelectedItem="{Binding Path=MapVM.SelectedPathingAlgorithm}" IsEnabled="{Binding Path=MapVM.CanStartPathing}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -59,7 +60,10 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Content="Start Pathing" Name="button1" Width="75" Command="{Binding Path=StartPathingCommand}" />
-                <Button Content="Stop Pathing" Name="button2" Width="75" Command="{Binding Path=StopPathingCommand}" />
+                <Button Content="Stop Pathing" Name="button2" Width="75" Command="{Binding Path=StopPathingCommand}" Margin="0,0,25,0" />
+                <Label Content="Faster" VerticalAlignment="Center" FontSize="10" />
+                <Slider Name="slider2" VerticalAlignment="Center" Width="150" Maximum="{Binding Path=MapVM.PathingStepDelayMaximum, Converter={StaticResource pathingStepDelayConverter}}" LargeChange="0.1" SmallChange="0.05" Value="{Binding Path=MapVM.PathingStepDelay, Converter={StaticResource pathingStepDelayConverter}}" Minimum="{Binding Path=MapVM.PathingStepDelayMinimum, Converter={StaticResource pathingStepDelayConverter}}" />
+                <Label Content="Slower" VerticalAlignment="Center" FontSize="10" />
             </ToolBar>
         </ToolBarTray>
         <StatusBar Grid.Row="3" Height="24" Name="statusBar1" VerticalAlignment="Stretch" Margin="0,0,226,0" />

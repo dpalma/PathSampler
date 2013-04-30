@@ -14,8 +14,8 @@ namespace PathSampler.Views
 
       public PathingStepDelayConverter()
       {
-         Minimum = TimeSpan.Zero;
-         Maximum = TimeSpan.FromMilliseconds(1000);
+         Minimum = PathSampler.ViewModels.MapVM.PathingStepDelayMinimum;
+         Maximum = PathSampler.ViewModels.MapVM.PathingStepDelayMaximum;
       }
 
       public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
