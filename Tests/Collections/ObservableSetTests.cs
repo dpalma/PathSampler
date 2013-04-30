@@ -119,5 +119,22 @@ namespace PathSamplerTests.Collections
             Assert.AreEqual(items[index++], enumerator.Current);
          }
       }
+
+      [Test]
+      public void TestNonGenericGetEnumeratorReturnsAllItems()
+      {
+         string[] items = new string[] { "A", "B", "C", "D" };
+         foreach (var item in items)
+         {
+            set.Add(item);
+         }
+         int index = 0;
+         var enumerator = ((System.Collections.IEnumerable)set).GetEnumerator();
+         while (enumerator.MoveNext())
+         {
+            Assert.AreEqual(items[index++], enumerator.Current);
+         }
+         Assert.AreEqual(items.Length, index);
+      }
    }
 }

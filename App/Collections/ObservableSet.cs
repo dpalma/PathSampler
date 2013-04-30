@@ -131,7 +131,7 @@ namespace PathSampler.Collections
 
       System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
       {
-         throw new NotImplementedException();
+         return ((System.Collections.IEnumerable)m_set).GetEnumerator();
       }
 
       #endregion
