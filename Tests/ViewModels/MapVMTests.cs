@@ -10,6 +10,7 @@ using NUnit.Framework;
 using PathSampler.Core;
 using PathSampler.Models;
 using PathSampler.ViewModels;
+using PathSampler.Views;
 
 namespace PathSamplerTests.ViewModels
 {
@@ -58,6 +59,27 @@ namespace PathSamplerTests.ViewModels
       {
          MapVM vm = CreateDefaultMapVM(5);
          Assert.IsNotNull(vm.SelectedPathingAlgorithm);
+      }
+
+      [Test]
+      public void TestPathingAlgorithmsAreSortedAlphabetically()
+      {
+         var converter = new DisplayNameConverter();
+         MapVM vm = CreateDefaultMapVM(5);
+
+         var names = new List<string>();
+         foreach (var x in vm.PathingAlgorithms)
+         {
+            string name = converter.Convert(x, typeof(string), null, null) as string;
+            names.Add(name);
+         }
+
+         string last = String.Empty;
+         foreach (var x in names)
+         {
+            Assert.IsTrue(x.CompareTo(last) > 0);
+            last = x;
+         }
       }
 
       [Test]

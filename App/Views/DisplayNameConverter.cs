@@ -16,21 +16,7 @@ namespace PathSampler.Views
          {
             Type t = value as Type;
 
-            object[] attributes = t.GetCustomAttributes(typeof(DisplayNameAttribute), false);
-
-            if (attributes.Length == 0)
-            {
-               return t.Name;
-            }
-            else
-            {
-               DisplayNameAttribute displayName = attributes.Single() as DisplayNameAttribute;
-
-               if (displayName != null)
-               {
-                  return displayName.DisplayName;
-               }
-            }
+            return PathSampler.PathFinders.PathFinder.GetDisplayName(t);
          }
 
          return value;

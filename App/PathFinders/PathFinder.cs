@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using PathSampler.Core;
 using PathSampler.Models;
+using System.ComponentModel;
 
 namespace PathSampler.PathFinders
 {
@@ -39,6 +41,44 @@ namespace PathSampler.PathFinders
       {
          m_map = map;
          m_cellColoring = cellColoring;
+      }
+
+      public static List<Type> GatherPathingAlgorithms()
+      {
+         var q = from t in Assembly.GetExecutingAssembly().GetTypes()
+                 where t.IsClass && t.BaseType.Equals(typeof(PathFinder))
+                 select t;
+
+         var l = q.ToList();
+
+         l.Sort((a, b) =>
+            {
+               return GetDisplayName(a).CompareTo(GetDisplayName(b));
+            });
+
+         return l;
+      }
+
+      public static string GetDisplayName(Type type)
+      {
+         if (!type.IsSubclassOf(typeof(PathFinder)))
+         {
+            throw new ArgumentException("Type does not inherit from PathFinder");
+         }
+
+         object[] attributes = type.GetCustomAttributes(typeof(DisplayNameAttribute), false);
+
+         if (attributes != null && attributes.Length > 0)
+         {
+            DisplayNameAttribute displayName = attributes.Single() as DisplayNameAttribute;
+
+            if (displayName != null)
+            {
+               return displayName.DisplayName;
+            }
+         }
+
+         return type.Name;
       }
 
       abstract public void Step();

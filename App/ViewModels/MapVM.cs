@@ -24,10 +24,7 @@ namespace PathSampler.ViewModels
       {
          Map = map;
 
-         var q = from t in Assembly.GetExecutingAssembly().GetTypes()
-                 where t.IsClass && t.BaseType.Equals(typeof(PathFinder))
-                 select t;
-         q.ToList().ForEach(t => PathingAlgorithms.Add(t));
+         PathFinder.GatherPathingAlgorithms().ForEach(t => PathingAlgorithms.Add(t));
 
          SelectedPathingAlgorithm = (from t in PathingAlgorithms
                                      where t.Equals(typeof(BreadthFirstSearch))
