@@ -73,7 +73,7 @@ namespace PathSamplerTests.ViewModels
          MapVM vm = CreateDefaultMapVM(5);
          var otherPathingAlgorithm = (from t in vm.PathingAlgorithms
                                       where !t.Equals(vm.SelectedPathingAlgorithm)
-                                      select t).Single();
+                                      select t).First();
          Assert.AreNotEqual(otherPathingAlgorithm, vm.SelectedPathingAlgorithm);
          vm.SelectedPathingAlgorithm = otherPathingAlgorithm;
          vm.StartPathing();
