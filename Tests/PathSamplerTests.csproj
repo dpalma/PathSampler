@@ -58,6 +58,7 @@
     <Compile Include="Models\MapExtensionsTests.cs" />
     <Compile Include="Models\MapTests.cs" />
     <Compile Include="PathFinders\AStarTests.cs" />
+    <Compile Include="PathFinders\PathFinderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CellVMTests.cs" />
     <Compile Include="ViewModels\MainWindowVMTests.cs" />

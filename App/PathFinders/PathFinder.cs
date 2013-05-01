@@ -49,7 +49,7 @@ namespace PathSampler.PathFinders
       protected IDictionary<GridCoordinate, GridCoordinate> Predecessors { get { return m_predecessors; } }
       private Dictionary<GridCoordinate, GridCoordinate> m_predecessors = new Dictionary<GridCoordinate, GridCoordinate>();
 
-      protected bool BuildPath()
+      public bool BuildPath()
       {
          List<GridCoordinate> path = new List<GridCoordinate>();
          GridCoordinate cell = Map.Goal;
@@ -60,6 +60,10 @@ namespace PathSampler.PathFinders
             if (!Predecessors.TryGetValue(cell, out predecessor))
             {
                return false;
+            }
+            if (path.Contains(predecessor))
+            {
+               throw new InvalidOperationException("The chain of predessors contains a cycle");
             }
             path.Add(predecessor);
             cell = predecessor;
