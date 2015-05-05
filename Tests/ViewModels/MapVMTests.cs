@@ -496,6 +496,17 @@ namespace PathSamplerTests.ViewModels
          vm.SelectedCells.Add(vm.Map.GetCenter());
          Assert.AreEqual(1, target.SelectedCells.Count);
       }
+
+      [Test]
+      public void TestAddingBlockCellClearsCurrentPath()
+      {
+         MapVM vm = CreateFastPathingMapVM(6);
+         vm.StartPathing();
+         vm.ActivePathingTask.Wait();
+         Assert.IsTrue(vm.CurrentPath.Count > 0);
+         vm.Map.BlockedCells.Add(vm.Map.GetCenter(), 1);
+         Assert.IsNull(vm.CurrentPath);
+      }
    }
 
    sealed class Target : DependencyObject

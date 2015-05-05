@@ -87,6 +87,10 @@ namespace PathSampler.ViewModels
 
       void BlockedCells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
+         if (CurrentPath != null)
+         {
+            CurrentPath = null;
+         }
          UpdateCells(e);
       }
 
