@@ -39,12 +39,13 @@ namespace PathSamplerTests.ViewModels
          Assert.AreEqual(1, vm.SelectedCells.Count);
       }
 
-      [Test, ExpectedException(typeof(InvalidOperationException), ExpectedMessage="Pathing already running")]
+      [Test]
       public void TestStartPathingTwiceThrowsException()
       {
          MapVM vm = CreateDefaultMapVM(10);
          vm.StartPathing();
-         vm.StartPathing();
+         // ExpectedMessage="Pathing already running"
+         Assert.Throws<InvalidOperationException>(() => vm.StartPathing());
       }
 
       [Test]
@@ -383,23 +384,21 @@ namespace PathSamplerTests.ViewModels
       }
 
       [Test]
-      [ExpectedException(typeof(InvalidOperationException))]
       public void TestSetGoalCommandThrowsExceptionWhenMoreThanOneCellIsSelected()
       {
          MapVM vm = CreateDefaultMapVM(5);
          vm.SelectedCells.Add(new GridCoordinate() { Row = 0, Column = 1 });
          vm.SelectedCells.Add(new GridCoordinate() { Row = 0, Column = 2 });
-         vm.SetGoalCommand.Execute(null);
+         Assert.Throws<InvalidOperationException>(() => vm.SetGoalCommand.Execute(null));
       }
 
       [Test]
-      [ExpectedException(typeof(InvalidOperationException))]
       public void TestSetStartCommandThrowsExceptionWhenMoreThanOneCellIsSelected()
       {
          MapVM vm = CreateDefaultMapVM(5);
          vm.SelectedCells.Add(new GridCoordinate() { Row = 1, Column = 1 });
          vm.SelectedCells.Add(new GridCoordinate() { Row = 1, Column = 2 });
-         vm.SetStartCommand.Execute(null);
+         Assert.Throws<InvalidOperationException>(() => vm.SetStartCommand.Execute(null));
       }
 
       [Test, MaxTime(PathTaskTimeout)]
@@ -467,18 +466,18 @@ namespace PathSamplerTests.ViewModels
          Assert.AreEqual(2, propertiesChanged.Count(x => x == "CanStartPathing"));
       }
 
-      [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+      [Test]
       public void TestSettingPathingStepDelayTooLowThrowsException()
       {
          MapVM vm = CreateDefaultMapVM(5);
-         vm.PathingStepDelay = MapVM.PathingStepDelayMinimum.Subtract(TimeSpan.FromMinutes(1));
+         Assert.Throws<ArgumentOutOfRangeException>(() => vm.PathingStepDelay = MapVM.PathingStepDelayMinimum.Subtract(TimeSpan.FromMinutes(1)));
       }
 
-      [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+      [Test]
       public void TestSettingPathingStepDelayTooHighThrowsException()
       {
          MapVM vm = CreateDefaultMapVM(5);
-         vm.PathingStepDelay = MapVM.PathingStepDelayMaximum.Add(TimeSpan.FromMinutes(1));
+         Assert.Throws<ArgumentOutOfRangeException>(() => vm.PathingStepDelay = MapVM.PathingStepDelayMaximum.Add(TimeSpan.FromMinutes(1)));
       }
 
       [Test]

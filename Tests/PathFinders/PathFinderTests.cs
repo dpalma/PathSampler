@@ -41,14 +41,15 @@ namespace PathSamplerTests.PathFinders
          Assert.IsFalse(pathFinder.BuildPath());
       }
 
-      [Test, ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The chain of predessors contains a cycle")]
+      [Test]
       public void TestBuildPathThrowsExceptionWhenPredecessorChainContainsCycle()
       {
          Map map = new Map();
          var pathFinder = new PathFinderForTesting(map);
          pathFinder.AddPredecessor(8, 8, map.Goal.Column, map.Goal.Row);
          pathFinder.AddPredecessor(map.Goal.Column, map.Goal.Row, 8, 8);
-         pathFinder.BuildPath();
+         // ExpectedMessage = "The chain of predessors contains a cycle"
+         Assert.Throws<InvalidOperationException>(()=>pathFinder.BuildPath());
       }
    }
 }

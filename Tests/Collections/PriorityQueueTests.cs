@@ -32,11 +32,10 @@ namespace PathSamplerTests.Collections
       }
 
       [Test]
-      [ExpectedException(typeof(InvalidOperationException))]
       public void TestDequeueThrowsExceptionForEmptyQueue()
       {
          PriorityQueue<int> queue = new PriorityQueue<int>();
-         queue.Dequeue();
+         Assert.Throws<InvalidOperationException>(() => queue.Dequeue());
       }
 
       [Test]
@@ -49,11 +48,10 @@ namespace PathSamplerTests.Collections
       }
 
       [Test]
-      [ExpectedException(typeof(InvalidOperationException))]
       public void TestPeekThrowsExceptionForEmptyQueue()
       {
          PriorityQueue<int> queue = new PriorityQueue<int>();
-         queue.Peek();
+         Assert.Throws<InvalidOperationException>(() => queue.Peek());
       }
 
       [Test]

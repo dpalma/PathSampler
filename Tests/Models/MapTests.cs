@@ -35,17 +35,15 @@ namespace PathSamplerTests.Models
       }
 
       [Test]
-      [ExpectedException(typeof(ArgumentNullException))]
       public void TestSettingNullGoalThrowsException()
       {
-         map.Goal = null;
+         Assert.Throws<ArgumentNullException>(() => map.Goal = null);
       }
 
       [Test]
-      [ExpectedException(typeof(ArgumentNullException))]
       public void TestSettingNullStartThrowsException()
       {
-         map.Start = null;
+         Assert.Throws<ArgumentNullException>(()=>map.Start = null);
       }
 
       [Test]
@@ -83,64 +81,74 @@ namespace PathSamplerTests.Models
          }
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "RowCount must be greater than zero")]
+      [Test]
       public void TestSettingNegativeRowCountThrowsException()
       {
-         map.RowCount = -1;
+         //ExpectedMessage = "RowCount must be greater than zero"
+         Assert.Throws<ArgumentException>(() => map.RowCount = -1);
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "ColumnCount must be greater than zero")]
+      [Test]
       public void TestSettingNegativeColumnCountThrowsException()
       {
-         map.ColumnCount = -1;
+         // ExpectedMessage = "ColumnCount must be greater than zero"
+         Assert.Throws<ArgumentException>(() => map.ColumnCount = -1);
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "RowCount must be greater than zero")]
+      [Test]
       public void TestSettingRowCountToZeroThrowsException()
       {
-         map.RowCount = 0;
+         // ExpectedMessage = "RowCount must be greater than zero"
+         Assert.Throws<ArgumentException>(() => map.RowCount = 0);
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "ColumnCount must be greater than zero")]
+      [Test]
       public void TestSettingColumnCountToZeroThrowsException()
       {
-         map.ColumnCount = 0;
+         // ExpectedMessage = "ColumnCount must be greater than zero"
+         Assert.Throws<ArgumentException>(() => map.ColumnCount = 0);
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
+      [Test]
       public void TestSettingAboveRowRangeGoalThrowsException()
       {
-         map.Goal = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 };
+         // ExpectedMessage = "Cell is out of bounds"
+         Assert.Throws<ArgumentException>(() => map.Goal = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 });
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
+      [Test]
       public void TestSettingBelowRowRangeGoalThrowsException()
       {
-         map.Goal = new GridCoordinate() { Column = 0, Row = -1 };
+         // ExpectedMessage = "Cell is out of bounds"
+         Assert.Throws<ArgumentException>(() => map.Goal = new GridCoordinate() { Column = 0, Row = -1 });
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
+      [Test]
       public void TestSettingBelowColumnRangeGoalThrowsException()
       {
-         map.Goal = new GridCoordinate() { Column = -1, Row = 0 };
+         // ExpectedMessage = "Cell is out of bounds"
+         Assert.Throws<ArgumentException>(() => map.Goal = new GridCoordinate() { Column = -1, Row = 0 });
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
+      [Test]
       public void TestSettingAboveRowRangeStartThrowsException()
       {
-         map.Start = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 };
+         // ExpectedMessage = "Cell is out of bounds"
+         Assert.Throws<ArgumentException>(() => map.Start = new GridCoordinate() { Column = 0, Row = map.RowCount + 1 });
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
+      [Test]
       public void TestSettingAboveColumnRangeStartThrowsException()
       {
-         map.Start = new GridCoordinate() { Column = map.ColumnCount + 1, Row = 0 };
+         // ExpectedMessage = "Cell is out of bounds"
+         Assert.Throws<ArgumentException>(() => map.Start = new GridCoordinate() { Column = map.ColumnCount + 1, Row = 0 });
       }
 
-      [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cell is out of bounds")]
+      [Test]
       public void TestSettingBelowRowRangeStartThrowsException()
       {
-         map.Start = new GridCoordinate() { Column = 0, Row = -1 };
+         // ExpectedMessage = "Cell is out of bounds"
+         Assert.Throws<ArgumentException>(() => map.Start = new GridCoordinate() { Column = 0, Row = -1 });
       }
 
       [Test]
@@ -219,16 +227,16 @@ namespace PathSamplerTests.Models
          Assert.AreEqual(0, propertiesChanged.Count);
       }
 
-      [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+      [Test]
       public void TestExceptionThrownWhenSettingCellSizeBelowMinimum()
       {
-         map.CellSizeScalar = Map.MinimumCellSizeScalar - 1;
+         Assert.Throws<ArgumentOutOfRangeException>(() => map.CellSizeScalar = Map.MinimumCellSizeScalar - 1);
       }
 
-      [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+      [Test]
       public void TestExceptionThrownWhenSettingCellSizeAboveMaximum()
       {
-         map.CellSizeScalar = Map.MaximumCellSizeScalar + 1;
+         Assert.Throws<ArgumentOutOfRangeException>(() => map.CellSizeScalar = Map.MaximumCellSizeScalar + 1);
       }
 
       [Test]
